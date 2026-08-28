@@ -1,6 +1,7 @@
 import Hero from "@/components/Hero";
 import Experience from "@/components/Experience";
 import ProofPoints from "@/components/ProofPoints";
+import Projects from "@/components/Projects";
 
 export default function Home() {
   return (
@@ -8,6 +9,7 @@ export default function Home() {
       <Hero />
       <Experience />
       <ProofPoints />
+      <Projects />
     </main>
   );
 }
