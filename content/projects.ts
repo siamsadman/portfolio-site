@@ -44,6 +44,37 @@ export const projects: Project[] = [
       src: "/projects/olist-sales/dashboard-01.png",
       alt: "Sales & Revenue Performance dashboard — Executive Overview page",
     },
+    sections: [
+      {
+        type: "gallery",
+        heading: "Screenshots",
+        images: [
+          { src: "/projects/olist-sales/dashboard-01.png", alt: "Executive Overview" },
+          { src: "/projects/olist-sales/dashboard-02.png", alt: "Category & Product Deep Dive" },
+          { src: "/projects/olist-sales/dashboard-03.png", alt: "Customer & Payment Insights" },
+        ],
+      },
+      {
+        type: "gallery",
+        heading: "Data Model",
+        images: [
+          {
+            src: "/projects/olist-sales/data-model.png",
+            alt: "Sales & Revenue Performance data model",
+          },
+        ],
+      },
+      {
+        type: "prose",
+        heading: "Validation",
+        paragraphs: [],
+      },
+      {
+        type: "list",
+        heading: "Findings",
+        items: [],
+      },
+    ],
   },
   {
     slug: "olist-logistics",
