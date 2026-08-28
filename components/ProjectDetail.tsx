@@ -9,6 +9,28 @@ function hasContent(section: ProjectSection): boolean {
   return section.images.length > 0;
 }
 
+// Minimal inline formatting for content strings: **bold** lead-ins and
+// `code` spans for table/field names, as used verbatim in project READMEs.
+function renderInline(text: string) {
+  const parts = text.split(/(\*\*[^*]+\*\*|`[^`]+`)/g);
+  return parts.map((part, index) => {
+    if (part.startsWith("**") && part.endsWith("**")) {
+      return <strong key={index}>{part.slice(2, -2)}</strong>;
+    }
+    if (part.startsWith("`") && part.endsWith("`")) {
+      return (
+        <code
+          key={index}
+          className="rounded bg-zinc-100 px-1 py-0.5 text-[0.9em]"
+        >
+          {part.slice(1, -1)}
+        </code>
+      );
+    }
+    return part;
+  });
+}
+
 function SectionBlock({ section }: { section: ProjectSection }) {
   if (section.type === "gallery") {
     return (
@@ -30,6 +52,18 @@ function SectionBlock({ section }: { section: ProjectSection }) {
             </figure>
           ))}
         </div>
+        {section.paragraphs && section.paragraphs.length > 0 && (
+          <div className="mt-6 flex max-w-3xl flex-col gap-4">
+            {section.paragraphs.map((paragraph) => (
+              <p
+                key={paragraph}
+                className="text-base leading-relaxed text-zinc-800"
+              >
+                {renderInline(paragraph)}
+              </p>
+            ))}
+          </div>
+        )}
       </div>
     );
   }
@@ -40,8 +74,11 @@ function SectionBlock({ section }: { section: ProjectSection }) {
         <h2 className="text-xl font-bold text-navy">{section.heading}</h2>
         <div className="mt-6 flex max-w-3xl flex-col gap-4">
           {section.paragraphs.map((paragraph) => (
-            <p key={paragraph} className="text-base leading-relaxed text-zinc-800">
-              {paragraph}
+            <p
+              key={paragraph}
+              className="text-base leading-relaxed text-zinc-800"
+            >
+              {renderInline(paragraph)}
             </p>
           ))}
         </div>
@@ -52,9 +89,14 @@ function SectionBlock({ section }: { section: ProjectSection }) {
   return (
     <div className="mt-16">
       <h2 className="text-xl font-bold text-navy">{section.heading}</h2>
+      {section.intro && (
+        <p className="mt-4 max-w-3xl text-base leading-relaxed text-zinc-800">
+          {renderInline(section.intro)}
+        </p>
+      )}
       <ul className="mt-6 max-w-3xl list-disc space-y-2 pl-5 text-base leading-relaxed text-zinc-800">
         {section.items.map((listItem) => (
-          <li key={listItem}>{listItem}</li>
+          <li key={listItem}>{renderInline(listItem)}</li>
         ))}
       </ul>
     </div>
