@@ -26,7 +26,7 @@ export default function Hero() {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
         >
-          <div className="rounded-[2rem] border border-teal/30 bg-zinc-100 p-3 dark:bg-zinc-900">
+          <div className="rounded-[2rem] border border-teal/30 bg-zinc-100 p-3">
             <Image
               src="/portrait.jpg"
               alt="Portrait of Siam Sadman"
@@ -46,14 +46,14 @@ export default function Hero() {
         >
           <motion.h1
             variants={item}
-            className="text-4xl font-bold tracking-tight text-navy dark:text-zinc-50 sm:text-5xl lg:text-6xl"
+            className="text-4xl font-bold tracking-tight text-navy sm:text-5xl lg:text-6xl"
           >
             Siam Sadman
           </motion.h1>
 
           <motion.p
             variants={item}
-            className="text-lg font-medium text-teal dark:text-teal-light sm:text-xl"
+            className="text-lg font-medium text-teal sm:text-xl"
           >
             <span className="whitespace-nowrap">Power BI Developer</span>{" "}
             <span className="whitespace-nowrap">
@@ -63,7 +63,7 @@ export default function Hero() {
 
           <motion.p
             variants={item}
-            className="max-w-xl text-base leading-relaxed text-zinc-800 dark:text-zinc-200 sm:text-lg"
+            className="max-w-xl text-base leading-relaxed text-zinc-800 sm:text-lg"
           >
             BI Developer and Reporting Analyst with 12+ years of experience
             building automated reporting pipelines and Power BI dashboards in
@@ -85,7 +85,7 @@ export default function Hero() {
               href="/Siam_Sadman_BI_Developer.pdf"
               target="_blank"
               rel="noopener noreferrer"
-              className="rounded-full border border-navy px-6 py-3 text-sm font-medium text-navy transition-colors hover:bg-navy hover:text-white dark:border-teal-light dark:text-teal-light dark:hover:bg-teal-light dark:hover:text-zinc-900"
+              className="rounded-full border border-navy px-6 py-3 text-sm font-medium text-navy transition-colors hover:bg-navy hover:text-white"
             >
               Download CV
             </a>
