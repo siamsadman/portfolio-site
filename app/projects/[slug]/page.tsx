@@ -23,9 +23,33 @@ export async function generateMetadata({
   const { slug } = await params;
   const project = getBuiltProject(slug);
   if (!project) return {};
+
+  const title = `${project.title} — Siam Sadman`;
+
   return {
-    title: `${project.title} — Siam Sadman`,
+    title,
     description: project.summary,
+    openGraph: {
+      title,
+      description: project.summary,
+      url: `/projects/${project.slug}`,
+      siteName: "Siam Sadman",
+      images: [
+        {
+          url: project.cardImage.src,
+          width: 1280,
+          height: 720,
+          alt: project.cardImage.alt,
+        },
+      ],
+      type: "article",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description: project.summary,
+      images: [project.cardImage.src],
+    },
   };
 }
 
