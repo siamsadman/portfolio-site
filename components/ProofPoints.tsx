@@ -36,7 +36,7 @@ const proofPoints = [
 
 export default function ProofPoints() {
   return (
-    <section className="pt-6 pb-24 sm:pt-8">
+    <section className="bg-background pt-6 pb-24 sm:pt-8">
       <PageContainer>
         <div className="max-w-3xl">
           <motion.p
@@ -44,7 +44,7 @@ export default function ProofPoints() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, ease: "easeOut" }}
-            className="mb-10 font-mono text-sm font-medium tracking-wide text-teal"
+            className="mb-10 font-mono text-sm font-medium tracking-wide text-accent"
           >
             03 / Validation
           </motion.p>
@@ -62,13 +62,13 @@ export default function ProofPoints() {
                 variants={item}
                 className="flex flex-col gap-2"
               >
-                <p className="text-3xl font-bold text-teal sm:text-4xl">
+                <p className="text-3xl font-bold text-accent sm:text-4xl">
                   {point.stat}
                 </p>
-                <p className="text-sm font-semibold text-zinc-900 sm:text-base">
+                <p className="text-sm font-semibold text-foreground sm:text-base">
                   {point.label}
                 </p>
-                <p className="text-sm leading-relaxed text-zinc-700 sm:text-base">
+                <p className="text-sm leading-relaxed text-muted sm:text-base">
                   {point.detail}
                 </p>
               </motion.div>

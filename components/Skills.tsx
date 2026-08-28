@@ -85,7 +85,7 @@ const skillGroups = [
 
 export default function Skills() {
   return (
-    <section className="pt-6 pb-24 sm:pt-8">
+    <section className="bg-background pt-6 pb-24 sm:pt-8">
       <PageContainer>
         <div className="max-w-3xl">
           <SectionHeading kicker="05 / Skills" title="Skills" />
@@ -99,14 +99,14 @@ export default function Skills() {
           >
             {skillGroups.map((group) => (
               <motion.div key={group.category} variants={item}>
-                <p className="text-xs font-semibold uppercase tracking-wide text-zinc-400">
+                <p className="text-xs font-semibold uppercase tracking-wide text-muted">
                   {group.category}
                 </p>
                 <div className="mt-3 flex flex-wrap gap-2">
                   {group.items.map((skill) => (
                     <span
                       key={skill}
-                      className="rounded-full bg-zinc-100 px-3.5 py-1.5 text-sm text-zinc-700"
+                      className="rounded-full border border-border bg-card px-3.5 py-1.5 text-sm text-muted"
                     >
                       {skill}
                     </span>

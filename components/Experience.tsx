@@ -35,21 +35,21 @@ function EngagementBlock({ item }: { item: EngagementItem }) {
   return (
     <motion.div
       variants={engagementItem}
-      className="border-l-2 border-zinc-200 pl-4"
+      className="border-l-2 border-border pl-4"
     >
-      <p className="text-xs font-semibold uppercase tracking-wide text-teal">
+      <p className="text-xs font-semibold uppercase tracking-wide text-accent">
         {kicker}
       </p>
 
       {item.kind === "internal" && (
         <>
           <div className="mt-1 flex items-baseline gap-2">
-            <h4 className="text-lg font-semibold text-zinc-900">
+            <h4 className="text-lg font-semibold text-foreground">
               {item.label}
             </h4>
-            <span className="text-xs text-zinc-500">{item.dateRange}</span>
+            <span className="text-xs text-muted">{item.dateRange}</span>
           </div>
-          <ul className="mt-2 max-w-[80ch] list-disc space-y-1 pl-4 text-base leading-relaxed text-zinc-900 sm:text-lg">
+          <ul className="mt-2 max-w-[80ch] list-disc space-y-1 pl-4 text-base leading-relaxed text-foreground sm:text-lg">
             {item.bullets.map((bullet) => (
               <li key={bullet}>{bullet}</li>
             ))}
@@ -60,19 +60,19 @@ function EngagementBlock({ item }: { item: EngagementItem }) {
       {item.kind === "client" && item.workstreams.length === 1 && (
         <>
           <div className="mt-1 flex flex-wrap items-baseline gap-2">
-            <h4 className="text-lg font-semibold text-zinc-900">
+            <h4 className="text-lg font-semibold text-foreground">
               {item.client} — {item.workstreams[0].descriptor}
             </h4>
-            <span className="text-xs text-zinc-500">
+            <span className="text-xs text-muted">
               {item.workstreams[0].dateRange}
             </span>
           </div>
           {item.workstreams[0].note && (
-            <p className="mt-1 text-sm italic text-zinc-500">
+            <p className="mt-1 text-sm italic text-muted">
               {item.workstreams[0].note}
             </p>
           )}
-          <ul className="mt-2 max-w-[80ch] list-disc space-y-1 pl-4 text-base leading-relaxed text-zinc-900 sm:text-lg">
+          <ul className="mt-2 max-w-[80ch] list-disc space-y-1 pl-4 text-base leading-relaxed text-foreground sm:text-lg">
             {item.workstreams[0].bullets.map((bullet) => (
               <li key={bullet}>{bullet}</li>
             ))}
@@ -82,29 +82,29 @@ function EngagementBlock({ item }: { item: EngagementItem }) {
 
       {item.kind === "client" && item.workstreams.length > 1 && (
         <>
-          <h4 className="mt-1 text-lg font-semibold text-zinc-900">
+          <h4 className="mt-1 text-lg font-semibold text-foreground">
             {item.client}
           </h4>
-          <div className="mt-3 space-y-4 rounded-lg bg-zinc-50 p-4">
+          <div className="mt-3 space-y-4 rounded-lg bg-elevated p-4">
             {item.workstreams.map((workstream) => (
               <div key={workstream.descriptor}>
-                <p className="text-[11px] font-semibold uppercase tracking-wide text-zinc-400">
+                <p className="text-[11px] font-semibold uppercase tracking-wide text-muted">
                   Workstream
                 </p>
                 <div className="mt-0.5 flex flex-wrap items-baseline gap-2">
-                  <p className="text-sm font-semibold text-zinc-800">
+                  <p className="text-sm font-semibold text-foreground">
                     {workstream.descriptor}
                   </p>
-                  <span className="text-xs text-zinc-500">
+                  <span className="text-xs text-muted">
                     {workstream.dateRange}
                   </span>
                 </div>
                 {workstream.note && (
-                  <p className="mt-1 text-sm italic text-zinc-500">
+                  <p className="mt-1 text-sm italic text-muted">
                     {workstream.note}
                   </p>
                 )}
-                <ul className="mt-2 max-w-[80ch] list-disc space-y-1 pl-4 text-base leading-relaxed text-zinc-900 sm:text-lg">
+                <ul className="mt-2 max-w-[80ch] list-disc space-y-1 pl-4 text-base leading-relaxed text-foreground sm:text-lg">
                   {workstream.bullets.map((bullet) => (
                     <li key={bullet}>{bullet}</li>
                   ))}
@@ -126,12 +126,12 @@ function ApsisCard({
   return (
     <motion.div
       variants={cardItem}
-      className="rounded-2xl border border-zinc-200 p-6 sm:p-8"
+      className="rounded-2xl border border-border bg-card p-6 sm:p-8"
     >
-      <h3 className="text-2xl font-bold text-navy sm:text-3xl">
+      <h3 className="text-2xl font-bold text-heading sm:text-3xl">
         {entry.employer}
       </h3>
-      <p className="mt-1 text-sm text-zinc-500">
+      <p className="mt-1 text-sm text-muted">
         {entry.location} · {entry.dateRange}
       </p>
 
@@ -139,16 +139,16 @@ function ApsisCard({
         {entry.titles.map((title) => (
           <p
             key={title.title}
-            className="text-sm font-medium text-zinc-700"
+            className="text-sm font-medium text-secondary"
           >
             {title.title}
             {title.dateRange && (
-              <span className="text-zinc-400"> · {title.dateRange}</span>
+              <span className="text-muted"> · {title.dateRange}</span>
             )}
           </p>
         ))}
         {entry.roleNote && (
-          <p className="text-xs italic text-zinc-500">{entry.roleNote}</p>
+          <p className="text-xs italic text-muted">{entry.roleNote}</p>
         )}
       </div>
 
@@ -175,26 +175,26 @@ function EarlierRoles({
   return (
     <motion.div
       variants={cardItem}
-      className="rounded-2xl border border-zinc-200 p-6 sm:p-8"
+      className="rounded-2xl border border-border bg-card p-6 sm:p-8"
     >
-      <p className="text-xs font-semibold uppercase tracking-wide text-zinc-400">
+      <p className="text-xs font-semibold uppercase tracking-wide text-muted">
         Earlier roles
       </p>
       <div className="mt-6 flex flex-col gap-6">
         {entries.map((entry) => (
           <div key={entry.id}>
-            <h4 className="text-lg font-semibold text-navy">
+            <h4 className="text-lg font-semibold text-heading">
               {entry.employer}
             </h4>
-            <p className="text-sm text-zinc-500">
+            <p className="text-sm text-muted">
               {entry.location} · {entry.dateRange}
               {entry.partTime && " · Part-time"}
             </p>
-            <p className="mt-1 text-sm font-medium text-zinc-700">
+            <p className="mt-1 text-sm font-medium text-secondary">
               {entry.titles[0].title}
             </p>
             {entry.bullets.map((bullet) => (
-              <p key={bullet} className="mt-2 text-base leading-relaxed text-zinc-900 sm:text-lg">
+              <p key={bullet} className="mt-2 text-base leading-relaxed text-foreground sm:text-lg">
                 {bullet}
               </p>
             ))}
@@ -216,7 +216,7 @@ export default function Experience() {
   );
 
   return (
-    <section id="experience" className="pt-6 pb-24 sm:pt-8">
+    <section id="experience" className="bg-panel pt-6 pb-24 sm:pt-8">
       <PageContainer>
         <div className="max-w-3xl">
           <motion.div

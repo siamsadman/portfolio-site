@@ -20,7 +20,7 @@ function renderInline(text: string) {
       return (
         <code
           key={index}
-          className="rounded bg-zinc-100 px-1 py-0.5 text-[0.9em]"
+          className="rounded bg-code px-1 py-0.5 text-[0.9em]"
         >
           {part.slice(1, -1)}
         </code>
@@ -34,7 +34,7 @@ function SectionBlock({ section }: { section: ProjectSection }) {
   if (section.type === "gallery") {
     return (
       <div className="mt-16">
-        <h2 className="text-xl font-bold text-navy">{section.heading}</h2>
+        <h2 className="text-xl font-bold text-heading">{section.heading}</h2>
         <div className="mt-6 flex flex-col gap-8">
           {section.images.map((image) => (
             <figure key={image.src}>
@@ -49,10 +49,10 @@ function SectionBlock({ section }: { section: ProjectSection }) {
                   alt={image.alt}
                   width={1600}
                   height={900}
-                  className="w-full rounded-2xl border border-zinc-200 object-cover"
+                  className="w-full rounded-2xl border border-border object-cover"
                 />
               </a>
-              <figcaption className="mt-2 text-xs text-zinc-500">
+              <figcaption className="mt-2 text-xs text-muted">
                 {image.alt} · Tap to view full-size
               </figcaption>
             </figure>
@@ -63,7 +63,7 @@ function SectionBlock({ section }: { section: ProjectSection }) {
             {section.paragraphs.map((paragraph) => (
               <p
                 key={paragraph}
-                className="text-base leading-relaxed text-zinc-800"
+                className="text-base leading-relaxed text-foreground"
               >
                 {renderInline(paragraph)}
               </p>
@@ -77,12 +77,12 @@ function SectionBlock({ section }: { section: ProjectSection }) {
   if (section.type === "prose") {
     return (
       <div className="mt-16">
-        <h2 className="text-xl font-bold text-navy">{section.heading}</h2>
+        <h2 className="text-xl font-bold text-heading">{section.heading}</h2>
         <div className="mt-6 flex max-w-3xl flex-col gap-4">
           {section.paragraphs.map((paragraph) => (
             <p
               key={paragraph}
-              className="text-base leading-relaxed text-zinc-800"
+              className="text-base leading-relaxed text-foreground"
             >
               {renderInline(paragraph)}
             </p>
@@ -94,13 +94,13 @@ function SectionBlock({ section }: { section: ProjectSection }) {
 
   return (
     <div className="mt-16">
-      <h2 className="text-xl font-bold text-navy">{section.heading}</h2>
+      <h2 className="text-xl font-bold text-heading">{section.heading}</h2>
       {section.intro && (
-        <p className="mt-4 max-w-3xl text-base leading-relaxed text-zinc-800">
+        <p className="mt-4 max-w-3xl text-base leading-relaxed text-foreground">
           {renderInline(section.intro)}
         </p>
       )}
-      <ul className="mt-6 max-w-3xl list-disc space-y-2 pl-5 text-base leading-relaxed text-zinc-800">
+      <ul className="mt-6 max-w-3xl list-disc space-y-2 pl-5 text-base leading-relaxed text-foreground">
         {section.items.map((listItem) => (
           <li key={listItem}>{renderInline(listItem)}</li>
         ))}
@@ -117,12 +117,12 @@ export default function ProjectDetail({ project }: { project: Project }) {
       <PageContainer>
         <a
           href="/#projects"
-          className="text-sm font-medium text-teal hover:underline"
+          className="text-sm font-medium text-accent hover:underline"
         >
           ← All projects
         </a>
 
-        <h1 className="mt-6 text-3xl font-bold text-navy sm:text-4xl">
+        <h1 className="mt-6 text-3xl font-bold text-heading sm:text-4xl">
           {project.title}
         </h1>
 
@@ -130,14 +130,14 @@ export default function ProjectDetail({ project }: { project: Project }) {
           {project.tags.map((tag) => (
             <span
               key={tag}
-              className="rounded-full bg-zinc-100 px-3 py-1 text-xs text-zinc-700"
+              className="rounded-full bg-panel px-3 py-1 text-xs text-muted"
             >
               {tag}
             </span>
           ))}
         </div>
 
-        <p className="mt-4 text-sm text-zinc-500">
+        <p className="mt-4 text-sm text-muted">
           Report pages: {project.pages.join(" · ")}
         </p>
 
@@ -145,12 +145,12 @@ export default function ProjectDetail({ project }: { project: Project }) {
           <SectionBlock key={section.heading} section={section} />
         ))}
 
-        <div className="mt-16 border-t border-zinc-200 pt-8">
+        <div className="mt-16 border-t border-border pt-8">
           <a
             href={project.repoUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-sm font-medium text-navy hover:text-teal"
+            className="text-sm font-medium text-heading hover:text-accent"
           >
             View source on GitHub →
           </a>

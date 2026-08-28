@@ -16,7 +16,7 @@ const item: Variants = {
 
 export default function Contact() {
   return (
-    <section id="contact" className="border-t border-zinc-200 pt-24 pb-24 sm:pt-32">
+    <section id="contact" className="border-t border-border bg-background pt-24 pb-24 sm:pt-32">
       <PageContainer>
         <div className="max-w-3xl">
           <SectionHeading kicker="07 / Contact" title="Contact" />
@@ -31,7 +31,7 @@ export default function Contact() {
             <motion.div variants={item} className="flex flex-wrap gap-4">
               <a
                 href="mailto:siamsadman@gmail.com"
-                className="rounded-full bg-navy px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-teal"
+                className="rounded-full bg-heading px-6 py-3 text-sm font-medium text-background transition-colors hover:bg-accent"
               >
                 siamsadman@gmail.com
               </a>
@@ -39,7 +39,7 @@ export default function Contact() {
                 href="https://www.linkedin.com/in/siam-sadman"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="rounded-full border border-navy px-6 py-3 text-sm font-medium text-navy transition-colors hover:bg-navy hover:text-white"
+                className="rounded-full border border-heading px-6 py-3 text-sm font-medium text-heading transition-colors hover:bg-heading hover:text-background"
               >
                 LinkedIn
               </a>
@@ -47,13 +47,13 @@ export default function Contact() {
                 href="https://github.com/siamsadman"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="rounded-full border border-navy px-6 py-3 text-sm font-medium text-navy transition-colors hover:bg-navy hover:text-white"
+                className="rounded-full border border-heading px-6 py-3 text-sm font-medium text-heading transition-colors hover:bg-heading hover:text-background"
               >
                 GitHub
               </a>
             </motion.div>
 
-            <motion.p variants={item} className="text-sm text-zinc-500">
+            <motion.p variants={item} className="text-sm text-muted">
               Currently open to new roles — Dhaka, Gulf, or remote.
             </motion.p>
           </motion.div>
