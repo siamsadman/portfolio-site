@@ -43,6 +43,8 @@ project can be linked directly in a job application.
 3. Deploy — the site is now live and linkable
 4. Remaining two detail pages, same template
 
+Projects must be data-driven. All project content lives in a single content/projects.ts array. The homepage maps over it to render cards; one dynamic route at app/projects/[slug]/page.tsx renders every detail page. Detail bodies are a per-project list of sections, not fixed slots, so structurally different projects (Fabric, SQL, Python) fit the same template. Adding a project must never require writing new components. Include a tags field on every project for future filtering.
+
 ## Do NOT build these
 
 Considered and deliberately rejected. Do not add them, do not suggest them again:
