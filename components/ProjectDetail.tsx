@@ -39,15 +39,22 @@ function SectionBlock({ section }: { section: ProjectSection }) {
         <div className="mt-6 flex flex-col gap-8">
           {section.images.map((image) => (
             <figure key={image.src}>
-              <Image
-                src={image.src}
-                alt={image.alt}
-                width={1600}
-                height={900}
-                className="w-full rounded-2xl border border-zinc-200 object-cover"
-              />
+              <a
+                href={image.src}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block"
+              >
+                <Image
+                  src={image.src}
+                  alt={image.alt}
+                  width={1600}
+                  height={900}
+                  className="w-full rounded-2xl border border-zinc-200 object-cover"
+                />
+              </a>
               <figcaption className="mt-2 text-xs text-zinc-500">
-                {image.alt}
+                {image.alt} · Tap to view full-size
               </figcaption>
             </figure>
           ))}
