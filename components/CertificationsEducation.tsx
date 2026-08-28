@@ -18,12 +18,12 @@ const certifications = [
   {
     title: "Microsoft Certified: Fabric Analytics Engineer Associate (DP-600)",
     date: "August 2026",
-    url: "https://learn.microsoft.com/en-us/users/siamsadman/credentials/certification/fabric-analytics-engineer-associate",
+    url: "https://learn.microsoft.com/en-us/users/siamsadman/credentials/66d644d3f55928b",
   },
   {
     title: "Microsoft Certified: Power BI Data Analyst Associate (PL-300)",
     date: "July 2026",
-    url: "https://learn.microsoft.com/en-us/users/siamsadman/credentials/certification/data-analyst-associate",
+    url: "https://learn.microsoft.com/en-us/users/siamsadman/credentials/5bf3f8c4b813c762",
   },
   {
     title: "EF SET English Certificate — C1 Advanced",
