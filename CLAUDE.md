@@ -36,14 +36,49 @@ Rationale: the deciding reader is a BI lead, and depth is what they screen for. 
 hiring managers will not open a GitHub repo. Per-project URLs also mean a specific
 project can be linked directly in a job application.
 
-**Build order — do not deviate.** A half-built site is worse than a finished simple one:
+### Homepage section order (decided — do not reorder)
+
+1. **Hero** — name, role line, the verbatim bio line, two buttons (view projects,
+   download CV), one dashboard screenshot as the visual anchor
+2. **Experience**
+3. **Projects**
+4. **Skills**
+5. **Certifications & Education**
+6. **Contact**
+
+Experience comes before Projects deliberately. Twelve years and three multinational
+clients is the credibility anchor; portfolio projects lead a page only when there is no
+experience to lead with. Two things protect the timeline from reading as a text wall:
+lead each Experience block with the **client and the work**, not the job title; and place
+a compact strip of **technical proof points** between Experience and Projects.
+
+### Projects must be data-driven
+
+All project content lives in a single `content/projects.ts` array. The homepage maps over
+it to render cards. One dynamic route at `app/projects/[slug]/page.tsx` renders every
+detail page.
+
+Detail bodies are a **per-project list of sections, not fixed slots**. Olist Sales might
+declare *Screenshots → Data Model → Validation → Findings*; a Microsoft Fabric project
+would declare *Architecture → Medallion Layers → Pipelines → Lineage*. Same template,
+different section list.
+
+**Adding a project must never require writing new components.** The steps must be: drop
+images into `public/projects/<slug>/`, add one entry to `content/projects.ts`, commit,
+push.
+
+Include a `tags` field on every project (`Power BI`, `Fabric`, `SQL`, `Python`) so a
+future `/projects` index page can filter without touching every entry. Do not build that
+index page yet — it becomes worthwhile at around six projects.
+
+### Build order — do not deviate
+
+A half-built site is worse than a finished simple one:
 
 1. Homepage, complete
 2. One detail page (Olist Sales) as the reusable template
 3. Deploy — the site is now live and linkable
 4. Remaining two detail pages, same template
-
-Projects must be data-driven. All project content lives in a single content/projects.ts array. The homepage maps over it to render cards; one dynamic route at app/projects/[slug]/page.tsx renders every detail page. Detail bodies are a per-project list of sections, not fixed slots, so structurally different projects (Fabric, SQL, Python) fit the same template. Adding a project must never require writing new components. Include a tags field on every project for future filtering.
 
 ## Do NOT build these
 
@@ -69,7 +104,7 @@ Framing throughout is **Experience** and **Projects** — never Services or Supp
   framing, and do not let AI-assisted work be discounted — but never compensate by
   overstating.
 
-### Confidentiality — public site
+### Confidentiality — this is a public site
 
 - **Keep TOLL Australia internal system and portal names out of anything published.**
   Describe them generically ("three internal client portals").
@@ -90,12 +125,18 @@ This line already appears across all three GitHub READMEs. Keep it consistent.
 - Microsoft Certified: Power BI Data Analyst Associate (**PL-300**) — July 2026
 - EF SET English Certificate — C1 Advanced
 
-### Availability
+### Availability — contact section only
 
-Last working day at Apsis Solutions was 23 August 2026. **Available to join immediately** —
-this zero-notice availability is a genuine advantage for UAE/Gulf roles and should be
-visible on the site. Targeting Dhaka roles, employer-sponsored UAE/Gulf roles, and
-genuine remote (EOR-based) work.
+One quiet line in the **Contact** section, phrased exactly as:
+
+> Currently open to new roles — Dhaka, Gulf, or remote.
+
+**Not in the hero.** In the hero it reads as anxious, signals unemployment to a reader who
+was not asking, and is the fastest thing on the site to go stale. Do not mention visa
+sponsorship or EOR arrangements anywhere on the site — those surface in conversation.
+
+The fuller availability statement stays in the PDF CV, where notice period is a real
+question.
 
 ## Projects
 
@@ -113,7 +154,7 @@ The screenshots are the strongest asset on the site. Unlike a developer portfoli
 projects are screenshots of websites, these artifacts are *dashboards* — visually rich and
 immediately legible as skilled work. Show them large.
 
-**Technical talking points worth surfacing on the site, not just in the repos:**
+**Technical proof points — surface these on the site, not just in the repos:**
 
 - Caught an on-time rate reading 95% instead of the correct 91.9% through independent SQL
   validation of every DAX measure
@@ -125,8 +166,9 @@ immediately legible as skilled work. Show them large.
 - Extended the model across all three parts without modifying any previously published
   table, treating earlier parts as live production assets
 
-Future work to accommodate without redesign: Microsoft Fabric (lakehouse, medallion
-architecture, notebooks, pipelines), SQL-focused projects, Python projects.
+Next project to be built: **Microsoft Fabric / DP-600** — lakehouse, medallion
+architecture, notebooks, pipelines, lineage view. Deliberately not another Power BI
+dashboard. SQL-focused and Python projects follow.
 
 ## Environment
 
@@ -135,7 +177,7 @@ architecture, notebooks, pipelines), SQL-focused projects, Python projects.
   through it.
 - Project root: `L:\Python_Env\Portfolio_Website\portfolio-site`
 - Node v24.19.0 at `L:\nodejs`, npm cache at `L:\npm-cache` (C: is space-constrained)
-- Git identity configured globally; branch is `main`; pushes auto-deploy to Vercel
+- Git identity configured globally; branch is `main`; every push auto-deploys to Vercel
 
 ## Working style
 
