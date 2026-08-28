@@ -38,41 +38,43 @@ export default function ProofPoints() {
   return (
     <section className="pt-6 pb-24 sm:pt-8">
       <PageContainer>
-        <motion.p
-          initial={{ opacity: 0, y: 12 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, ease: "easeOut" }}
-          className="mb-10 font-mono text-sm font-medium tracking-wide text-teal"
-        >
-          03 / Validation
-        </motion.p>
+        <div className="max-w-3xl">
+          <motion.p
+            initial={{ opacity: 0, y: 12 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
+            className="mb-10 font-mono text-sm font-medium tracking-wide text-teal"
+          >
+            03 / Validation
+          </motion.p>
 
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.2 }}
-          variants={container}
-          className="grid grid-cols-1 gap-10 sm:grid-cols-3 sm:divide-x sm:divide-zinc-200"
-        >
-          {proofPoints.map((point) => (
-            <motion.div
-              key={point.label}
-              variants={item}
-              className="flex flex-col gap-2 sm:px-8 sm:first:pl-0 sm:last:pr-0"
-            >
-              <p className="text-3xl font-bold text-teal sm:text-4xl">
-                {point.stat}
-              </p>
-              <p className="text-sm font-semibold text-zinc-900 sm:text-base">
-                {point.label}
-              </p>
-              <p className="text-sm leading-relaxed text-zinc-700 sm:text-base">
-                {point.detail}
-              </p>
-            </motion.div>
-          ))}
-        </motion.div>
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+            variants={container}
+            className="grid grid-cols-1 gap-x-10 gap-y-8 sm:grid-cols-2"
+          >
+            {proofPoints.map((point) => (
+              <motion.div
+                key={point.label}
+                variants={item}
+                className="flex flex-col gap-2"
+              >
+                <p className="text-3xl font-bold text-teal sm:text-4xl">
+                  {point.stat}
+                </p>
+                <p className="text-sm font-semibold text-zinc-900 sm:text-base">
+                  {point.label}
+                </p>
+                <p className="text-sm leading-relaxed text-zinc-700 sm:text-base">
+                  {point.detail}
+                </p>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
       </PageContainer>
     </section>
   );
