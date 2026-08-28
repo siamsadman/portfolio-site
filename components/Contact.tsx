@@ -16,7 +16,7 @@ const item: Variants = {
 
 export default function Contact() {
   return (
-    <section className="border-t border-zinc-200 pt-24 pb-24 sm:pt-32">
+    <section id="contact" className="border-t border-zinc-200 pt-24 pb-24 sm:pt-32">
       <PageContainer>
         <div className="max-w-3xl">
           <SectionHeading kicker="07 / Contact" title="Contact" />

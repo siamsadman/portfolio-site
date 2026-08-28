@@ -19,7 +19,7 @@ const item: Variants = {
 
 export default function Hero() {
   return (
-    <section className="flex items-center py-16 sm:py-20">
+    <section id="top" className="flex items-center py-16 sm:py-20">
       <PageContainer className="grid gap-12 lg:grid-cols-[3fr_2fr] lg:items-center">
         <motion.div
           className="order-1 flex justify-center lg:order-2 lg:justify-end"

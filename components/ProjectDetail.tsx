@@ -1,5 +1,4 @@
 import Image from "next/image";
-import Link from "next/link";
 import PageContainer from "@/components/PageContainer";
 import type { Project, ProjectSection } from "@/content/projects";
 
@@ -116,12 +115,12 @@ export default function ProjectDetail({ project }: { project: Project }) {
   return (
     <section className="px-6 py-16 sm:px-10 sm:py-20 lg:px-16">
       <PageContainer>
-        <Link
+        <a
           href="/#projects"
           className="text-sm font-medium text-teal hover:underline"
         >
           ← All projects
-        </Link>
+        </a>
 
         <h1 className="mt-6 text-3xl font-bold text-navy sm:text-4xl">
           {project.title}
