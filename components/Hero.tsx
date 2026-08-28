@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { motion, type Variants } from "framer-motion";
+import PageContainer from "@/components/PageContainer";
 
 const container: Variants = {
   hidden: { opacity: 0 },
@@ -18,8 +19,8 @@ const item: Variants = {
 
 export default function Hero() {
   return (
-    <section className="flex min-h-[90vh] items-center px-6 py-24 sm:px-10 lg:px-16">
-      <div className="mx-auto grid w-full max-w-7xl gap-12 lg:grid-cols-[3fr_2fr] lg:items-center">
+    <section className="flex items-center py-16 sm:py-20">
+      <PageContainer className="grid gap-12 lg:grid-cols-[3fr_2fr] lg:items-center">
         <motion.div
           className="order-1 flex justify-center lg:order-2"
           initial={{ opacity: 0, scale: 0.95 }}
@@ -91,7 +92,7 @@ export default function Hero() {
             </a>
           </motion.div>
         </motion.div>
-      </div>
+      </PageContainer>
     </section>
   );
 }
