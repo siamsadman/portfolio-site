@@ -36,9 +36,13 @@ visual design — the site should look like its own thing.
 
 Elements deliberately borrowed from other references:
 
-- **Numbered section markers** — a small, quiet `01 / Experience`, `02 / Projects` above
-  each section heading. Adapted from a terminal-styled reference; keep it understated,
-  not a full monospace brutalist theme.
+- **Numbered section markers** — a small, quiet `0X / Section name` above each
+  titled section. Adapted from a terminal-styled reference; keep it understated,
+  not a full monospace brutalist theme. Hero silently occupies slot 1 (it shows
+  no kicker of its own), so the as-built sequence is: Experience "02", the
+  technical proof-points strip "03" (kicker-only, no visible title — see that
+  section), Projects "04", Skills "05", Certifications & Education "06", Contact
+  "07".
 - **Tech tags on project cards** — small pills (`Power BI`, `DAX`, `T-SQL`). These come
   from each project's `tags` field.
 
