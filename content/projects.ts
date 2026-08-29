@@ -188,7 +188,7 @@ export const projects: Project[] = [
     title: "Customer Experience & Satisfaction",
     pages: ["Overview", "Drivers", "Sellers"],
     summary:
-      "Three pages covering a satisfaction overview, the drivers behind it, and seller-level performance.",
+      "Three pages covering a satisfaction overview, the drivers behind it, and seller-level performance across the qualifying seller base.",
     tags: ["Power BI", "DAX", "T-SQL"],
     palette: "coral-gold",
     repoUrl:
