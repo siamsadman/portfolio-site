@@ -25,7 +25,7 @@ const bioLine =
 const siteTitle = "Siam Sadman — Power BI Developer & Fabric Analytics Engineer";
 
 const shortDescription =
-  "12+ years building Power BI dashboards and reporting pipelines for BATB, Arnott's and TOLL.";
+  "12+ years building Power BI dashboards and reporting pipelines in production for British American Tobacco, Arnott's Australia and TOLL Australia.";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://siamsadman.vercel.app"),
@@ -50,7 +50,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: siteTitle,
-    description: bioLine,
+    description: shortDescription,
     images: ["/og-image.png"],
   },
 };
