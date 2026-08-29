@@ -24,21 +24,24 @@ const bioLine =
 
 const siteTitle = "Siam Sadman — Power BI Developer & Fabric Analytics Engineer";
 
+const shortDescription =
+  "12+ years building Power BI dashboards and reporting pipelines for BATB, Arnott's and TOLL.";
+
 export const metadata: Metadata = {
   metadataBase: new URL("https://siamsadman.vercel.app"),
   title: siteTitle,
   description: bioLine,
   openGraph: {
     title: siteTitle,
-    description: bioLine,
+    description: shortDescription,
     url: "/",
     siteName: "Siam Sadman",
     images: [
       {
-        url: "/portrait.jpg",
-        width: 800,
-        height: 800,
-        alt: "Portrait of Siam Sadman",
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: siteTitle,
       },
     ],
     locale: "en_US",
@@ -48,7 +51,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: siteTitle,
     description: bioLine,
-    images: ["/portrait.jpg"],
+    images: ["/og-image.png"],
   },
 };
 

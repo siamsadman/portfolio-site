@@ -16,7 +16,8 @@ export default function Header() {
             href="/#top"
             className="font-[family-name:var(--font-corinthia)] text-3xl font-bold text-heading"
           >
-            Siam Sadman
+            <span className="sm:hidden">SS</span>
+            <span className="hidden sm:inline">Siam Sadman</span>
           </a>
           <div className="flex items-center gap-6">
             <nav className="flex gap-6">

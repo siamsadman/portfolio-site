@@ -54,12 +54,13 @@ export default function Hero() {
 
           <motion.p
             variants={item}
-            className="text-lg font-medium text-accent sm:text-xl"
+            className="flex flex-col items-center gap-1 text-lg font-medium text-accent sm:flex-row sm:justify-center sm:gap-2 sm:text-xl lg:justify-start"
           >
-            <span className="whitespace-nowrap">Power BI Developer</span>{" "}
-            <span className="whitespace-nowrap">
-              · Microsoft Fabric Analytics Engineer
+            <span>Power BI Developer</span>
+            <span className="hidden sm:inline" aria-hidden="true">
+              ·
             </span>
+            <span>Microsoft Fabric Analytics Engineer</span>
           </motion.p>
 
           <motion.p
