@@ -1,6 +1,7 @@
 export type ProjectImage = {
   src: string;
   alt: string;
+  darkSrc?: string; // optional dark-theme variant; omit to render unchanged in both themes
 };
 
 // Detail-page content block — not rendered yet (detail pages are a later
@@ -17,7 +18,13 @@ export type ProjectSection =
       paragraphs?: string[]; // optional explanatory text beneath the images
     }
   | { type: "prose"; heading: string; paragraphs: string[] }
-  | { type: "list"; heading: string; intro?: string; items: string[] };
+  | {
+      type: "list";
+      heading: string;
+      intro?: string;
+      items: string[];
+      images?: ProjectImage[]; // rendered after the list items
+    };
 
 export type Project = {
   slug: string;
@@ -263,6 +270,125 @@ export const projects: Project[] = [
           "**Extreme seller scores are mostly small-sample effects.** The best and worst qualifying sellers differ by 2.67 points, but that spread collapses as volume rises: sellers with 30 to 49 reviews range across 1.93 points, the 26 largest span only 0.85. Seller-level satisfaction converges hard toward the 4.09 platform average.",
           "**Higher-value orders score consistently lower,** from 4.16 under R$50 down to 3.93 above R$500 — a modest but monotonic decline, suggesting expectations scale with price faster than service does.",
           "**Response is fast for almost everyone, and glacial for a few.** 86% of reviews get a response within three days, but a 655-review tail waits over 30 days, with the longest cases stretching past a year.",
+        ],
+      },
+    ],
+  },
+  {
+    slug: "bts-fabric-pipeline",
+    title: "BTS Airline On-Time Performance — Fabric Lakehouse",
+    pages: ["Report page"],
+    summary:
+      "A medallion-architecture lakehouse over 41.8 million US flight records — PySpark transformation, watermark-driven incremental loading, and a Direct Lake semantic model, with validation gates at every layer boundary.",
+    tags: ["Microsoft Fabric", "PySpark", "Data Engineering", "Delta Lake"],
+    palette: "indigo",
+    repoUrl: "https://github.com/siamsadman/bts-fabric-pipeline",
+    cardImage: {
+      src: "/projects/bts-fabric-pipeline/14-report-page.png",
+      alt: "BTS on-time performance report",
+    },
+    sections: [
+      {
+        type: "gallery",
+        heading: "Report",
+        images: [
+          { src: "/projects/bts-fabric-pipeline/14-report-page.png", alt: "BTS on-time performance report" },
+        ],
+        paragraphs: [
+          "One page: KPI cards, on-time and cancellation rate by month across the full range, carrier comparison, and delay minutes by cause.",
+          "The page carries a note explaining that on-time performance *improved* through mid-2020 while cancellations spiked to 41.5%. Both are real — domestic volume fell below 30% of normal, so the flights that did operate met empty airports and uncongested airspace. April 2020 records **95.1% on-time and 41.5% cancelled in the same month**: the best punctuality and the worst reliability in the dataset. Retaining cancelled flights is what makes that visible.",
+        ],
+      },
+      {
+        type: "gallery",
+        heading: "Architecture",
+        images: [
+          {
+            src: "/projects/bts-fabric-pipeline/architecture_light.png",
+            darkSrc: "/projects/bts-fabric-pipeline/architecture_dark.png",
+            alt: "Medallion lakehouse architecture — landing, bronze, silver, gold and the Direct Lake semantic model",
+          },
+          {
+            src: "/projects/bts-fabric-pipeline/orchestration_light.png",
+            darkSrc: "/projects/bts-fabric-pipeline/orchestration_dark.png",
+            alt: "Pipeline orchestration — single-period and backfill Data Factory pipelines",
+          },
+        ],
+        paragraphs: [
+          "A medallion lakehouse in Microsoft Fabric over US Bureau of Transportation Statistics flight data: January 2020 to June 2026, 78 monthly files, **41.8 million flight records**, roughly 20 GB of source CSV.",
+          "Landing holds raw CSV. Bronze preserves the source contract with an explicit schema and audit columns. Silver types and cleans, reducing 109 source fields to 56 and merging on a business key. Gold is a star schema — two facts, five dimensions. A Direct Lake semantic model sits on the gold tables only.",
+          "Layer separation is by table-name prefix within a single lakehouse. Three separate lakehouses would mean cross-lakehouse references in every notebook for no architectural gain at this scale.",
+          "Orchestration is two Data Factory pipelines: one that processes a single period through four notebook activities, and a backfill that invokes it sequentially per period. Activities are chained **on success**, not on completion — on-completion would let a failed landing step run bronze anyway, which is how partial data gets written and reported as a success. All four activities share a Spark session tag so the pipeline runs as one Spark application rather than four, which is necessary on F4 capacity and removes three session startups from every run.",
+          "**Why this dataset.** Volume justifies the architecture at roughly 600,000 flights per month. BTS publishes monthly, so the pipeline processes real new periods rather than a simulated drip-feed. And the period covered contains a natural stress test: domestic flights fell from 648,229 in March 2020 to 180,617 in May, with a 41.5% cancellation rate in April.",
+        ],
+      },
+      {
+        type: "list",
+        heading: "Pipeline decisions",
+        items: [
+          "**Explicit schema, not inference.** Inference reads the file twice and produces inconsistent types between months — a column entirely null in one month infers as `string` and as `int` in another, and the append then fails partway through a backfill. The schema is generated once from a reference month, hardened, and cached to a 20 KB JSON file rather than making two passes over 260 MB of CSV.",
+          "**The phantom column.** BTS ends every row with a trailing comma, producing a 110th unnamed field. Declaring it as `_phantom` and dropping it by name avoids Spark flagging every row as containing discarded data — a false \"corrupted records\" warning on 600,000 rows trains you to ignore warnings. It is also faster: 13 seconds against 24.",
+          "**Keep-list, not drop-list.** Silver reduces 109 fields to 56 using an explicit keep-list, so a new column in a future BTS vintage is ignored by default rather than flowing through uninvited.",
+          "**Arrival timestamps take the date from arithmetic and the clock from BTS.** Adding elapsed minutes to the departure timestamp produced a **48% mismatch** against the reported arrival time. Every mismatch was a whole number of hours and tracked direction of travel — `ActualElapsedTime` is gate-to-gate in local clock time at each end, so pure arithmetic yields origin-local time while BTS reports destination-local. The hybrid resolves it without requiring an airport-to-timezone reference dataset.",
+          "**The `2400` rule differs between departure and arrival, deliberately.** On the departure side the base date has not moved, so a day is added; on the arrival side the arithmetic has already crossed midnight, so it is not. Applying the departure rule to arrivals put 532 rows two days out.",
+          "**Null-safe equality in the merge condition.** Standard `=` returns null when either side is null, so a row with a null key column would never match itself and would insert a duplicate on every run.",
+          "**Natural keys throughout, not generated surrogates.** `monotonically_increasing_id()` is not stable across reruns, and a proper key-assignment step adds pipeline machinery this project does not need.",
+          "**Airports are keyed on `airport_id`, not the IATA code.** BTS reuses IATA codes across different airports over time. Carriers join on DOT ID for the same reason — BTS defines a unique airline by its certificate regardless of code or holding company.",
+          "**Dimensions rebuild in full every run.** This is what handled late-arriving members without special casing: `dim_airport` grew from 367 to 387 and `dim_carrier` from 17 to 18 as periods outside the development slice introduced airports and carriers that had not appeared before.",
+          "**Grain is one row per scheduled flight leg, including cancelled and diverted.** Filtering cancellations out is the common mistake with this dataset — it destroys cancellation-rate analysis and biases every delay average, because the worst operational days are the ones with the most cancellations. April 2020 would lose two fifths of its rows.",
+        ],
+        images: [
+          { src: "/projects/bts-fabric-pipeline/05-bronze-table-111-columns.png", alt: "Bronze — source contract preserved, 111 columns" },
+          { src: "/projects/bts-fabric-pipeline/06-silver-table-56-columns.png", alt: "Silver — typed and named, 56 columns" },
+        ],
+      },
+      {
+        type: "list",
+        heading: "Validation",
+        intro:
+          "Every layer boundary has a check that fails the run rather than warning. When the pipeline runs unattended, a bad month must fail the run rather than quietly write wrong data.\n\n`validate_timestamps()` runs two **independent** checks: that the derived clock matches the BTS reported time of day, and that the arrival date is the flight date or the day after. The `2400` bug passed the first at 100% and was caught only by the second. One passing check is not validation.",
+        items: [
+          "Source archives CRC-verified before ingestion — 77 of 77 valid, 1.92 GB",
+          "Explicit schema held across all 78 periods, 2020 to 2026",
+          "Derived clock matched the BTS reported time at 100%, every period",
+          "Arrival date within 0 to 1 days of flight date — 100%, zero outside range",
+          "Business key unique — zero duplicates, every period",
+          "Silver merge idempotent — row count unchanged on a full re-run at 41.2M rows",
+          "Every delayed flight appears in delay attribution — 82,285 = 82,285",
+          "Referential integrity across five relationships — zero orphans across 41.2M rows",
+          "**Assume referential integrity.** All semantic model relationships use Assume referential integrity, which generates INNER rather than OUTER joins on a 41M-row fact. That is a promise, not a check — it is only safe because the gold notebook verifies exactly these five relationships with `left_anti` joins on every load and raises on failure.",
+        ],
+        images: [
+          { src: "/projects/bts-fabric-pipeline/13-silver-validation-gates.png", alt: "Silver validation gates" },
+          { src: "/projects/bts-fabric-pipeline/10-referential-integrity-full-dataset.png", alt: "Referential integrity across 41.2M rows" },
+        ],
+      },
+      {
+        type: "list",
+        heading: "Results",
+        items: [
+          "**41,829,828 rows**, identical across bronze, silver and `fact_flight` — no drift through the chain.",
+          "**Full backfill of 71 periods ran unattended in 7 hours 6 minutes with zero failures.** Retries were configured on each activity but never fired.",
+          "**One period end to end takes about 6.5 minutes** on F4 trial capacity — 53 seconds to fetch and extract, 13 seconds to bronze, 1m 22s through silver, 2m 25s to gold.",
+          "**Incremental load demonstrated.** June 2026 was deliberately held back from the backfill and loaded afterwards through the same unchanged pipeline: 77 periods to 78, and exactly 607,577 new rows — June's count as recorded in the watermark. No double-counting, no manual intervention.",
+          "**The failure path works.** A later attempt at July 2026 returned HTTP 404 because BTS had not yet published it. Landing failed, and on-success chaining meant bronze, silver and gold never ran — they show as unstarted rather than skipped or failed. No partial data, no false success.",
+          "**Late aircraft leads on total delay minutes despite fewer occurrences than carrier delay** — the cascade effect, where one delayed aircraft makes its subsequent flights late. Weather is the rarest cause and by far the most severe per occurrence at 70.4 minutes average.",
+          "**Attribution covers 91.3% of arrival delay minutes.** The gap is flights delayed 1 to 14 minutes, for which BTS reports no cause. The unattributed share moves with severity — 11.7% when delays were mild, 5.2% when they were long. Correct behaviour, not a data quality issue.",
+        ],
+        images: [
+          { src: "/projects/bts-fabric-pipeline/08-backfill-71-periods-7h06m.png", alt: "Backfill — 71 periods, 7h 06m, zero failures" },
+          { src: "/projects/bts-fabric-pipeline/15-pipeline-failure-unpublished-period.png", alt: "Failure path — unpublished period, no partial data" },
+        ],
+      },
+      {
+        type: "list",
+        heading: "Notes on the Fabric platform",
+        intro: "Three defaults that cost time and are not obvious from the error messages.",
+        items: [
+          "**GitHub sync is disabled tenant-wide by default.** The setting lives in the Admin portal, not workspace settings. With it off, GitHub simply does not appear in the workspace Git provider list — it looks like a missing feature rather than a permission.",
+          "**High concurrency for pipelines is off by default.** Four notebook activities in sequence each request their own Spark session, and on F4 the second fails with `TooManyRequestsForCapacity`. Session tags are the mechanism, but they are ignored for pipelines unless the setting is enabled. The equivalent toggle for interactive notebooks is on by default, which makes the asymmetry easy to miss.",
+          "**A notebook parameter cell must be toggled, not merely present.** Untoggled, pipeline values are silently ignored and the notebook runs its defaults — and the failure surfaces two activities downstream. A zero-row guard converted a silent misconfiguration into a named, actionable error.",
+          "**HTTP 200 does not mean success.** TranStats returns 200 with an HTML body for URLs it does not recognise, which produced two false positives during the build. Both fetch paths assert on content — the zip download checks magic bytes, the lookup checks the CSV header — rather than trusting the status code.",
         ],
       },
     ],

@@ -23,11 +23,6 @@ export default function Projects() {
       <PageContainer>
         <SectionHeading kicker="04 / Projects" title="Projects" />
 
-        <p className="mb-12 max-w-2xl text-sm text-muted sm:text-base">
-          Nine pages across three dashboards, built on one shared dimensional
-          model — the Olist Brazilian E-Commerce dataset (Kaggle).
-        </p>
-
         <motion.div
           initial="hidden"
           whileInView="visible"

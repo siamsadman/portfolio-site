@@ -38,20 +38,53 @@ function SectionBlock({ section }: { section: ProjectSection }) {
         <div className="mt-6 flex flex-col gap-8">
           {section.images.map((image) => (
             <figure key={image.src}>
-              <a
-                href={image.src}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block"
-              >
-                <Image
-                  src={image.src}
-                  alt={image.alt}
-                  width={1600}
-                  height={900}
-                  className="w-full rounded-2xl border border-border object-cover"
-                />
-              </a>
+              {image.darkSrc ? (
+                <>
+                  <a
+                    href={image.src}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block dark:hidden"
+                  >
+                    <Image
+                      src={image.src}
+                      alt={image.alt}
+                      width={1600}
+                      height={900}
+                      className="w-full rounded-2xl border border-border object-cover"
+                    />
+                  </a>
+                  <a
+                    href={image.darkSrc}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hidden dark:block"
+                  >
+                    <Image
+                      src={image.darkSrc}
+                      alt={image.alt}
+                      width={1600}
+                      height={900}
+                      className="w-full rounded-2xl border border-border object-cover"
+                    />
+                  </a>
+                </>
+              ) : (
+                <a
+                  href={image.src}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block"
+                >
+                  <Image
+                    src={image.src}
+                    alt={image.alt}
+                    width={1600}
+                    height={900}
+                    className="w-full rounded-2xl border border-border object-cover"
+                  />
+                </a>
+              )}
               <figcaption className="mt-2 text-xs text-muted">
                 {image.alt} · Tap to view full-size
               </figcaption>
@@ -105,6 +138,31 @@ function SectionBlock({ section }: { section: ProjectSection }) {
           <li key={listItem}>{renderInline(listItem)}</li>
         ))}
       </ul>
+      {section.images && section.images.length > 0 && (
+        <div className="mt-8 grid grid-cols-1 gap-x-10 gap-y-10 sm:grid-cols-2">
+          {section.images.map((image) => (
+            <figure key={image.src}>
+              <a
+                href={image.src}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block"
+              >
+                <Image
+                  src={image.src}
+                  alt={image.alt}
+                  width={1600}
+                  height={900}
+                  className="w-full rounded-2xl border border-border object-cover"
+                />
+              </a>
+              <figcaption className="mt-2 text-xs text-muted">
+                {image.alt} · Tap to view full-size
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
