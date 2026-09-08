@@ -20,6 +20,7 @@ daily in parallel; the site is an amplifier, not a blocker.
 |---|---|
 | Framework | Next.js 16.3.1, App Router, TypeScript |
 | Styling | Tailwind CSS v4 |
+| Theme | Light/dark, class-based toggle in the header, defaults to system preference |
 | Animation | Framer Motion |
 | Hosting | Vercel, Hobby plan |
 | Domain | `siamsadman.vercel.app` (custom domain possible later) |
@@ -84,9 +85,10 @@ project can be linked directly in a job application.
    large, in the project cards. If no suitable portrait is supplied, the hero is
    text-only with generous whitespace.
 2. **Experience**
-3. **Technical proof points** — a compact three-item strip between Experience and
-   Projects (the 91.9% validation catch, the 41-second import, the nine-page shared
-   model). This is what stops a BI lead scrolling.
+3. **Technical proof points** — a compact four-item strip between Experience and
+   Projects (the 91.9% validation catch, the 48% timestamp-derivation mismatch, the
+   41.8M-row zero-failure backfill, and the 41-second import). This is what stops a
+   BI lead scrolling.
 4. **Projects**
 5. **Skills**
 6. **Certifications & Education**
@@ -111,6 +113,9 @@ different section list.
 **Adding a project must never require writing new components.** The steps must be: drop
 images into `public/projects/<slug>/`, add one entry to `content/projects.ts`, commit,
 push.
+
+The homepage renders cards in a three-across grid at desktop width (two-across on
+tablet, one-across on mobile) — not a stacked single column.
 
 Include a `tags` field on every project (`Power BI`, `Fabric`, `SQL`, `Python`).
 
@@ -190,34 +195,42 @@ sponsorship or EOR arrangements anywhere on the site.
 
 ## Projects
 
-Three completed Power BI dashboards on the Olist Brazilian E-Commerce dataset (Kaggle).
-Nine dashboard pages total across the series, on one shared dimensional model. Each repo
-has three dashboard screenshots plus a data model diagram in `images/`.
+Three completed Power BI dashboards on the Olist Brazilian E-Commerce dataset (Kaggle),
+plus a completed Microsoft Fabric data engineering project on US BTS airline on-time
+performance data. Nine dashboard pages total across the Olist series, on one shared
+dimensional model. Each Olist repo has three dashboard screenshots plus a data model
+diagram in `images/`.
 
 | # | Project | Palette | Repo |
 |---|---|---|---|
 | 1 | Sales & Revenue Performance | blue | `olist-sales-dashboard` |
 | 2 | Logistics & Delivery Performance | teal/navy | `olist-logistics-dashboard` |
 | 3 | Customer Experience & Satisfaction | coral/gold | `olist-customer-satisfaction-dashboard` |
+| 4 | BTS Airline On-Time Performance — Fabric Lakehouse | indigo | `bts-fabric-pipeline` |
 
 The screenshots are the strongest asset on the site. Unlike a developer portfolio where
 projects are screenshots of websites, these artifacts are *dashboards* — visually rich and
 immediately legible as skilled work. Show them large.
 
-**Technical proof points — these drive the strip in section 03:**
+**Technical proof points — these drive the strip in section 03. Attributions are
+settled, don't re-derive them:**
 
 - Caught an on-time rate reading 95% instead of the correct 91.9% through independent SQL
-  validation of every DAX measure
+  validation of every DAX measure — **Olist Logistics**
+- Adding elapsed minutes to departure time disagreed with the reported arrival on nearly
+  half of all flights; diagnosed to gate-to-gate local clock time and resolved without a
+  timezone reference dataset — **BTS Fabric Pipeline**
+- Seventy-one monthly periods (41.8M rows) loaded end to end in seven hours through a
+  Fabric pipeline, with retries configured on every activity and none fired —
+  **BTS Fabric Pipeline**
+- Cut a 98,000-row SQL Server import from 10+ minutes to 41 seconds by correcting column
+  type declarations — **Olist Customer Experience**
 - Deliberately disconnected a pre-flattened bridge table when DAX across two independent
   many-to-many paths returned plausible but wrong results — and documented why rather than
-  hiding it
-- Cut a 98,000-row SQL Server import from 10+ minutes to 41 seconds by correcting column
-  type declarations
-- Extended the model across all three parts without modifying any previously published
-  table, treating earlier parts as live production assets
+  hiding it — **Olist Customer Experience**
 
-Next project to be built: **Microsoft Fabric / DP-600** — lakehouse, medallion
-architecture, notebooks, pipelines, lineage view. SQL-focused and Python projects follow.
+Next project to be built: a **SQL-focused project**. The Fabric/DP-600 project (BTS
+Airline On-Time Performance) is done. A Python-focused project follows the SQL one.
 
 ## Environment
 

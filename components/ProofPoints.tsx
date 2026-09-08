@@ -21,16 +21,22 @@ const proofPoints = [
       "Caught an on-time rate reading 95% instead of the correct 91.9% through independent SQL validation of every DAX measure.",
   },
   {
+    stat: "48% mismatch",
+    label: "Arrival timestamp derivation",
+    detail:
+      "Adding elapsed minutes to departure time disagreed with the reported arrival on nearly half of all flights. Diagnosed to gate-to-gate local clock time and resolved without a timezone reference dataset.",
+  },
+  {
+    stat: "41.8M rows · 0 failures",
+    label: "Unattended backfill",
+    detail:
+      "Seventy-one monthly periods loaded end to end in seven hours through a Fabric pipeline, with retries configured on every activity and none fired.",
+  },
+  {
     stat: "10+ min → 41s",
     label: "SQL Server import",
     detail:
       "Cut a 98,000-row SQL Server import from 10+ minutes to 41 seconds by correcting column type declarations.",
-  },
-  {
-    stat: "9 pages · 1 model",
-    label: "One shared dimensional model",
-    detail:
-      "Nine dashboard pages across three dashboards share one dimensional model — extended across all three parts without modifying any previously published table, treating earlier parts as live production assets.",
   },
 ];
 
@@ -46,7 +52,7 @@ export default function ProofPoints() {
             transition={{ duration: 0.2, ease: "easeOut" }}
             className="mb-10 font-mono text-sm font-medium tracking-wide text-accent"
           >
-            03 / Validation
+            03 / Proof points
           </motion.p>
 
           <motion.div
