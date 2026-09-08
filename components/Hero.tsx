@@ -5,16 +5,15 @@ import { motion, type Variants } from "framer-motion";
 import PageContainer from "@/components/PageContainer";
 
 const container: Variants = {
-  hidden: { opacity: 0 },
+  hidden: {},
   visible: {
-    opacity: 1,
-    transition: { staggerChildren: 0.12, delayChildren: 0.1 },
+    transition: { staggerChildren: 0.06, delayChildren: 0.05 },
   },
 };
 
 const item: Variants = {
-  hidden: { opacity: 0, y: 16 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
+  hidden: { opacity: 1, y: 16 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.2, ease: "easeOut" } },
 };
 
 export default function Hero() {
@@ -23,9 +22,9 @@ export default function Hero() {
       <PageContainer className="grid gap-12 lg:grid-cols-[3fr_2fr] lg:items-center">
         <motion.div
           className="order-1 flex justify-center lg:order-2 lg:justify-end"
-          initial={{ opacity: 0, scale: 0.95 }}
+          initial={{ opacity: 1, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
+          transition={{ duration: 0.25, delay: 0.05, ease: "easeOut" }}
         >
           <div className="rounded-[2rem] border border-accent/30 bg-panel p-3">
             <Image

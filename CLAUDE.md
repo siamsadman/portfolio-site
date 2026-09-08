@@ -182,7 +182,7 @@ This line already appears across all three GitHub READMEs. Keep it consistent.
 
 One quiet line in the **Contact** section, phrased exactly as:
 
-> Currently open to new roles — Dhaka, Gulf, or remote.
+> Currently open to new roles — Dhaka or remote.
 
 **Not in the hero.** In the hero it reads as anxious, signals unemployment to a reader who
 was not asking, and is the fastest thing on the site to go stale. Do not mention visa

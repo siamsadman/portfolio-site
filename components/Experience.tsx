@@ -11,22 +11,22 @@ import {
 
 const cardsContainer: Variants = {
   hidden: {},
-  visible: { transition: { staggerChildren: 0.15 } },
+  visible: { transition: { staggerChildren: 0.06 } },
 };
 
 const cardItem: Variants = {
   hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.2, ease: "easeOut" } },
 };
 
 const engagementsContainer: Variants = {
   hidden: {},
-  visible: { transition: { staggerChildren: 0.08 } },
+  visible: { transition: { staggerChildren: 0.04 } },
 };
 
 const engagementItem: Variants = {
   hidden: { opacity: 0, y: 10 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" } },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.15, ease: "easeOut" } },
 };
 
 function EngagementBlock({ item }: { item: EngagementItem }) {
@@ -218,12 +218,12 @@ export default function Experience() {
   return (
     <section id="experience" className="bg-panel pt-6 pb-24 sm:pt-8">
       <PageContainer>
-        <div className="max-w-3xl">
+        <div className="mx-auto max-w-3xl">
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.5, ease: "easeOut" }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
           >
             <SectionHeading kicker="02 / Experience" title="Experience" />
           </motion.div>

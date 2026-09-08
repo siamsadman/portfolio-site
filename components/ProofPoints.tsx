@@ -5,12 +5,12 @@ import PageContainer from "@/components/PageContainer";
 
 const container: Variants = {
   hidden: {},
-  visible: { transition: { staggerChildren: 0.15 } },
+  visible: { transition: { staggerChildren: 0.06 } },
 };
 
 const item: Variants = {
   hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.2, ease: "easeOut" } },
 };
 
 const proofPoints = [
@@ -38,12 +38,12 @@ export default function ProofPoints() {
   return (
     <section className="bg-background pt-6 pb-24 sm:pt-8">
       <PageContainer>
-        <div className="max-w-3xl">
+        <div className="mx-auto max-w-3xl">
           <motion.p
             initial={{ opacity: 0, y: 12 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.5, ease: "easeOut" }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
             className="mb-10 font-mono text-sm font-medium tracking-wide text-accent"
           >
             03 / Validation

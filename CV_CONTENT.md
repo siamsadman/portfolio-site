@@ -174,5 +174,5 @@ B.Sc. in Computer Science — Prime University, Dhaka — 2012 — CGPA 3.44
 
 - Email: siamsadman@gmail.com
 - LinkedIn and GitHub links
-- One availability line, exactly: *Currently open to new roles — Dhaka, Gulf, or remote.*
+- One availability line, exactly: *Currently open to new roles — Dhaka or remote.*
 - **No phone number. No WhatsApp button.**

@@ -6,19 +6,19 @@ import SectionHeading from "@/components/SectionHeading";
 
 const container: Variants = {
   hidden: {},
-  visible: { transition: { staggerChildren: 0.12 } },
+  visible: { transition: { staggerChildren: 0.05 } },
 };
 
 const item: Variants = {
   hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.2, ease: "easeOut" } },
 };
 
 export default function Contact() {
   return (
-    <section id="contact" className="border-t border-border bg-background pt-24 pb-24 sm:pt-32">
+    <section id="contact" className="border-t border-border bg-background pt-24 pb-12 sm:pt-32">
       <PageContainer>
-        <div className="max-w-3xl">
+        <div className="mx-auto max-w-3xl">
           <SectionHeading kicker="07 / Contact" title="Contact" />
 
           <motion.div
@@ -54,7 +54,7 @@ export default function Contact() {
             </motion.div>
 
             <motion.p variants={item} className="text-sm text-muted">
-              Currently open to new roles — Dhaka, Gulf, or remote.
+              Currently open to new roles — Dhaka or remote.
             </motion.p>
           </motion.div>
         </div>

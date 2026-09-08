@@ -6,12 +6,12 @@ import SectionHeading from "@/components/SectionHeading";
 
 const container: Variants = {
   hidden: {},
-  visible: { transition: { staggerChildren: 0.1 } },
+  visible: { transition: { staggerChildren: 0.05 } },
 };
 
 const item: Variants = {
   hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.2, ease: "easeOut" } },
 };
 
 const skillGroups = [
@@ -87,7 +87,7 @@ export default function Skills() {
   return (
     <section className="bg-background pt-6 pb-24 sm:pt-8">
       <PageContainer>
-        <div className="max-w-3xl">
+        <div className="mx-auto max-w-3xl">
           <SectionHeading kicker="05 / Skills" title="Skills" />
 
           <motion.div
