@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     siteName: "Siam Sadman",
     images: [
       {
-        url: "/og-image.png",
+        url: "/og-image-v2.jpg",
         width: 1200,
         height: 630,
         alt: siteTitle,
@@ -51,7 +51,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: siteTitle,
     description: shortDescription,
-    images: ["/og-image.png"],
+    images: ["/og-image-v2.jpg"],
   },
 };
 

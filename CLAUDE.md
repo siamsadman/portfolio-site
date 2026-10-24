@@ -179,6 +179,7 @@ This line already appears across all three GitHub READMEs. Keep it consistent.
 
 ### Certifications — all held
 
+- Microsoft Certified: Fabric Data Engineer Associate (**DP-700**) — October 2026
 - Microsoft Certified: Fabric Analytics Engineer Associate (**DP-600**) — August 2026
 - Microsoft Certified: Power BI Data Analyst Associate (**PL-300**) — July 2026
 - EF SET English Certificate — C1 Advanced

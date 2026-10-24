@@ -14,7 +14,19 @@ const item: Variants = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.2, ease: "easeOut" } },
 };
 
-const certifications = [
+type Certification = {
+  title: string;
+  date?: string;
+  detail?: string;
+  url?: string;
+};
+
+const certifications: Certification[] = [
+  {
+    title: "Microsoft Certified: Fabric Data Engineer Associate (DP-700)",
+    date: "October 2026",
+    url: "https://learn.microsoft.com/en-us/users/siamsadman/credentials/784b368bc24e1335",
+  },
   {
     title: "Microsoft Certified: Fabric Analytics Engineer Associate (DP-600)",
     date: "August 2026",
@@ -54,33 +66,46 @@ export default function CertificationsEducation() {
                 Certifications
               </p>
               <div className="mt-4 flex flex-col gap-4">
-                {certifications.map((cert) => (
-                  <a
-                    key={cert.title}
-                    href={cert.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group block w-fit"
-                  >
-                    <p className="text-base font-medium text-foreground group-hover:text-accent">
-                      {cert.title}
-                      {cert.date && (
-                        <span className="text-muted"> · {cert.date}</span>
-                      )}
-                    </p>
-                    {cert.detail && (
-                      <p className="mt-1 text-sm text-muted">
-                        {cert.detail}
+                {certifications.map((cert) => {
+                  const body = (
+                    <>
+                      <p className="text-base font-medium text-foreground group-hover:text-accent">
+                        {cert.title}
+                        {cert.date && (
+                          <span className="text-muted"> · {cert.date}</span>
+                        )}
                       </p>
-                    )}
-                    <p className="mt-1 flex items-center gap-1 text-xs font-medium text-accent">
-                      Verify
-                      <span className="inline-block transition-transform group-hover:translate-x-1">
-                        ↗
-                      </span>
-                    </p>
-                  </a>
-                ))}
+                      {cert.detail && (
+                        <p className="mt-1 text-sm text-muted">
+                          {cert.detail}
+                        </p>
+                      )}
+                      {cert.url && (
+                        <p className="mt-1 flex items-center gap-1 text-xs font-medium text-accent">
+                          Verify
+                          <span className="inline-block transition-transform group-hover:translate-x-1">
+                            ↗
+                          </span>
+                        </p>
+                      )}
+                    </>
+                  );
+                  return cert.url ? (
+                    <a
+                      key={cert.title}
+                      href={cert.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group block w-fit"
+                    >
+                      {body}
+                    </a>
+                  ) : (
+                    <div key={cert.title} className="group block w-fit">
+                      {body}
+                    </div>
+                  );
+                })}
               </div>
             </motion.div>
 
