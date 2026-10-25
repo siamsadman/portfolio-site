@@ -20,12 +20,12 @@ const corinthia = Corinthia({
 });
 
 const bioLine =
-  "BI Developer and Reporting Analyst with 12+ years of experience building automated reporting pipelines and Power BI dashboards in production environments for clients including British American Tobacco Bangladesh, Arnott's Australia and TOLL Australia.";
+  "BI Developer and Reporting Analyst with 10+ years in enterprise reporting, building automated reporting pipelines and Power BI dashboards in production environments for clients including British American Tobacco Bangladesh, Arnott's Australia and TOLL Australia.";
 
 const siteTitle = "Siam Sadman — Power BI Developer & Fabric Analytics Engineer";
 
 const shortDescription =
-  "12+ years building Power BI dashboards and reporting pipelines in production for British American Tobacco, Arnott's Australia and TOLL Australia.";
+  "10+ years in enterprise reporting, delivering Power BI dashboards and reporting pipelines in production for British American Tobacco, Arnott's Australia and TOLL Australia.";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://siamsadman.vercel.app"),

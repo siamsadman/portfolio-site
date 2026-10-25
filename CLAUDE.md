@@ -171,7 +171,7 @@ engagement". Full rule in `CV_CONTENT.md`.
 
 ### Bio line — use verbatim, do not reword
 
-> BI Developer and Reporting Analyst with 12+ years of experience building automated
+> BI Developer and Reporting Analyst with 10+ years in enterprise reporting, building automated
 > reporting pipelines and Power BI dashboards in production environments for clients
 > including British American Tobacco Bangladesh, Arnott's Australia and TOLL Australia.
 

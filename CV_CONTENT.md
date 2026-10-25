@@ -21,7 +21,7 @@ that gets sent directly to an employer, not on a scrapeable web page.
 > Power BI Developer · Microsoft Fabric Analytics Engineer · Power Platform Automation
 
 **Bio line — verbatim, do not reword:**
-> BI Developer and Reporting Analyst with 12+ years of experience building automated
+> BI Developer and Reporting Analyst with 10+ years in enterprise reporting, building automated
 > reporting pipelines and Power BI dashboards in production environments for clients
 > including British American Tobacco Bangladesh, Arnott's Australia and TOLL Australia.
 

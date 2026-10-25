@@ -66,7 +66,7 @@ export default function Hero() {
             variants={item}
             className="max-w-xl text-base leading-relaxed text-foreground sm:text-lg"
           >
-            BI Developer and Reporting Analyst with 12+ years of experience
+            BI Developer and Reporting Analyst with 10+ years in enterprise reporting,
             building automated reporting pipelines and Power BI dashboards in
             production environments for clients including British American
             Tobacco Bangladesh, Arnott&apos;s Australia and TOLL Australia.
