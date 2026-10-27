@@ -403,8 +403,8 @@ export const projects: Project[] = [
     palette: "sky",
     repoUrl: "https://github.com/siamsadman/opensky-fabric-rti",
     cardImage: {
-      src: "/projects/opensky-fabric-rti/14-dashboard-strict-tile.png",
-      alt: "OpenSky live aircraft dashboard — distinct aircraft per 5 minutes and rapid-descent tiles",
+      src: "/projects/opensky-fabric-rti/22-powerbi-report.png",
+      alt: "OpenSky Power BI report page: KPI cards, aircraft per 5 minutes, top origin countries and a table of airborne readings below -20 m/s",
     },
     sections: [
       {
@@ -458,6 +458,22 @@ export const projects: Project[] = [
         ],
       },
       {
+        type: "gallery",
+        heading: "Power BI report",
+        images: [
+          {
+            src: "/projects/opensky-fabric-rti/22-powerbi-report.png",
+            alt: "Power BI report page: four KPI cards, a line chart of distinct aircraft per 5-minute window, a bar chart of the top 8 origin countries and a table of airborne readings below -20 m/s",
+          },
+        ],
+        paragraphs: [
+          "A one-page Power BI report on an imported snapshot of `aircraft_clean()` (46,004 rows), not a live connection to the Eventhouse. Four KPI cards, distinct aircraft per 5-minute window, the top 8 origin countries, and a table of the 26 airborne readings reported below -20 m/s.",
+          "The report was built with Claude Code and Microsoft's Power BI authoring plugin.",
+          "**Checks.** The imported row count matches the KQL result, the table's 26 readings equal the `Readings Below -20 m/s` measure, and the nine rows at the top of the table match a DAX query on the model. The other measures were checked in the model only, not cross-checked in KQL.",
+          "**Limits.** The time axis shows 12-hour labels, the table scrolls (about eight of its 26 rows are visible at once), and the Power BI project files are not published because they contain the Eventhouse address.",
+        ],
+      },
+      {
         type: "list",
         heading: "Limits and what I did not verify",
         items: [
@@ -465,8 +481,8 @@ export const projects: Project[] = [
           "**Producer timeouts.** One ReadTimeout and several ConnectTimeouts calling OpenSky. The script logged each and recovered at the next interval; I did not determine the cause.",
           "**The flag is a data check, not a safety signal.** Many reported rapid descents looked inconsistent with altitude, which could be bad values, and I did not establish what actually happened.",
           "**Mistakes I made and fixed.** The first dashboard tile ignored the time-range filter, the alert condition first saved as equal to instead of less than, I first counted live-feed rows as activations, and my first redaction of the dashboard export missed one identifier. All are in the problems log.",
-          "**Not tested.** The Eventstream HTTP source, ingestion latency, rebuilding the project from scratch on another machine, and a Power BI report on the Eventhouse.",
-          "**After the trial.** The Fabric items disappear when the trial ends. The repo keeps the producer script, the KQL scripts, a sanitized dashboard export, the problems log and 21 screenshots.",
+          "**Not tested.** The Eventstream HTTP source, ingestion latency, rebuilding the project from scratch on another machine, and a live (DirectQuery) Power BI connection to the Eventhouse.",
+          "**After the trial.** The Fabric items disappear when the trial ends. The repo keeps the producer script, the KQL scripts, a sanitized dashboard export, the problems log and 22 screenshots.",
         ],
       },
     ],
