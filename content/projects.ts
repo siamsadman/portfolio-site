@@ -396,10 +396,10 @@ export const projects: Project[] = [
   {
     slug: "opensky-fabric-rti",
     title: "Live Aircraft Data — Fabric Real-Time Intelligence",
-    pages: ["Aircraft per 5 minutes", "Rapid descents"],
+    pages: ["OpenSky snapshot"],
     summary:
-      "Live OpenSky aircraft positions streamed through a Fabric Eventstream into an Eventhouse, analysed with KQL, shown on a Real-Time Dashboard, with an Activator rule on top. A streaming counterpart to the BTS batch lakehouse; the write-up states what failed and what was not verified.",
-    tags: ["Microsoft Fabric", "Real-Time Intelligence", "KQL", "Python"],
+      "Live OpenSky aircraft positions streamed through a Fabric Eventstream into an Eventhouse, analysed with KQL, shown on a Real-Time Dashboard and in a Power BI report on an imported snapshot, with an Activator rule on top. A streaming counterpart to the BTS batch lakehouse; the write-up states what failed and what was not verified.",
+    tags: ["Microsoft Fabric", "Real-Time Intelligence", "KQL", "Python", "Power BI"],
     palette: "sky",
     repoUrl: "https://github.com/siamsadman/opensky-fabric-rti",
     cardImage: {
@@ -440,7 +440,7 @@ export const projects: Project[] = [
           "**Volume.** 54,587 events ingested between 10:16 and 13:34 UTC, a span of 3 h 18 min with gaps, covering about 1,086 distinct aircraft (a `dcount` estimate).",
           "**Repeated positions.** Each poll resends aircraft that have not reported a new position, so `aircraft_clean()` removed 8,583 of the 54,587 rows (about 15.7%), mostly repeats.",
           "**Registration, not location.** In a query at 11:06 UTC India led with 408 distinct aircraft, then the UAE with 47. `origin_country` is inferred from the transponder address, so this is registration country, not where the aircraft were flying.",
-          "**Reported rapid descents often disagreed with altitude.** Of 12 readings reported below -20 m/s, 2 agreed with the rate calculated from the altitude change between consecutive readings (within 5 m/s, a tolerance I chose) and 10 did not. The sample is small and I did not investigate why they disagree.",
+          "**Reported rapid descents often disagreed with altitude.** On the final data, 23 of the 26 airborne readings reported below -20 m/s had an earlier reading from the same aircraft 5 to 120 seconds before, so a rate could be calculated from the altitude change. 4 agreed (within 5 m/s, a tolerance I chose) and 19 did not. An earlier run on partial data found 12 readings, 2 agreed and 10 did not. I did not investigate why they disagree.",
         ],
       },
       {
@@ -469,7 +469,7 @@ export const projects: Project[] = [
         paragraphs: [
           "A one-page Power BI report on an imported snapshot of `aircraft_clean()` (46,004 rows), not a live connection to the Eventhouse. Four KPI cards, distinct aircraft per 5-minute window, the top 8 origin countries, and a table of the 26 airborne readings reported below -20 m/s.",
           "The report was built with Claude Code and Microsoft's Power BI authoring plugin.",
-          "**Checks.** The imported row count matches the KQL result, the table's 26 readings equal the `Readings Below -20 m/s` measure, and the nine rows at the top of the table match a DAX query on the model. The other measures were checked in the model only, not cross-checked in KQL.",
+          "**Checks.** The five count measures match a KQL cross-check on the final data (46,004 / 1,088 / 1,081 / 26 / 21), the table's 26 readings equal the `Readings Below -20 m/s` measure, and the nine rows at the top of the table match a DAX query on the model. The top-8 countries measure was checked with a DAX query only, not in KQL.",
           "**Limits.** The time axis shows 12-hour labels, the table scrolls (about eight of its 26 rows are visible at once), and the Power BI project files are not published because they contain the Eventhouse address.",
         ],
       },
@@ -480,7 +480,7 @@ export const projects: Project[] = [
           "**Not a continuous series.** Eight gaps longer than 90 seconds, up to 487 seconds: one is the producer restart, two match producer timeouts, and five are unexplained.",
           "**Producer timeouts.** One ReadTimeout and several ConnectTimeouts calling OpenSky. The script logged each and recovered at the next interval; I did not determine the cause.",
           "**The flag is a data check, not a safety signal.** Many reported rapid descents looked inconsistent with altitude, which could be bad values, and I did not establish what actually happened.",
-          "**Mistakes I made and fixed.** The first dashboard tile ignored the time-range filter, the alert condition first saved as equal to instead of less than, I first counted live-feed rows as activations, and my first redaction of the dashboard export missed one identifier. All are in the problems log.",
+          "**Mistakes I made and fixed.** The first dashboard tile ignored the time-range filter, the alert condition first saved as equal to instead of less than, I first counted live-feed rows as activations, my first redaction of the dashboard export missed one identifier, and the Power BI report's 5-minute window column first loaded as text because its query had no type step. All are in the problems log.",
           "**Not tested.** The Eventstream HTTP source, ingestion latency, rebuilding the project from scratch on another machine, and a live (DirectQuery) Power BI connection to the Eventhouse.",
           "**After the trial.** The Fabric items disappear when the trial ends. The repo keeps the producer script, the KQL scripts, a sanitized dashboard export, the problems log and 22 screenshots.",
         ],
