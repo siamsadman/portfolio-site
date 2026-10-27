@@ -5,7 +5,7 @@ export type Title = {
 
 // A client relationship can span more than one workstream running over
 // different (possibly overlapping) date ranges — BATB is both "Reporting
-// operations leadership" (2017 – June 2025) and, concurrently, "Business
+// operations leadership" (Jul 2016 – June 2025) and, concurrently, "Business
 // intelligence modernisation" (2021 – 2025). These render as two workstreams
 // inside one client block, never as two separate client engagements.
 export type Workstream = {
@@ -64,7 +64,7 @@ export const experience: ExperienceEntry[] = [
         workstreams: [
           {
             descriptor: "Reporting operations leadership",
-            dateRange: "2017 – June 2025",
+            dateRange: "Jul 2016 – June 2025",
             bullets: [
               "Led a team of 2–4 analysts delivering approximately 130 scheduled and ad-hoc reports per month to BATB's central analytics function, regional managers and area managers.",
               "Owned the full reporting lifecycle for BATB's CRM and sales force automation platform, from requirement gathering through delivery, covering sales, distribution, trade and campaign reporting.",
@@ -128,7 +128,7 @@ export const experience: ExperienceEntry[] = [
     id: "market-express",
     employer: "Market Express Limited",
     location: "Dhaka",
-    dateRange: "2016 – Feb 2017",
+    dateRange: "Jul 2016 – Feb 2017",
     titles: [{ title: "Reporting Officer" }],
     type: "bullets",
     bullets: [
@@ -139,7 +139,7 @@ export const experience: ExperienceEntry[] = [
     id: "ks-international",
     employer: "K.S. International",
     location: "Dhaka",
-    dateRange: "2014 – 2016",
+    dateRange: "2014 – Jun 2016",
     titles: [{ title: "Digital Media Developer" }],
     type: "bullets",
     bullets: [],
