@@ -139,7 +139,11 @@ function SectionBlock({ section }: { section: ProjectSection }) {
         ))}
       </ul>
       {section.images && section.images.length > 0 && (
-        <div className="mt-8 grid grid-cols-1 gap-x-10 gap-y-10 sm:grid-cols-2">
+        <div
+          className={`mt-8 grid grid-cols-1 gap-x-10 gap-y-10 ${
+            section.images.length > 1 ? "sm:grid-cols-2" : ""
+          }`}
+        >
           {section.images.map((image) => (
             <figure key={image.src}>
               <a
@@ -195,9 +199,11 @@ export default function ProjectDetail({ project }: { project: Project }) {
           ))}
         </div>
 
-        <p className="mt-4 text-sm text-muted">
-          Report pages: {project.pages.join(" · ")}
-        </p>
+        {project.pages && project.pages.length > 0 && (
+          <p className="mt-4 text-sm text-muted">
+            {project.pagesLabel ?? "Report pages"}: {project.pages.join(" · ")}
+          </p>
+        )}
 
         {sections.map((section) => (
           <SectionBlock key={section.heading} section={section} />

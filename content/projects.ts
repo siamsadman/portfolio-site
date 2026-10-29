@@ -29,7 +29,8 @@ export type ProjectSection =
 export type Project = {
   slug: string;
   title: string;
-  pages: string[];
+  pages?: string[]; // omit to hide the line entirely
+  pagesLabel?: string; // defaults to "Report pages"
   summary: string;
   tags: string[];
   palette: string;
@@ -277,7 +278,6 @@ export const projects: Project[] = [
   {
     slug: "bts-fabric-pipeline",
     title: "BTS Airline On-Time Performance — Fabric Lakehouse",
-    pages: ["Report page"],
     summary:
       "A medallion-architecture lakehouse over 41.8 million US flight records — PySpark transformation, watermark-driven incremental loading, and a Direct Lake semantic model, with validation gates at every layer boundary.",
     tags: ["Microsoft Fabric", "PySpark", "Data Engineering", "Delta Lake"],
@@ -483,6 +483,95 @@ export const projects: Project[] = [
           "**Mistakes I made and fixed.** The first dashboard tile ignored the time-range filter, the alert condition first saved as equal to instead of less than, I first counted live-feed rows as activations, my first redaction of the dashboard export missed one identifier, and the Power BI report's 5-minute window column first loaded as text because its query had no type step. All are in the problems log.",
           "**Not tested.** The Eventstream HTTP source, ingestion latency, rebuilding the project from scratch on another machine, and a live (DirectQuery) Power BI connection to the Eventhouse.",
           "**After the trial.** The Fabric items disappear when the trial ends. The repo keeps the producer script, the KQL scripts, a sanitized dashboard export, the problems log and 22 screenshots.",
+        ],
+      },
+    ],
+  },
+  {
+    slug: "grid-shift",
+    title: "Grid Shift — Fabric App",
+    pages: ["Overview", "Monthly"],
+    pagesLabel: "Views",
+    summary:
+      "How Bangladesh's electricity is generated, and how it compares with South Asia and the world. A Fabric App (preview) over a Direct Lake semantic model.",
+    tags: [
+      "Microsoft Fabric",
+      "Dataflow Gen2",
+      "T-SQL",
+      "Direct Lake",
+      "DAX",
+      "Fabric Apps (preview)",
+    ],
+    palette: "emerald",
+    repoUrl: "https://github.com/siamsadman/ember-fabric-app",
+    cardImage: {
+      src: "/projects/grid-shift/01_Bangladesh_overview_dark_theme_card.png",
+      alt: "Grid Shift overview for Bangladesh, dark theme — KPI cards and the generation-mix chart",
+    },
+    sections: [
+      {
+        type: "gallery",
+        heading: "The app",
+        images: [
+          {
+            src: "/projects/grid-shift/01_Bangladesh_overview_dark_theme.png",
+            alt: "Grid Shift overview for Bangladesh, dark theme",
+          },
+          {
+            src: "/projects/grid-shift/04_Bangladesh_monthly_dark_theme.png",
+            alt: "Monthly view for Bangladesh — generation by fuel, month by month",
+          },
+          {
+            src: "/projects/grid-shift/05_Nepal_monthly_dark_theme.png",
+            alt: "Monthly view for Nepal — an explicit empty state, because Ember has yearly data only for Nepal",
+          },
+        ],
+        paragraphs: [
+          "A Fabric App (preview) built on the `dataapp` template, reading every number from the `sm_grid_shift` semantic model through the semantic-model connector. No mock data. Two views, Overview and Monthly, with light and dark themes, a phone layout and 44px touch targets.",
+          "A watchlist feature writes per-user notes to the app's own Fabric SQL database, to show the app can write as well as read.",
+          "The app layer was built with AI assistance — Claude drafted the SQL and Power Query, Claude Code wrote the app code and DAX measures — while I chose the dataset and the story, decided the architecture and warehouse model, ran every step in Fabric, validated the results against Ember's raw data and tested the per-user notes with two accounts.",
+        ],
+      },
+      {
+        type: "list",
+        heading: "Pipeline",
+        intro:
+          "Built end to end in Microsoft Fabric on a trial capacity in October 2026, on Ember's open electricity data (CC BY 4.0).",
+        items: [
+          "**Load.** A Dataflow Gen2 (`df_ember_load`) brings Ember's yearly and monthly CSVs into staging tables in a Fabric Warehouse — 104,241 yearly rows across 224 areas (2000–2025) and 181,459 monthly rows across 99 areas (Jan 2019 – Aug 2026).",
+          "**Model.** A star schema in the warehouse's `mart` schema, built with T-SQL CTAS: `dim_source`, `dim_area`, `dim_year`, `dim_date`, `fact_generation_yearly` and `fact_generation_monthly`. Row counts and duplicate checks are in the schema script.",
+          "**Semantic model.** `sm_grid_shift`, Direct Lake on OneLake, with 6 relationships and 22 DAX measures, edited as TMDL through Fabric Git integration. Summary sources (Clean, Fossil, Total) are never summed with individual fuels.",
+          "**App.** A Fabric App (preview) with delegated sign-in, plus its own Fabric SQL database for per-user watchlist notes following the documented `@role` policy pattern.",
+        ],
+        images: [
+          {
+            src: "/projects/grid-shift/architecture.png",
+            alt: "Architecture — Ember CSVs through Dataflow Gen2 into a Fabric Warehouse, a star schema and Direct Lake semantic model, then the Fabric App",
+          },
+        ],
+      },
+      {
+        type: "list",
+        heading: "What the data says",
+        intro:
+          "Figures come from the semantic model and were reconciled against Ember's raw CSV.",
+        items: [
+          "**Gas is losing share.** 64.3% of Bangladesh's generation in 2025, down from a 92.5% peak in 2010.",
+          "**Coal took most of it.** 21.5% in 2025, from roughly 0% in 2000.",
+          "**Imports matter.** Net imports are 14.2% of generation.",
+          "**Clean power is still about 2%.** 2.1% in 2025 — the story is not a solar boom.",
+          "**Carbon intensity** 696 gCO2e/kWh, on total demand of 118.0 TWh.",
+        ],
+      },
+      {
+        type: "list",
+        heading: "Checks and limits",
+        items: [
+          "**Reconciled against source.** Bangladesh's 2025 values were checked between a DAX query and Ember's raw CSV, and a monthly comparison (Bangladesh coal, Aug 2026 vs Aug 2025) was checked the same way.",
+          "**Per-user notes tested with two accounts** in separate private browser sessions, with a database check that each note carries its author's owner ID.",
+          "**Preview and sign-in.** Fabric Apps are in preview, and the live app needs a Fabric sign-in with access to the workspace — so there is no public link. It ran on a trial capacity ending in early November 2026; the screenshots and the recorded demo in the repo are the lasting record.",
+          "**Data limits.** Ember's latest months are provisional and get revised. Pakistan's monthly series ends earlier than the others, and Nepal has yearly data only — the Monthly view says so rather than rendering an empty chart.",
+          "**Three details were not in the docs I read:** Direct Lake as the model's storage mode, the database `dialect: mssql` setting, and the `devUri` local dev flow.",
         ],
       },
     ],

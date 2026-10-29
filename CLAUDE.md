@@ -196,11 +196,11 @@ sponsorship or EOR arrangements anywhere on the site.
 
 ## Projects
 
-Three completed Power BI dashboards on the Olist Brazilian E-Commerce dataset (Kaggle),
-plus a completed Microsoft Fabric data engineering project on US BTS airline on-time
-performance data. Nine dashboard pages total across the Olist series, on one shared
-dimensional model. Each Olist repo has three dashboard screenshots plus a data model
-diagram in `images/`.
+Six projects: three Power BI dashboards on the Olist Brazilian E-Commerce dataset
+(Kaggle), then three Microsoft Fabric projects covering batch, streaming and app
+workloads. Nine dashboard pages total across the Olist series, on one shared dimensional
+model. Each Olist repo has three dashboard screenshots plus a data model diagram in
+`images/`.
 
 | # | Project | Palette | Repo |
 |---|---|---|---|
@@ -208,6 +208,11 @@ diagram in `images/`.
 | 2 | Logistics & Delivery Performance | teal/navy | `olist-logistics-dashboard` |
 | 3 | Customer Experience & Satisfaction | coral/gold | `olist-customer-satisfaction-dashboard` |
 | 4 | BTS Airline On-Time Performance — Fabric Lakehouse | indigo | `bts-fabric-pipeline` |
+| 5 | Live Aircraft Data — Fabric Real-Time Intelligence | sky | `opensky-fabric-rti` |
+| 6 | Grid Shift — Fabric App | emerald | `ember-fabric-app` |
+
+Cards render in array order, so the newest project goes last. Project 6's slug is
+`grid-shift`, not the repo name — the only slug that differs.
 
 The screenshots are the strongest asset on the site. Unlike a developer portfolio where
 projects are screenshots of websites, these artifacts are *dashboards* — visually rich and
@@ -230,8 +235,25 @@ settled, don't re-derive them:**
   many-to-many paths returned plausible but wrong results — and documented why rather than
   hiding it — **Olist Customer Experience**
 
-Next project to be built: a **SQL-focused project**. The Fabric/DP-600 project (BTS
-Airline On-Time Performance) is done. A Python-focused project follows the SQL one.
+Next project to be built: a **SQL-focused project**, with a Python-focused project after
+it. The three Fabric projects (BTS lakehouse, OpenSky Real-Time Intelligence, Grid Shift
+Fabric App) are done; DP-700 was passed on 24 Oct 2026 and is listed in Certifications.
+
+**Positioning — settled, do not drift.** The hero role line, site title, bio and OG
+description all describe Power BI and reporting on purpose. Siam is targeting analyst and
+BI roles first, with MIS as the fallback, not data engineering roles — so do not
+reposition the site around DP-700 or "Fabric Data Engineer" even though the Fabric
+projects would support it.
+
+**Optional `Project` fields, used sparingly:**
+
+- `pages` / `pagesLabel` — the line under the tags on a detail page. Omit `pages` to hide
+  the line (BTS does, it had only one page). `pagesLabel` defaults to "Report pages";
+  Grid Shift sets it to "Views" because it is an app, not a report.
+- `ProjectImage.darkSrc` — a dark-theme variant, swapped with CSS, used by the BTS
+  architecture diagrams.
+- `images` on a `list` section — evidence screenshots rendered after the list items, used
+  by BTS and by Grid Shift's architecture diagram.
 
 ## Environment
 
