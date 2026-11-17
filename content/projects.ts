@@ -622,6 +622,10 @@ export const projects: Project[] = [
             src: "/projects/olist-dbt-databricks/lineage-graph.png",
             alt: "dbt lineage for fact_deliveries — five raw sources and a seed, through staging views and an intermediate view, into the mart",
           },
+          {
+            src: "/projects/olist-dbt-databricks/dbt-docs-columns.png",
+            alt: "Generated dbt docs for fact_deliveries — every column has a description; the sidebar shows 25 models, 57 tests, 9 sources and 1 seed",
+          },
         ],
       },
       {
@@ -658,6 +662,10 @@ export const projects: Project[] = [
           "**Free Edition.** Serverless compute only, one SQL warehouse and one active pipeline per type, with a daily compute quota whose size is not published.",
         ],
         images: [
+          {
+            src: "/projects/olist-dbt-databricks/dbt-build-local.png",
+            alt: "Local dbt build on dbt v2 (2.0.11) — 25 models, 57 tests, 1 seed and 2 hooks, 85 of 85 succeeded in 1 minute 35 seconds",
+          },
           {
             src: "/projects/olist-dbt-databricks/job-run.png",
             alt: "Databricks job run output — dbt build completed successfully, 85 of 85 including two project hooks",
