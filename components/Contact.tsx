@@ -3,6 +3,7 @@
 import { motion, type Variants } from "framer-motion";
 import PageContainer from "@/components/PageContainer";
 import SectionHeading from "@/components/SectionHeading";
+import { GithubIcon, LinkedinIcon, MailIcon } from "@/components/Icons";
 
 const container: Variants = {
   hidden: {},
@@ -31,24 +32,27 @@ export default function Contact() {
             <motion.div variants={item} className="flex flex-wrap gap-4">
               <a
                 href="mailto:siamsadman@gmail.com"
-                className="rounded-full bg-heading px-6 py-3 text-sm font-medium text-background transition-colors hover:bg-accent"
+                className="inline-flex items-center gap-2 rounded-full bg-heading px-6 py-3 text-sm font-medium text-background transition-colors hover:bg-accent"
               >
+                <MailIcon />
                 siamsadman@gmail.com
               </a>
               <a
                 href="https://www.linkedin.com/in/siam-sadman"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="rounded-full border border-heading px-6 py-3 text-sm font-medium text-heading transition-colors hover:bg-heading hover:text-background"
+                className="inline-flex items-center gap-2 rounded-full border border-heading px-6 py-3 text-sm font-medium text-heading transition-colors hover:bg-heading hover:text-background"
               >
+                <LinkedinIcon />
                 LinkedIn
               </a>
               <a
                 href="https://github.com/siamsadman"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="rounded-full border border-heading px-6 py-3 text-sm font-medium text-heading transition-colors hover:bg-heading hover:text-background"
+                className="inline-flex items-center gap-2 rounded-full border border-heading px-6 py-3 text-sm font-medium text-heading transition-colors hover:bg-heading hover:text-background"
               >
+                <GithubIcon />
                 GitHub
               </a>
             </motion.div>

@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { motion, type Variants } from "framer-motion";
 import PageContainer from "@/components/PageContainer";
+import { ArrowDownIcon, DownloadIcon } from "@/components/Icons";
 
 const container: Variants = {
   hidden: {},
@@ -78,16 +79,18 @@ export default function Hero() {
           >
             <a
               href="#projects"
-              className="rounded-full bg-heading px-6 py-3 text-sm font-medium text-background transition-colors hover:bg-accent"
+              className="inline-flex items-center gap-2 rounded-full bg-heading px-6 py-3 text-sm font-medium text-background transition-colors hover:bg-accent"
             >
               View projects
+              <ArrowDownIcon />
             </a>
             <a
               href="/Siam_Sadman_BI_Developer.pdf"
               target="_blank"
               rel="noopener noreferrer"
-              className="rounded-full border border-heading px-6 py-3 text-sm font-medium text-heading transition-colors hover:bg-heading hover:text-background"
+              className="inline-flex items-center gap-2 rounded-full border border-heading px-6 py-3 text-sm font-medium text-heading transition-colors hover:bg-heading hover:text-background"
             >
+              <DownloadIcon />
               Download CV
             </a>
           </motion.div>
