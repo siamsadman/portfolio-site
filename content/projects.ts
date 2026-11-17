@@ -652,6 +652,17 @@ export const projects: Project[] = [
       },
       {
         type: "list",
+        heading: "What I learned",
+        items: [
+          "**Models with ref() replace scripts run by hand.** dbt works out the build order and the lineage itself.",
+          "**Tests catch what row counts cannot.** Matching numbers did not prove that a rebuild kept the row filter, so I checked the state directly.",
+          "**Docs only stay true if I regenerate them.** I forgot to after adding the hooks and had to redo them.",
+          "**Reconciling is most useful when it fails.** Two of the four differences came from the original SQL and the published numbers not agreeing with each other.",
+          "**Day differences must be computed on dates, not timestamps.** SQL Server counts date boundaries.",
+        ],
+      },
+      {
+        type: "list",
         heading: "Checks and limits",
         items: [
           "**Checked.** `dbt build` passes 83 of 83 locally and in the Databricks job, the marts reconcile against my published figures, and the row filter was confirmed in `information_schema.row_filters` after a rebuild.",
