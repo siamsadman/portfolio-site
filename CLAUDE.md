@@ -196,11 +196,12 @@ sponsorship or EOR arrangements anywhere on the site.
 
 ## Projects
 
-Six projects: three Power BI dashboards on the Olist Brazilian E-Commerce dataset
+Seven projects: three Power BI dashboards on the Olist Brazilian E-Commerce dataset
 (Kaggle), then three Microsoft Fabric projects covering batch, streaming and app
-workloads. Nine dashboard pages total across the Olist series, on one shared dimensional
-model. Each Olist repo has three dashboard screenshots plus a data model diagram in
-`images/`.
+workloads, then a dbt-on-Databricks project that rebuilds the Olist pipelines. Nine
+dashboard pages total across the three Olist Power BI projects, on one shared dimensional
+model. Each Olist Power BI repo has three dashboard screenshots plus a data model diagram
+in `images/`.
 
 | # | Project | Palette | Repo |
 |---|---|---|---|
@@ -210,8 +211,11 @@ model. Each Olist repo has three dashboard screenshots plus a data model diagram
 | 4 | BTS Airline On-Time Performance — Fabric Lakehouse | indigo | `bts-fabric-pipeline` |
 | 5 | Live Aircraft Data — Fabric Real-Time Intelligence | sky | `opensky-fabric-rti` |
 | 6 | Grid Shift — Fabric App | emerald | `ember-fabric-app` |
+| 7 | Olist Pipeline — dbt on Databricks | amber | `olist-dbt-databricks` |
 
-Cards render in array order, so the newest project goes last. Project 6's slug is
+Cards render in array order, so the newest project goes last. Every `cardImage` must be
+16:9 — the three-across grid assumes it, and the detail page also uses it as the 1280×720
+social-share image — so make card images exactly 1280×720. Project 6's slug is
 `grid-shift`, not the repo name — the only slug that differs.
 
 The screenshots are the strongest asset on the site. Unlike a developer portfolio where
@@ -235,7 +239,7 @@ settled, don't re-derive them:**
   many-to-many paths returned plausible but wrong results — and documented why rather than
   hiding it — **Olist Customer Experience**
 
-Next project to be built: a **SQL-focused project**, with a Python-focused project after
+Next project to be built (after project 7): a **SQL-focused project**, with a Python-focused project after
 it. The three Fabric projects (BTS lakehouse, OpenSky Real-Time Intelligence, Grid Shift
 Fabric App) are done; DP-700 was passed on 24 Oct 2026 and is listed in Certifications.
 
@@ -245,11 +249,22 @@ BI roles first, with MIS as the fallback, not data engineering roles — so do n
 reposition the site around DP-700 or "Fabric Data Engineer" even though the Fabric
 projects would support it.
 
+**Project 7 (`olist-dbt-databricks`) — framing, settled.** A learning project: dbt on
+Databricks Free Edition, rebuilding the pipelines behind the three Olist dashboards. The
+card says openly that the owner is new to dbt and Databricks and used AI (Claude) as a
+guide, and states its limits (row filter tested with a simulated non-member only, the
+Lakeflow stream is simulated, the dashboard export is untested on re-import). It is a
+card only: it does not change the hero, the site title or the Skills section. Do not add
+dbt or Databricks to Skills or to the CV without the owner's explicit say-so.
+
 **Optional `Project` fields, used sparingly:**
 
 - `pages` / `pagesLabel` — the line under the tags on a detail page. Omit `pages` to hide
   the line (BTS does, it had only one page). `pagesLabel` defaults to "Report pages";
   Grid Shift sets it to "Views" because it is an app, not a report.
+- `docsUrl` — a link to a live docs site, shown as "Live docs ↗" beside the GitHub link at
+  the bottom of the detail page and opening in a new tab. Used by project 7 (the dbt Docs
+  site on Vercel). Omit it and nothing renders.
 - `ProjectImage.darkSrc` — a dark-theme variant, swapped with CSS, used by the BTS
   architecture diagrams.
 - `images` on a `list` section — evidence screenshots rendered after the list items, used

@@ -35,6 +35,7 @@ export type Project = {
   tags: string[];
   palette: string;
   repoUrl: string;
+  docsUrl?: string; // optional link to a live docs site, shown beside the GitHub link
   cardImage: ProjectImage;
   sections?: ProjectSection[];
 };
@@ -572,6 +573,103 @@ export const projects: Project[] = [
           "**Preview and sign-in.** Fabric Apps are in preview, and the live app needs a Fabric sign-in with access to the workspace — so there is no public link. It ran on a trial capacity ending in early November 2026; the screenshots and the recorded demo in the repo are the lasting record.",
           "**Data limits.** Ember's latest months are provisional and get revised. Pakistan's monthly series ends earlier than the others, and Nepal has yearly data only — the Monthly view says so rather than rendering an empty chart.",
           "**Three details were not in the docs I read:** Direct Lake as the model's storage mode, the database `dialect: mssql` setting, and the `devUri` local dev flow.",
+        ],
+      },
+    ],
+  },
+  {
+    slug: "olist-dbt-databricks",
+    title: "Olist Pipeline — dbt on Databricks",
+    summary:
+      "The pipelines behind my three Olist dashboards, rebuilt in dbt on Databricks Free Edition: 25 models, 57 tests, a Databricks job, a Lakeflow pipeline and a Unity Catalog row filter. A learning project, built with AI as a guide.",
+    tags: ["dbt", "Databricks", "SQL", "Unity Catalog", "Lakeflow"],
+    palette: "amber",
+    repoUrl: "https://github.com/siamsadman/olist-dbt-databricks",
+    docsUrl: "https://olist-dbt-docs.vercel.app",
+    cardImage: {
+      src: "/projects/olist-dbt-databricks/card.png",
+      alt: "Databricks dashboard on the dbt marts — six KPIs, revenue by month, late-delivery rate, review score by delay, delivery time against review score by state, and the payment mix",
+    },
+    sections: [
+      {
+        type: "gallery",
+        heading: "The dashboard",
+        images: [
+          {
+            src: "/projects/olist-dbt-databricks/dashboard.png",
+            alt: "Databricks dashboard on the dbt marts: six KPI tiles, revenue by month, late deliveries by purchase month, review score by delay bucket, delivery time against review score by state, and payment value by type",
+          },
+        ],
+        paragraphs: [
+          "Built by hand in the Databricks dashboard editor on top of the dbt marts, with six SQL datasets. The late-delivery line groups by purchase month and only counts months with 100 or more orders, because a handful of orders in September 2016 gave a meaningless 100% rate.",
+        ],
+      },
+      {
+        type: "list",
+        heading: "Pipeline",
+        intro:
+          "Built end to end on Databricks Free Edition, rebuilding the pipelines behind my three Olist Power BI dashboards. I am new to dbt and Databricks and used AI (Claude) as a guide throughout; I ran every step myself and checked the numbers against my original projects.",
+        items: [
+          "**Raw layer.** The nine Olist CSV files are loaded as all-text tables in `workspace.olist_raw`, so dbt does every cast and clean.",
+          "**dbt models.** 25 models — 9 staging views, 1 intermediate view and 15 marts — plus 57 tests and 1 seed. `dbt build` passes 83 of 83 (85 counting two project hooks).",
+          "**Databricks job.** A Databricks Asset Bundle deploys a serverless job that runs `dbt build`. The job runs dbt 1.12.6 while I develop locally with dbt v2 (2.0.11); the same project ran unchanged under both.",
+          "**Lakeflow pipeline.** Auto Loader reads the orders file in two batches into a streaming table with three data-quality expectations, plus a materialized view. The stream is simulated: the Olist data is static, so I split one CSV into two files and uploaded them by hand.",
+          "**Row filter.** A Unity Catalog row filter on `dim_customer` — admins see every customer, everyone else only São Paulo — re-applied after every dbt rebuild by dbt hooks.",
+          "**Docs.** A dbt Docs v2 site with lineage, descriptions and tests, hosted on Vercel.",
+        ],
+        images: [
+          {
+            src: "/projects/olist-dbt-databricks/lineage-graph.png",
+            alt: "dbt lineage for fact_deliveries — five raw sources and a seed, through staging views and an intermediate view, into the mart",
+          },
+        ],
+      },
+      {
+        type: "list",
+        heading: "Reconciliation and what differs",
+        intro:
+          "Every mart was reconciled against the numbers from my published Olist projects. Where they differ, the difference is documented rather than hidden.",
+        items: [
+          "**bridge_review_category_delay: 98,991 rows against the published 103,831.** The published count only reproduces when the same join runs without `DISTINCT`, although the original SQL contains `SELECT DISTINCT`. I kept `DISTINCT`: one row per review, category and delay bucket.",
+          "**dim_customer takes each customer's address from their latest order.** 252 customers (0.26%) have more than one address, so a few rows can differ from the published project.",
+          "**dim_date has 800 days, not 774.** The logistics project needed estimated delivery dates beyond the last purchase date.",
+          "**Late means a timestamp comparison, not a date comparison.** The published review figures only reproduce when lateness compares full timestamps; the date-based version in the SQL file gives an average score of 2.27 for late orders against the published 2.57.",
+        ],
+      },
+      {
+        type: "list",
+        heading: "What went wrong",
+        items: [
+          "**A dbt rebuild silently dropped the row filter.** Rebuilding `dim_customer` removed it. The fix is dbt hooks (an `on-run-start` function and a model `post_hook`), verified in both dbt versions.",
+          "**Anaconda broke the Databricks CLI.** A user-level `SSL_CERT_FILE` variable made it fail with a certificate error; clearing it in each terminal session fixes it.",
+          "**I first counted the wrong number of delivered orders without a delivery date.** I recorded 2; the right number is 8 — my comparison had netted out other statuses.",
+          "**Deleting a Lakeflow pipeline did not delete its tables.** I dropped them by hand before the bundle took over the pipeline.",
+        ],
+      },
+      {
+        type: "list",
+        heading: "Checks and limits",
+        items: [
+          "**Checked.** `dbt build` passes 83 of 83 locally and in the Databricks job, the marts reconcile against my published figures, and the row filter was confirmed in `information_schema.row_filters` after a rebuild.",
+          "**Row filter limit.** I tested it by swapping in a rule that referenced a group I do not belong to, not with a second real user.",
+          "**Expectations.** The drop-row and fail-update expectations fired zero times on the real data; they show the mechanism, not a cleaned dataset. The warning expectation flagged 8 delivered orders with no delivery date.",
+          "**Dashboard.** Built by hand and not deployed by the bundle. Its exported JSON is in the repo, but I have not tested re-importing it into a fresh workspace.",
+          "**Docs.** dbt Docs v2 is alpha and loads its viewer libraries from a CDN.",
+          "**Free Edition.** Serverless compute only, one SQL warehouse and one active pipeline per type, with a daily compute quota whose size is not published.",
+        ],
+        images: [
+          {
+            src: "/projects/olist-dbt-databricks/job-run.png",
+            alt: "Databricks job run output — dbt build completed successfully, 85 of 85 including two project hooks",
+          },
+          {
+            src: "/projects/olist-dbt-databricks/lakeflow-pipeline.png",
+            alt: "Lakeflow pipeline graph with the expectations panel — 99,441 rows written, none dropped, 8 warnings on delivered_has_date",
+          },
+          {
+            src: "/projects/olist-dbt-databricks/row-filter.png",
+            alt: "Query result showing the row filter attached to dim_customer",
+          },
         ],
       },
     ],

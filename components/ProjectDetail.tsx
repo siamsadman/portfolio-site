@@ -209,7 +209,7 @@ export default function ProjectDetail({ project }: { project: Project }) {
           <SectionBlock key={section.heading} section={section} />
         ))}
 
-        <div className="mt-16 border-t border-border pt-8">
+        <div className="mt-16 flex flex-wrap gap-x-8 gap-y-3 border-t border-border pt-8">
           <a
             href={project.repoUrl}
             target="_blank"
@@ -218,6 +218,16 @@ export default function ProjectDetail({ project }: { project: Project }) {
           >
             View source on GitHub →
           </a>
+          {project.docsUrl && (
+            <a
+              href={project.docsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm font-medium text-heading hover:text-accent"
+            >
+              Live docs ↗
+            </a>
+          )}
         </div>
       </PageContainer>
     </section>
