@@ -45,6 +45,15 @@ const skillGroups = [
     ],
   },
   {
+    category: "Databricks and dbt",
+    items: [
+      "dbt: models, tests, seeds, hooks and docs",
+      "Databricks Asset Bundles and serverless jobs",
+      "Lakeflow pipelines with Auto Loader and expectations (Free Edition)",
+      "Unity Catalog row filters",
+    ],
+  },
+  {
     category: "Data and Databases",
     items: [
       "T-SQL",

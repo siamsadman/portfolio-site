@@ -138,6 +138,10 @@ Group as the CVs group them. **No percentage bars, no proficiency ratings, no nu
 **BI and Analytics** — Power BI Desktop, Power BI Service, DAX, Power Query, Microsoft
 Fabric, advanced time intelligence, USERELATIONSHIP and role-playing dimensions, Excel
 
+**Databricks and dbt** — dbt: models, tests, seeds, hooks and docs, Databricks Asset Bundles
+and serverless jobs, Lakeflow pipelines with Auto Loader and expectations (Free Edition),
+Unity Catalog row filters
+
 **Data and Databases** — T-SQL, SQL Server, MySQL, star and snowflake schema modelling,
 stored procedures, views, ETL development, Python for data cleaning
 
