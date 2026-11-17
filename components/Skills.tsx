@@ -25,7 +25,6 @@ const skillGroups = [
       "Advanced time intelligence",
       "USERELATIONSHIP and role-playing dimensions",
       "Excel",
-      "Tableau",
     ],
   },
   {

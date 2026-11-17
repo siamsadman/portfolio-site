@@ -136,8 +136,7 @@ achievements for this role.
 Group as the CVs group them. **No percentage bars, no proficiency ratings, no numbers.**
 
 **BI and Analytics** — Power BI Desktop, Power BI Service, DAX, Power Query, Microsoft
-Fabric, advanced time intelligence, USERELATIONSHIP and role-playing dimensions, Excel,
-Tableau
+Fabric, advanced time intelligence, USERELATIONSHIP and role-playing dimensions, Excel
 
 **Data and Databases** — T-SQL, SQL Server, MySQL, star and snowflake schema modelling,
 stored procedures, views, ETL development, Python for data cleaning
