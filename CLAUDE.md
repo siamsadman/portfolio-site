@@ -53,6 +53,19 @@ someone who cares about presentation built it, not a static document.
 The owner is genuinely skilled at UI/UX and works in Figma. Structure the visual layer
 so he can refine it himself — keep design tokens and spacing consistent and centralised.
 
+### Buttons and icons (decided 2026-11-17)
+
+Every call-to-action button is a **pill**: filled primary
+`rounded-full bg-heading px-6 py-3 text-sm font-medium text-background transition-colors hover:bg-accent`,
+outlined secondary
+`rounded-full border border-heading px-6 py-3 text-sm font-medium text-heading transition-colors hover:bg-heading hover:text-background`,
+with `inline-flex items-center gap-2` when an icon is present. This is used by the Hero, the
+Contact row and the bottom of each project detail page. Do not invent a second button shape;
+read `Contact.tsx` and `Hero.tsx` first. The "View project →" links on cards and "← All
+projects" stay quiet text links on purpose (a grid of filled buttons would compete with the
+screenshots). Icons are inline SVG components in `components/Icons.tsx` (no icon package):
+add a new icon there instead of pasting SVG into a page. Check both light and dark themes.
+
 ### Explicitly NOT in this build
 
 Deferred, do not build, do not suggest until the owner raises them:
@@ -254,16 +267,18 @@ Databricks Free Edition, rebuilding the pipelines behind the three Olist dashboa
 card says openly that the owner is new to dbt and Databricks and used AI (Claude) as a
 guide, and states its limits (row filter tested with a simulated non-member only, the
 Lakeflow stream is simulated, the dashboard export is untested on re-import). It is a
-card only: it does not change the hero, the site title or the Skills section. Do not add
-dbt or Databricks to Skills or to the CV without the owner's explicit say-so.
+card only: it does not change the hero or the site title. Skills now
+has a "Databricks and dbt" group with four lines the owner approved (2026-11-17); do not add
+or reword dbt or Databricks skills, or touch the CV, without the owner's explicit say-so.
 
 **Optional `Project` fields, used sparingly:**
 
 - `pages` / `pagesLabel` — the line under the tags on a detail page. Omit `pages` to hide
   the line (BTS does, it had only one page). `pagesLabel` defaults to "Report pages";
   Grid Shift sets it to "Views" because it is an app, not a report.
-- `docsUrl` — a link to a live docs site, shown as "Live docs ↗" beside the GitHub link at
-  the bottom of the detail page and opening in a new tab. Used by project 7 (the dbt Docs
+- `docsUrl` — a link to a live docs site, shown as a filled "Live docs" pill (book icon and
+  arrow) beside the outlined GitHub pill at the bottom of the detail page and opening in a
+  new tab. Used by project 7 (the dbt Docs
   site on Vercel). Omit it and nothing renders.
 - `ProjectImage.darkSrc` — a dark-theme variant, swapped with CSS, used by the BTS
   architecture diagrams.
