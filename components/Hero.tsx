@@ -1,100 +1,127 @@
-"use client";
-
 import Image from "next/image";
-import { motion, type Variants } from "framer-motion";
 import PageContainer from "@/components/PageContainer";
-import { ArrowDownIcon, DownloadIcon } from "@/components/Icons";
 
-const container: Variants = {
-  hidden: {},
-  visible: {
-    transition: { staggerChildren: 0.06, delayChildren: 0.05 },
-  },
-};
+const certChips = ["DP-700", "DP-600", "PL-300"];
 
-const item: Variants = {
-  hidden: { opacity: 1, y: 16 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.2, ease: "easeOut" } },
-};
+const pipelineNodes = [
+  { name: "Bronze", note: "raw", delay: "0s" },
+  { name: "Silver", note: "clean", delay: "1s" },
+  { name: "Gold", note: "model", delay: "2s" },
+];
+
+const portraitClass =
+  "absolute bottom-0 left-[6%] h-auto w-[88%] [mask-image:linear-gradient(to_bottom,#000_82%,transparent_100%)]";
 
 export default function Hero() {
   return (
-    <section id="top" className="flex items-center bg-background py-16 sm:py-20">
-      <PageContainer className="grid gap-12 lg:grid-cols-[3fr_2fr] lg:items-center">
-        <motion.div
-          className="order-1 flex justify-center lg:order-2 lg:justify-end"
-          initial={{ opacity: 1, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.25, delay: 0.05, ease: "easeOut" }}
-        >
-          <div className="rounded-[2rem] border border-accent/30 bg-panel p-3">
-            <Image
-              src="/portrait.jpg"
-              alt="Portrait of Siam Sadman"
-              width={360}
-              height={360}
-              priority
-              className="h-64 w-64 rounded-[1.5rem] object-cover sm:h-80 sm:w-80"
-            />
+    <section id="top" className="bg-background pt-16 pb-14 sm:pt-20 sm:pb-16 lg:pt-24">
+      <PageContainer className="flex flex-wrap items-center gap-12 lg:gap-14">
+        {/* Left: message */}
+        <div className="min-w-0 flex-[1_1_520px]">
+          <p className="mb-5 font-mono text-xs tracking-[0.12em] text-muted uppercase">
+            Power BI Developer · Microsoft Fabric Analytics Engineer
+          </p>
+          <h1 className="mb-6 text-[clamp(2rem,4.6vw,3rem)] leading-[1.1] font-bold tracking-tight text-heading">
+            Enterprise reporting that people trust.
+          </h1>
+          <p className="mb-8 max-w-[600px] text-[clamp(1rem,1.4vw,1.125rem)] text-secondary">
+            Power BI dashboards and automated reporting for British American Tobacco
+            Bangladesh, Arnott&apos;s Australia and TOLL Australia.
+          </p>
+          <a
+            href="#projects"
+            className="mb-9 inline-flex items-center justify-center rounded-[10px] bg-accent px-7 py-3.5 text-[0.9375rem] font-semibold text-on-accent transition-opacity hover:opacity-90"
+          >
+            View projects
+          </a>
+
+          <ul className="flex flex-wrap gap-2.5">
+            {certChips.map((chip) => (
+              <li
+                key={chip}
+                className="inline-flex items-center gap-2 rounded-full border border-line py-1.5 pr-3.5 pl-2 font-mono text-xs text-secondary"
+              >
+                <Image
+                  src="/ms-associate-badge.svg"
+                  alt="Microsoft Certified Associate badge"
+                  width={28}
+                  height={28}
+                />
+                {chip}
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Right: portrait, stat, pipeline */}
+        <div className="flex min-w-[280px] flex-[0_1_420px] flex-col items-center gap-12">
+          <div className="relative flex w-full justify-center">
+            <div className="relative h-[380px] w-[min(320px,100%)] overflow-hidden rounded-[28px] border border-border bg-[radial-gradient(ellipse_at_50%_28%,var(--elevated)_0%,var(--card)_75%)]">
+              <Image
+                src="/portrait-light.webp"
+                alt="Portrait of Siam Sadman"
+                width={500}
+                height={603}
+                priority
+                className={`${portraitClass} dark:hidden`}
+              />
+              <Image
+                src="/portrait-dark.webp"
+                alt=""
+                aria-hidden="true"
+                width={500}
+                height={603}
+                priority
+                className={`${portraitClass} hidden dark:block`}
+              />
+            </div>
+            <div className="absolute -bottom-6 left-3 rounded-xl border border-border border-l-4 border-l-accent bg-card px-5 py-3.5">
+              <p className="font-display text-[1.75rem] leading-tight font-bold text-heading">
+                10+ yrs
+              </p>
+              <p className="text-sm text-muted">
+                in enterprise reporting
+                <br />
+                9.5 of them as team lead
+              </p>
+            </div>
           </div>
-        </motion.div>
 
-        <motion.div
-          className="order-2 flex flex-col items-center gap-6 text-center lg:order-1 lg:items-start lg:text-left"
-          initial="hidden"
-          animate="visible"
-          variants={container}
-        >
-          <motion.h1
-            variants={item}
-            className="text-4xl font-bold tracking-tight text-heading sm:text-5xl lg:text-6xl"
+          <div
+            role="img"
+            aria-label="Animated data pipeline: raw data flows through bronze, silver and gold layers into a dashboard"
+            className="flex w-full items-center gap-1.5 rounded-2xl border border-line bg-card px-4 py-[18px]"
           >
-            Siam Sadman
-          </motion.h1>
-
-          <motion.p
-            variants={item}
-            className="flex flex-col items-center gap-1 text-lg font-medium text-accent sm:flex-row sm:justify-center sm:gap-2 sm:text-xl lg:justify-start"
-          >
-            <span>Power BI Developer</span>
-            <span className="hidden sm:inline" aria-hidden="true">
-              ·
-            </span>
-            <span>Microsoft Fabric Analytics Engineer</span>
-          </motion.p>
-
-          <motion.p
-            variants={item}
-            className="max-w-xl text-base leading-relaxed text-foreground sm:text-lg"
-          >
-            BI Developer and Reporting Analyst with 10+ years in enterprise reporting,
-            building automated reporting pipelines and Power BI dashboards in
-            production environments for clients including British American
-            Tobacco Bangladesh, Arnott&apos;s Australia and TOLL Australia.
-          </motion.p>
-
-          <motion.div
-            variants={item}
-            className="flex flex-wrap justify-center gap-4 lg:justify-start"
-          >
-            <a
-              href="#projects"
-              className="inline-flex items-center gap-2 rounded-full bg-heading px-6 py-3 text-sm font-medium text-background transition-colors hover:bg-accent"
-            >
-              View projects
-              <ArrowDownIcon />
-            </a>
-            <a
-              href="/Siam_Sadman_BI_Developer.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-full border border-heading px-6 py-3 text-sm font-medium text-heading transition-colors hover:bg-heading hover:text-background"
-            >
-              <DownloadIcon />
-              Download CV
-            </a>
-          </motion.div>
-        </motion.div>
+            {pipelineNodes.map((node) => (
+              <div key={node.name} className="contents">
+                <div
+                  className="fl-node min-w-[62px] rounded-[10px] border border-border bg-card px-2.5 py-2 text-center"
+                  style={{ animationDelay: node.delay }}
+                >
+                  <p className="font-mono text-xs text-secondary">{node.name}</p>
+                  <p className="text-xs text-muted">{node.note}</p>
+                </div>
+                <div className="relative h-0.5 min-w-4 flex-[1_1_20px] bg-line">
+                  <span className="fl-dot" style={{ animationDelay: node.delay }} />
+                </div>
+              </div>
+            ))}
+            <div className="flex h-[34px] items-end gap-1 px-1.5" aria-hidden="true">
+              {[
+                { h: 14, d: "0s" },
+                { h: 24, d: "0.4s" },
+                { h: 18, d: "0.8s" },
+                { h: 30, d: "1.2s" },
+              ].map((bar) => (
+                <span
+                  key={bar.d}
+                  className="fl-bar block w-1.5 rounded-[2px] bg-accent"
+                  style={{ height: bar.h, animationDelay: bar.d }}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
       </PageContainer>
     </section>
   );

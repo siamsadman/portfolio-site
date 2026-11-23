@@ -81,3 +81,46 @@ h3 {
     scroll-behavior: auto;
   }
 }
+
+/* Hero pipeline animation (Bronze → Silver → Gold → dashboard) */
+@keyframes flowDot {
+  0% { left: 0; opacity: 0; }
+  12% { opacity: 1; }
+  88% { opacity: 1; }
+  100% { left: calc(100% - 8px); opacity: 0; }
+}
+
+@keyframes nodePulse {
+  0%, 100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 0%, transparent); }
+  50% { box-shadow: 0 0 0 6px color-mix(in srgb, var(--accent) 18%, transparent); }
+}
+
+@keyframes barGrow {
+  0%, 100% { transform: scaleY(0.35); }
+  50% { transform: scaleY(1); }
+}
+
+.fl-dot {
+  position: absolute;
+  top: -3px;
+  left: 0;
+  width: 8px;
+  height: 8px;
+  border-radius: 9999px;
+  background: var(--accent);
+  animation: flowDot 3s linear infinite;
+}
+
+.fl-node {
+  animation: nodePulse 3s ease-in-out infinite;
+}
+
+.fl-bar {
+  transform-origin: bottom;
+  animation: barGrow 3s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fl-dot, .fl-node, .fl-bar { animation: none; }
+  .fl-dot { display: none; }
+}
