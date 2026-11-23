@@ -109,7 +109,7 @@ const skillGroups = [
 
 export default function Skills() {
   return (
-    <section className="bg-background pt-6 pb-24 sm:pt-8">
+    <section id="skills" className="bg-background pt-6 pb-24 sm:pt-8">
       <PageContainer>
         <div className="mx-auto max-w-3xl">
           <SectionHeading kicker="05 / Skills" title="Skills" />

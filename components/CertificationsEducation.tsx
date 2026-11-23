@@ -46,7 +46,7 @@ const certifications: Certification[] = [
 
 export default function CertificationsEducation() {
   return (
-    <section className="bg-panel pt-6 pb-24 sm:pt-8">
+    <section id="credentials" className="bg-panel pt-6 pb-24 sm:pt-8">
       <PageContainer>
         <div className="mx-auto max-w-3xl">
           <SectionHeading

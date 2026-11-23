@@ -4,34 +4,43 @@
 
 html {
   scroll-padding-top: 5rem;
+  scroll-behavior: smooth;
 }
 
+/* Light theme tokens (from the redesign mockup) */
 :root {
-  --background: #ffffff;
-  --panel: #f4f4f5;
+  --background: #f6f8fb;
+  --panel: #ffffff;
   --card: #ffffff;
-  --code: #f4f4f5;
-  --elevated: #f4f4f5;
-  --border: #d4d4d8;
-  --foreground: #18181b;
-  --secondary: #3f3f46;
-  --muted: #71717a;
-  --heading: #1f3a5f;
-  --accent: #0e7c86;
+  --code: #eef2f8;
+  --elevated: #eef2f8;
+  --line: #d9e1ec;
+  --border: #c5d0e0;
+  --foreground: #0b1220;
+  --heading: #0b1220;
+  --secondary: #33425c;
+  --muted: #556580;
+  --dot: #7e90ad;
+  --accent: #0f766e;
+  --on-accent: #ffffff;
 }
 
+/* Dark theme tokens */
 .dark {
   --background: #0b1220;
-  --panel: #131c2e;
-  --card: #1b2740;
-  --code: #131c2e;
-  --elevated: #243a5c;
-  --border: #3f4f6b;
-  --foreground: #f4f4f5;
-  --secondary: #b8c2cf;
-  --muted: #98a3b3;
-  --heading: #8fb0d9;
+  --panel: #101a2e;
+  --card: #101a2e;
+  --code: #101a2e;
+  --elevated: #16233d;
+  --line: #1e2c48;
+  --border: #2a3a5c;
+  --foreground: #e6edf7;
+  --heading: #e6edf7;
+  --secondary: #c9d6ea;
+  --muted: #9db0c8;
+  --dot: #5b7197;
   --accent: #5eead4;
+  --on-accent: #06231f;
 }
 
 @theme inline {
@@ -40,19 +49,35 @@ html {
   --color-card: var(--card);
   --color-code: var(--code);
   --color-elevated: var(--elevated);
+  --color-line: var(--line);
   --color-border: var(--border);
   --color-foreground: var(--foreground);
   --color-secondary: var(--secondary);
   --color-muted: var(--muted);
   --color-heading: var(--heading);
+  --color-dot: var(--dot);
   --color-accent: var(--accent);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-on-accent: var(--on-accent);
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+  --font-display: var(--font-space-grotesk), system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
   transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 }
