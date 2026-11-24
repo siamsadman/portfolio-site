@@ -29,7 +29,10 @@ function renderInline(text: string): React.ReactNode[] {
     }
     if (part.startsWith("`") && part.endsWith("`")) {
       return (
-        <code key={index} className="rounded bg-code px-1 py-0.5 text-[0.9em]">
+        <code
+          key={index}
+          className="rounded bg-code px-1 py-0.5 text-[0.9em] [overflow-wrap:anywhere]"
+        >
           {part.slice(1, -1)}
         </code>
       );
@@ -224,6 +227,17 @@ export default function ProjectDetail({ project }: { project: Project }) {
               >
                 <BookIcon />
                 Live docs
+                <ArrowUpRightIcon />
+              </a>
+            )}
+            {project.downloadUrl && (
+              <a
+                href={project.downloadUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex min-h-11 items-center gap-2 rounded-[10px] border border-border px-6 py-3 text-secondary transition-colors hover:border-accent hover:text-accent"
+              >
+                {project.downloadLabel ?? "Download"}
                 <ArrowUpRightIcon />
               </a>
             )}

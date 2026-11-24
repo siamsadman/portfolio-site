@@ -61,6 +61,8 @@ export type Project = {
   repoUrl: string;
   docsUrl?: string; // optional link to a live docs site, shown beside the GitHub link
   demoUrl?: string; // optional link to a recorded demo, shown beside the GitHub link
+  downloadUrl?: string; // optional file download (for example a .pbix), shown beside the GitHub link
+  downloadLabel?: string; // defaults to "Download"
   cardImage: ProjectImage;
   eyebrow?: string; // mono label above the title on the write-up page
   numbers?: ProjectNumber[]; // key-number cards
@@ -97,78 +99,135 @@ export const projects: Project[] = [
       "Executive overview down to category and product detail, plus the customer and payment patterns behind revenue.",
     outcome: "3 report pages",
     cardTags: ["Power BI", "DAX", "T-SQL"],
-    title: "Sales & Revenue Performance",
+    title: "Olist Sales & Revenue Performance: a Power BI dashboard",
+    eyebrow: "Power BI · Olist series, part 1 of 3",
     pages: [
       "Executive Overview",
       "Category & Product Deep Dive",
       "Customer & Payment Insights",
     ],
     summary:
-      "Three pages tracking sales performance from an executive-level overview down to category and product detail, plus customer and payment patterns behind the revenue.",
-    tags: ["Power BI", "DAX", "T-SQL"],
+      "A three-page Power BI dashboard on sales, category and customer and payment performance for Olist, a Brazilian multi-vendor marketplace. Built end to end from raw CSVs: data cleaning, star schema design, DAX modelling and dashboard design.",
+    tags: ["Power BI", "DAX", "T-SQL", "SQL Server", "Python", "Star schema"],
     palette: "blue",
     repoUrl: "https://github.com/siamsadman/olist-sales-dashboard",
+    downloadUrl:
+      "https://github.com/siamsadman/olist-sales-dashboard/blob/main/dashboard/olist_sales_dashboard.pbix",
+    downloadLabel: "Download .pbix",
     cardImage: {
       src: "/projects/olist-sales/dashboard-01.png",
       alt: "Sales & Revenue Performance dashboard — Executive Overview page",
     },
-    sections: [
+    numbers: [
+      { big: "R$ 7.3M", label: "total revenue, Jan to Aug 2018, on the Executive Overview" },
+      { big: "53,530", label: "orders in the same period, across a star schema of two fact tables and five dimensions" },
+      { big: "7", label: "data-quality problems found in the raw data, each documented and handled" },
+    ],
+    archHeading: "From raw CSVs to three report pages",
+    layers: [
       {
-        type: "gallery",
-        heading: "Screenshots",
-        images: [
-          { src: "/projects/olist-sales/dashboard-01.png", alt: "Executive Overview" },
-          { src: "/projects/olist-sales/dashboard-02.png", alt: "Category & Product Deep Dive" },
-          { src: "/projects/olist-sales/dashboard-03.png", alt: "Customer & Payment Insights" },
-        ],
+        label: "CLEAN",
+        title: "pandas and SQL Server",
+        text: "Raw Olist CSVs are cleaned in Python, imported into a Dockerized SQL Server for staging, and transformed into a star schema with T-SQL scripts.",
+        gateLabel: "Checked",
+        gate: "Datetime columns that silently lost their date portion were diagnosed and re-imported with an explicit format.",
       },
       {
-        type: "gallery",
-        heading: "Data Model",
-        images: [
-          {
-            src: "/projects/olist-sales/data-model.png",
-            alt: "Sales & Revenue Performance data model",
-          },
-        ],
+        label: "MODEL",
+        title: "Star schema with a bridge",
+        text: "Two fact tables at different grains relate through a `dim_order` bridge, so both join many-to-one, next to date, customer, seller and product dimensions.",
+        gateLabel: "Checked",
+        gate: "775 orders with no line items were confirmed as expected, because the fact grain is the order line item.",
+      },
+      {
+        label: "REPORT",
+        title: "Power BI, three pages",
+        text: "DAX measures drive the pages. The callout boxes are dynamic measures that update live with the applied filters, not static text.",
+        gateLabel: "Checked",
+        gate: "Trend visuals stop at August 2018, the last complete month, so there is no false revenue cliff.",
+        highlight: true,
+      },
+    ],
+    archNote:
+      "I chose the Olist dataset over a simpler single-table one on purpose: it mirrors real business complexity, with related tables at different grains, inconsistent category naming, missing translations and orphaned records. The model covers about 98k orders from September 2016 to October 2018; the headline figures above are the Executive Overview for January to August 2018. The aim was the full analyst workflow: clean messy data, model it correctly, justify the business logic and communicate the result.",
+    diagrams: [
+      {
+        src: "/projects/olist-sales/data-model.png",
+        alt: "Sales & Revenue Performance data model — two fact tables related through dim_order, with date, customer, seller and product dimensions",
+      },
+    ],
+    findingsHeading: "What the dashboard shows",
+    findings: [
+      {
+        big: "~40%",
+        title: "São Paulo drives 2018 revenue",
+        text: "The widest concentration of any state, and a signal that customer acquisition is heavily weighted toward one region.",
+      },
+      {
+        big: "Top 2 ≈ 20%",
+        title: "Revenue concentrates at category level too",
+        text: "The top two categories account for roughly 20% of total revenue, while the bottom five combined contribute under 1%.",
+      },
+      {
+        big: "~3%",
+        title: "A very low repeat purchase rate",
+        text: "Consistent with a multi-vendor marketplace without platform-level loyalty mechanisms. The state with the strongest repeat behaviour, among states with a meaningful sample, is not the state with the most revenue: loyalty and revenue scale do not move together.",
+      },
+      {
+        big: "Credit card",
+        title: "The de facto financing mechanism",
+        text: "It carries both the highest average installment count and the highest average order value, while boleto, debit and voucher payments are overwhelmingly pay-in-full, lower-value transactions.",
+      },
+    ],
+    screensHeading: "The three report pages",
+    screens: {
+      images: [
+        { src: "/projects/olist-sales/dashboard-01.png", alt: "Executive Overview" },
+        { src: "/projects/olist-sales/dashboard-02.png", alt: "Category & Product Deep Dive" },
+        { src: "/projects/olist-sales/dashboard-03.png", alt: "Customer & Payment Insights" },
+      ],
+      paragraphs: [
+        "**Executive Overview.** Top-line KPIs, revenue trend, geographic distribution and category leaders: the 30-second summary.",
+        "**Category & Product Deep Dive.** A category performance table, revenue concentration in a treemap, top and bottom performers, and price distribution.",
+        "**Customer & Payment Insights.** Payment method behaviour, installment patterns, the new versus repeat customer split, and a state-level loyalty comparison.",
+        "All three pages share a synced filter panel and carry both auto-generated statistical highlights from Power BI Smart Insights and hand-written analyst takeaways.",
+      ],
+    },
+    sections: [
+      {
+        type: "prose",
+        kicker: "Data model",
+        heading: "Why orders get a bridge table",
         paragraphs: [
-          "Two fact tables at different grains — `fact_order_items`, one row per order line item, and `fact_payments`, one row per payment installment record — with `dim_date`, `dim_customer`, `dim_seller`, `dim_product` and `dim_order` as dimensions.",
-          "Both facts share `order_id`, but the field is unique in neither: an order has multiple line items and multiple payment records. Relating them directly produces an uncontrolled many-to-many relationship that silently inflates revenue and payment totals depending on query context. `dim_order` sits between them as a proper dimension, so both facts relate to it many-to-one — a clean, predictable star pattern.",
+          "`fact_order_items` has one row per order line item and `fact_payments` has one row per payment installment record. Both share `order_id`, but the field is unique in neither: an order has multiple line items and multiple payment records.",
+          "Relating them directly produces an uncontrolled many-to-many relationship that silently inflates revenue and payment totals depending on query context. `dim_order` sits between them as a proper dimension, so both facts relate to it many-to-one: a clean, predictable star pattern.",
         ],
       },
       {
         type: "list",
-        heading: "Data quality",
+        kicker: "Data quality",
+        heading: "Seven problems in the raw data",
         intro:
-          "Real datasets are messy. Documenting these decisions matters more than the charts — it shows how the problems were reasoned about, not just what got built.",
+          "Real datasets are messy. Documenting these decisions matters more than the charts: it shows how the problems were reasoned about, not just what got built.",
         items: [
-          "`customer_id` is order-specific — the same person receives a new ID for every order. Used `customer_unique_id` as the true customer key for all customer-level metrics, including repeat rate and unique customer counts.",
-          "The `order_items` to `payments` relationship was many-to-many. Introduced `dim_order` as a bridge dimension so both facts relate many-to-one.",
+          "`customer_id` is order-specific, so the same person receives a new ID for every order. I used `customer_unique_id` as the true customer key for all customer-level metrics, including repeat rate and unique customer counts.",
+          "The `order_items` to `payments` relationship was many-to-many. I introduced `dim_order` as a bridge dimension so both facts relate many-to-one.",
           "775 orders had no rows in `order_items`, having been cancelled or become unavailable before fulfilment. Confirmed as expected: the fact grain is order line item, so these are naturally excluded.",
-          "623 products carried untranslated, Portuguese-only category names. Manually mapped the three missing categories to the translation table.",
-          "461 orders marked `canceled` still had line items, having been cancelled after fulfilment began. Built a primary `Total Revenue` measure excluding cancelled and unavailable statuses, alongside a separate `Total Revenue (Gross)` measure for demand analysis.",
-          "The final month of data, September 2018, was incomplete — the extract was taken mid-month. Filtered all trend visuals to complete months only, through August 2018, to avoid a misleading revenue cliff.",
+          "461 orders marked `canceled` still had line items, having been cancelled after fulfilment began. I built a primary `Total Revenue` measure excluding cancelled and unavailable statuses, alongside a separate `Total Revenue (Gross)` measure for demand analysis.",
+          "The final month of data, September 2018, was incomplete because the extract was taken mid-month. I filtered all trend visuals to complete months only, through August 2018.",
+          "623 products carried untranslated, Portuguese-only category names. I manually mapped the three missing categories to the translation table.",
           "Datetime columns imported as SQL Server `time`, silently dropping the date portion. Diagnosed via `INFORMATION_SCHEMA.COLUMNS` and fixed by re-importing with an explicit `yyyy-MM-dd HH:mm:ss` format mapping.",
         ],
       },
       {
         type: "list",
-        heading: "Modelling decisions",
+        kicker: "Modelling",
+        heading: "Four decisions behind the numbers",
         items: [
           "**Revenue definition.** `Total Revenue` excludes cancelled and unavailable orders to reflect realised performance, with `Total Revenue (Gross)` available for demand analysis. Ratio measures such as Average Order Value use the same filtered population in numerator and denominator, so the two never disagree.",
-          "**Year-over-year growth.** Calculated as a fixed comparison of full calendar 2018 against full calendar 2017, rather than an open date range — an open range compares a partial year against a complete one and produces misleading results.",
+          "**Year-over-year growth.** Calculated as a fixed comparison of full calendar 2018 against full calendar 2017, not an open date range, which would compare a partial year against a complete one.",
           "**Repeat customer rate.** Calculated on a lifetime basis rather than within the selected period, so a customer whose two orders fall in different years is not counted as non-repeating.",
-          "**Statistical significance threshold.** The top loyalty state insight considers only states with at least 500 customers, so a small, low-volume state where one or two repeat customers dominate the percentage cannot surface as a false leader.",
-        ],
-      },
-      {
-        type: "list",
-        heading: "Findings",
-        items: [
-          "**São Paulo drives around 40% of 2018 revenue** — the widest concentration of any state, and a signal that customer acquisition is heavily weighted toward one region.",
-          "**Revenue concentrates at category level too.** The top two categories account for roughly 20% of total revenue; the bottom five combined contribute under 1%.",
-          "**The repeat purchase rate is very low, around 3%,** consistent with a multi-vendor marketplace lacking platform-level loyalty mechanisms. The state with the strongest repeat behaviour, among those with meaningful sample size, is not the state with the most revenue — loyalty and revenue scale do not move together.",
-          "**Credit card is the platform's de facto financing mechanism,** carrying both the highest average installment count and the highest average order value, while boleto, debit and voucher payments are overwhelmingly pay-in-full, lower-value transactions.",
+          "**Statistical significance threshold.** The top loyalty state insight considers only states with at least 500 customers, so a small state where one or two repeat customers dominate the percentage cannot surface as a false leader.",
         ],
       },
     ],
