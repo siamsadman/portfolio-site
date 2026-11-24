@@ -75,6 +75,9 @@ What exists today, and nothing else:
   cards (second card in a row delayed 70 ms), the Apsis block and timeline entries in
   Experience, the Skills table and the Credentials grid. Use `as="li"` / `as="dl"` to keep
   valid markup. To animate another block, wrap it in `<Reveal>`; do not write new motion code.
+- **Layer connectors** on project pages: a horizontal line with a moving dot between the
+  layer cards from tablet width up, and a short vertical line with a dot (`.fl-dot-v`)
+  between the stacked cards on phones. Both are hidden for reduced motion.
 - Smooth anchor scrolling (`scroll-behavior: smooth`, `scroll-padding-top: 5rem`) and a
   0.2 s background/colour transition when the theme toggles.
 - Hover transitions on buttons and cards (`transition-colors` / `transition-opacity`).
@@ -229,6 +232,16 @@ One quiet line in the **Contact** section, phrased exactly as:
 **Not in the hero.** In the hero it reads as anxious, signals unemployment to a reader who
 was not asking, and is the fastest thing on the site to go stale. Do not mention visa
 sponsorship or EOR arrangements anywhere on the site.
+
+## Markdown files in this repo
+
+- `CLAUDE.md` (this file): the working rules. Keep it current when the design changes.
+- `README.md`: what the site is, how to run it, how to add a project.
+- `CV_CONTENT.md`: CV source text. **Not part of the redesign; do not edit it unless the
+  owner asks.** It still carries the old Market Express wording, as does the CV PDF.
+- `AGENTS.md`: written and re-added by `next dev`. Leave it as is.
+- `bts-fabric-sections.md`: an early drafting note for the BTS page. The content now lives
+  in `content/projects.ts`, which wins wherever the two differ.
 
 ## Environment
 

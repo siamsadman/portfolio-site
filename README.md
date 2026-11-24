@@ -1,36 +1,56 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Siam Sadman — portfolio site
 
-## Getting Started
+Source for [siamsadman.vercel.app](https://siamsadman.vercel.app): the portfolio of a BI
+developer and reporting analyst in Dhaka, Bangladesh. It leads with seven project
+write-ups (Power BI, Microsoft Fabric, dbt on Databricks), followed by experience, skills
+and certifications.
 
-First, run the development server:
+Built with Next.js 16 (App Router), TypeScript and Tailwind CSS v4. Hosted on Vercel.
+
+## Run it locally
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev        # http://localhost:3000
+npx tsc --noEmit   # type check
+npm run lint
+npm run build      # production build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## How it is organised
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Path | What it holds |
+|---|---|
+| `app/page.tsx` | The homepage: Hero, About, Projects, Experience, Skills, Certifications, Contact |
+| `app/projects/[slug]/page.tsx` | One dynamic route that renders every project page |
+| `app/not-found.tsx` | The 404 page |
+| `app/icon.svg`, `app/favicon.ico`, `app/apple-icon.png` | Site icons (the SS monogram) |
+| `content/projects.ts` | All project content, plus `projectOrder` |
+| `content/experience.ts` | Experience and earlier career |
+| `components/` | Page sections, `ProjectDetail` (the shared project template), `Logo`, `Reveal` (scroll animation) |
+| `public/projects/<slug>/` | Screenshots and diagrams for each project |
+| `app/globals.css` | Light and dark colour tokens, and the CSS animations |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Adding a project
 
-## Learn More
+No new component is needed.
 
-To learn more about Next.js, take a look at the following resources:
+1. Put the images in `public/projects/<slug>/`.
+2. Add one entry to `content/projects.ts`.
+3. Add its slug to `projectOrder` in the same file. That list sets the homepage card order
+   and the previous and next links on project pages.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Working on it
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Design rules, content rules and what is deliberately not built are in
+[`CLAUDE.md`](./CLAUDE.md). Read it before changing the layout or any claim on the site.
+Every number on a project page was checked against its repository and the live work, so
+re-check before editing one.
 
-## Deploy on Vercel
+`CV_CONTENT.md` holds the CV source text. The downloadable CV is
+`public/Siam_Sadman_BI_Developer.pdf`.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Deploying
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Every push to a branch builds a Vercel preview. Pushing to `main` deploys to production.
+Edit locally and push, never on github.com, so the repository and the live site stay in step.
