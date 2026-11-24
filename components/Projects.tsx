@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import PageContainer from "@/components/PageContainer";
+import SectionHeading from "@/components/SectionHeading";
 import { projects, type Project, type ProjectCategory } from "@/content/projects";
 
 // Order shown on the homepage (the first four are visible before "See all")
@@ -39,18 +40,13 @@ export default function Projects() {
   const canExpand = filtered.length > INITIAL_COUNT;
 
   return (
-    <section id="projects" className="bg-background pt-[72px] pb-14">
+    <section id="projects" className="bg-background py-14 sm:py-16">
       <PageContainer>
-        <p className="mb-3 font-mono text-xs tracking-[0.12em] text-muted uppercase">
-          Projects
-        </p>
-        <h2 className="mb-3 text-[clamp(1.5rem,2.8vw,2rem)] font-bold tracking-tight text-heading">
-          Dashboards, pipelines and what they proved
-        </h2>
-        <p className="mb-7 max-w-[680px] text-[clamp(1rem,1.4vw,1.125rem)] text-muted">
-          Selected builds across Power BI, Microsoft Fabric and dbt on Databricks.
-          Each has a write-up that says what failed, not just what shipped.
-        </p>
+        <SectionHeading
+          kicker="Projects"
+          title="Dashboards, pipelines and what they proved"
+          intro="Selected builds across Power BI, Microsoft Fabric and dbt on Databricks. Each has a write-up that says what failed, not just what shipped."
+        />
 
         <div className="mb-8 flex flex-wrap gap-2.5" role="group" aria-label="Filter projects">
           {filters.map((f) => (
@@ -62,7 +58,7 @@ export default function Projects() {
                 setFilter(f.id);
                 setShowAll(false);
               }}
-              className={`rounded-full border px-4 py-2 text-sm font-medium transition-colors ${
+              className={`min-h-11 rounded-full border px-4 py-2 text-sm font-medium transition-colors ${
                 filter === f.id
                   ? "border-accent bg-accent text-on-accent"
                   : "border-border text-secondary hover:border-accent hover:text-accent"
@@ -129,9 +125,10 @@ export default function Projects() {
                     </li>
                   ))}
                 </ul>
-                <p className="text-sm font-semibold text-heading group-hover:text-accent">
-                  View project →
-                </p>
+                <span className="mt-1 inline-flex min-h-11 items-center gap-1.5 self-start rounded-lg border border-border px-4 py-2 text-sm font-semibold text-heading transition-colors group-hover:border-accent group-hover:bg-accent group-hover:text-on-accent">
+                  View project
+                  <span aria-hidden="true">→</span>
+                </span>
               </div>
             </Link>
           ))}
@@ -142,7 +139,7 @@ export default function Projects() {
             <button
               type="button"
               onClick={() => setShowAll((v) => !v)}
-              className="min-h-11 rounded-[10px] border border-border px-6 py-3 text-[0.9375rem] font-semibold text-secondary transition-colors hover:border-accent hover:text-accent"
+              className="min-h-11 rounded-[10px] border border-border px-6 py-3 text-sm font-semibold text-secondary transition-colors hover:border-accent hover:text-accent"
             >
               {showAll ? "Show fewer projects" : `See all ${filtered.length} projects`}
             </button>

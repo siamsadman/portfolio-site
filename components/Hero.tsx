@@ -24,13 +24,13 @@ export default function Hero() {
           <h1 className="mb-6 text-[clamp(2rem,4.6vw,3rem)] leading-[1.1] font-bold tracking-tight text-heading">
             Enterprise reporting that people trust.
           </h1>
-          <p className="mb-8 max-w-[600px] text-[clamp(1rem,1.4vw,1.125rem)] text-secondary">
+          <p className="mb-8 max-w-[600px] text-base text-secondary sm:text-lg">
             Power BI dashboards and automated reporting for British American Tobacco
             Bangladesh, Arnott&apos;s Australia and TOLL Australia.
           </p>
           <a
             href="#projects"
-            className="mb-9 inline-flex items-center justify-center rounded-[10px] bg-accent px-7 py-3.5 text-[0.9375rem] font-semibold text-on-accent transition-opacity hover:opacity-90"
+            className="mb-9 inline-flex items-center justify-center rounded-[10px] bg-accent px-7 py-3.5 text-base font-semibold text-on-accent transition-opacity hover:opacity-90"
           >
             View projects
           </a>
@@ -39,7 +39,7 @@ export default function Hero() {
             {certChips.map((chip) => (
               <li
                 key={chip}
-                className="inline-flex items-center gap-2 rounded-full border border-line py-1.5 pr-3.5 pl-2 font-mono text-xs text-secondary"
+                className="inline-flex items-center gap-2 rounded-full bg-elevated py-1.5 pr-3.5 pl-2 font-mono text-xs text-secondary"
               >
                 <Image
                   src="/ms-associate-badge.svg"

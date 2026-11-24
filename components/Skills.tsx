@@ -1,145 +1,53 @@
-"use client";
-
-import { motion, type Variants } from "framer-motion";
 import PageContainer from "@/components/PageContainer";
 import SectionHeading from "@/components/SectionHeading";
 
-const container: Variants = {
-  hidden: {},
-  visible: { transition: { staggerChildren: 0.05 } },
-};
-
-const item: Variants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.2, ease: "easeOut" } },
-};
-
-const skillGroups = [
+const skillRows = [
   {
-    category: "BI and Analytics",
-    items: [
-      "Power BI Desktop",
-      "Power BI Service",
-      "DAX",
-      "Power Query",
-      "Advanced time intelligence",
-      "USERELATIONSHIP and role-playing dimensions",
-      "Excel",
-    ],
+    label: "BI and analytics",
+    text: "Power BI Desktop and Service · DAX · Power Query · Advanced time intelligence · USERELATIONSHIP and role-playing dimensions · Excel · Dashboard UX and visual design",
   },
   {
-    category: "Microsoft Fabric",
-    items: [
-      "Dataflow Gen2",
-      "Fabric Warehouse (T-SQL CTAS)",
-      "Lakehouse and medallion architecture",
-      "Direct Lake semantic models",
-      "Delta Lake",
-      "PySpark",
-      "Data Factory pipelines and incremental loading",
-      "Real-Time Intelligence (Eventstream, Eventhouse)",
-      "KQL",
-      "Activator",
-      "Fabric Apps (preview)",
-      "TMDL and Fabric Git integration",
-    ],
+    label: "Microsoft Fabric",
+    text: "Lakehouse and medallion architecture · Direct Lake semantic models · Delta Lake · PySpark · Data Factory pipelines and incremental loading · Dataflow Gen2 · Real-Time Intelligence · KQL · Activator · Fabric Apps (preview) · TMDL and Git integration",
   },
   {
-    category: "Databricks and dbt",
-    items: [
-      "dbt: models, tests, seeds, hooks and docs",
-      "Databricks Asset Bundles and serverless jobs",
-      "Lakeflow pipelines with Auto Loader and expectations (Free Edition)",
-      "Unity Catalog row filters",
-    ],
+    label: "Databricks and dbt",
+    text: "dbt models, tests, seeds and docs · Databricks Asset Bundles and serverless jobs · Lakeflow pipelines · Unity Catalog row filters",
   },
   {
-    category: "Data and Databases",
-    items: [
-      "T-SQL",
-      "SQL Server",
-      "MySQL",
-      "Star and snowflake schema modelling",
-      "Stored procedures",
-      "Views",
-      "ETL development",
-      "Python and PySpark for data processing",
-    ],
+    label: "Data and databases",
+    text: "T-SQL · SQL Server · MySQL · Star and snowflake modelling · Stored procedures · ETL development · Python",
   },
   {
-    category: "Automation and RPA",
-    items: [
-      "Power Automate Cloud",
-      "Power Automate Desktop unattended RPA",
-      "Microsoft Graph API",
-      "REST API integration",
-      "Browser automation",
-      "UiPath to Power Automate migration",
-      "ServiceNow integration",
-    ],
+    label: "Automation",
+    text: "Power Automate Cloud and Desktop RPA · Microsoft Graph API · REST API integration · Microsoft Entra ID provisioning · UiPath to Power Automate migration",
   },
   {
-    category: "Identity and Cloud",
-    items: [
-      "Microsoft Entra ID user provisioning",
-      "Active Directory group and licence management",
-      "Microsoft 365 licensing (F3, E5)",
-      "Secure credential vault integration",
-    ],
-  },
-  {
-    category: "Design and Delivery",
-    items: [
-      "Dashboard UX and visual design",
-      "Figma",
-      "Requirements gathering",
-      "Stakeholder management",
-      "DEV/UAT/PROD deployment",
-    ],
-  },
-  {
-    category: "Leadership",
-    items: [
-      "Team leadership (2–4 analysts)",
-      "Client relationship management",
-      "Multinational stakeholder communication",
-    ],
+    label: "Delivery and leadership",
+    text: "Team leadership · Requirements gathering · Stakeholder management · Client relationship management · DEV/UAT/PROD deployment",
   },
 ];
 
 export default function Skills() {
   return (
-    <section id="skills" className="bg-background pt-6 pb-24 sm:pt-8">
+    <section id="skills" className="bg-background py-14 sm:py-16">
       <PageContainer>
-        <div className="mx-auto max-w-3xl">
-          <SectionHeading kicker="05 / Skills" title="Skills" />
-
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.1 }}
-            variants={container}
-            className="grid grid-cols-1 gap-x-10 gap-y-10 sm:grid-cols-2"
-          >
-            {skillGroups.map((group) => (
-              <motion.div key={group.category} variants={item}>
-                <p className="text-xs font-semibold uppercase tracking-wide text-muted">
-                  {group.category}
-                </p>
-                <div className="mt-3 flex flex-wrap gap-2">
-                  {group.items.map((skill) => (
-                    <span
-                      key={skill}
-                      className="rounded-full border border-border bg-card px-3.5 py-1.5 text-sm text-muted"
-                    >
-                      {skill}
-                    </span>
-                  ))}
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
+        <SectionHeading kicker="Skills" title="What I work with" />
+        <dl className="rounded-[18px] border border-line bg-card px-6 py-2">
+          {skillRows.map((row) => (
+            <div
+              key={row.label}
+              className="flex flex-wrap gap-x-6 gap-y-1.5 border-b border-line py-4 last:border-b-0"
+            >
+              <dt className="flex-[0_0_180px] pt-0.5 font-mono text-xs tracking-[0.12em] text-muted uppercase">
+                {row.label}
+              </dt>
+              <dd className="flex-[1_1_360px] text-base text-secondary">
+                {row.text}
+              </dd>
+            </div>
+          ))}
+        </dl>
       </PageContainer>
     </section>
   );

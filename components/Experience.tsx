@@ -2,7 +2,10 @@
 
 import { useState } from "react";
 import PageContainer from "@/components/PageContainer";
+import SectionHeading from "@/components/SectionHeading";
 import { experience, timeline, earlierCareer } from "@/content/experience";
+
+const VISIBLE_BULLETS = 2;
 
 function shortRange(range?: string) {
   // "Jan 2022 – Aug 2026" -> "2022 – 2026"
@@ -16,15 +19,13 @@ export default function Experience() {
   const ladder = apsis ? [...apsis.titles].reverse() : [];
 
   return (
-    <section id="experience" className="bg-background pt-[72px] pb-14">
+    <section id="experience" className="bg-background py-14 sm:py-16">
       <PageContainer>
         <div className="max-w-[1100px]">
-          <p className="mb-3 font-mono text-xs tracking-[0.12em] text-muted uppercase">
-            Experience
-          </p>
-          <h2 className="mb-7 text-[clamp(1.5rem,2.8vw,2rem)] font-bold tracking-tight text-heading">
-            From requirements to production, for global clients
-          </h2>
+          <SectionHeading
+            kicker="Experience"
+            title="From requirements to production, for global clients"
+          />
 
           {apsis && (
             <div className="mb-10 rounded-[18px] border border-line bg-card p-7">
@@ -40,19 +41,19 @@ export default function Experience() {
                   {apsis.roleNote ? ` · ${apsis.roleNote}` : ""}
                 </p>
               </div>
-              <ol className="flex flex-wrap items-center gap-3 text-sm">
+              <ol className="flex flex-col items-start gap-2 text-sm sm:flex-row sm:flex-wrap sm:items-center sm:gap-3">
                 {ladder.map((t, i) => (
                   <li key={t.title} className="contents">
                     {i > 0 && (
-                      <span aria-hidden="true" className="text-dot">
+                      <span aria-hidden="true" className="hidden text-dot sm:inline">
                         →
                       </span>
                     )}
                     <span
-                      className={`rounded-lg border px-3.5 py-2 ${
+                      className={`rounded-lg px-3.5 py-2 ${
                         i === ladder.length - 1
-                          ? "border-accent text-heading"
-                          : "border-border text-secondary"
+                          ? "bg-accent/15 text-heading"
+                          : "bg-elevated text-secondary"
                       }`}
                     >
                       {t.title}
@@ -68,7 +69,9 @@ export default function Experience() {
           <ol className="ml-2 flex flex-col gap-8 border-l-2 border-line pl-9">
             {timeline.map((item) => {
               const isOpen = !!open[item.id];
-              const bullets = isOpen ? [...item.bullets, ...item.more] : item.bullets;
+              const all = [...item.bullets, ...item.more];
+              const hiddenCount = Math.max(0, all.length - VISIBLE_BULLETS);
+              const bullets = isOpen ? all : all.slice(0, VISIBLE_BULLETS);
               return (
                 <li
                   key={item.id}
@@ -81,19 +84,32 @@ export default function Experience() {
                   <p className="mb-2 font-mono text-xs text-muted">{item.when}</p>
                   <h3 className="mb-0.5 text-xl font-bold text-heading">{item.title}</h3>
                   <p className="mb-4 text-sm text-muted">{item.org}</p>
-                  <ul className="flex list-disc flex-col gap-2 pl-5 text-[0.9375rem] text-secondary">
+                  <ul className="flex list-disc flex-col gap-2 pl-5 text-base text-secondary">
                     {bullets.map((b) => (
                       <li key={b}>{b}</li>
                     ))}
                   </ul>
-                  {item.more.length > 0 && (
+                  {hiddenCount > 0 && (
                     <button
                       type="button"
                       aria-expanded={isOpen}
                       onClick={() => setOpen((o) => ({ ...o, [item.id]: !o[item.id] }))}
-                      className="mt-4 rounded-lg border border-border px-4 py-2 text-sm text-secondary transition-colors hover:border-accent hover:text-accent"
+                      className="mt-3 inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold text-accent transition-opacity hover:opacity-80"
                     >
-                      {isOpen ? "Show less" : `Show ${item.more.length} more`}
+                      {isOpen ? "Show less" : "Show more"}
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className={`h-4 w-4 transition-transform ${isOpen ? "rotate-180" : ""}`}
+                        aria-hidden="true"
+                      >
+                        <path d="M6 9l6 6 6-6" />
+                      </svg>
                     </button>
                   )}
                 </li>
@@ -122,11 +138,11 @@ export default function Experience() {
                       {role.location} · {role.when}
                     </p>
                   </div>
-                  <p className="inline-block rounded-lg border border-border px-3.5 py-2 text-sm text-secondary">
+                  <p className="inline-block rounded-lg bg-elevated px-3.5 py-2 text-sm text-secondary">
                     {role.title}
                   </p>
                   {role.note && (
-                    <p className="mt-4 max-w-[760px] text-[0.9375rem] text-secondary">
+                    <p className="mt-4 max-w-[760px] text-base text-secondary">
                       {role.note}
                     </p>
                   )}

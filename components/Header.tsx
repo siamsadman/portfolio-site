@@ -108,7 +108,7 @@ export default function Header() {
               aria-label={open ? "Close menu" : "Open menu"}
               aria-expanded={open}
               aria-controls="mobile-menu"
-              className="flex h-9 w-9 items-center justify-center rounded-[10px] border border-line text-secondary transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent active:border-accent active:bg-elevated active:text-accent lg:hidden">
+              className="flex h-11 w-11 items-center justify-center rounded-[10px] border border-line text-secondary transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent active:border-accent active:bg-elevated active:text-accent lg:hidden">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"

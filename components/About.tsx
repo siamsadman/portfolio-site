@@ -1,13 +1,12 @@
 import PageContainer from "@/components/PageContainer";
+import SectionHeading from "@/components/SectionHeading";
 
 export default function About() {
   return (
-    <section id="about" className="bg-background pt-6 pb-4 sm:pt-8">
+    <section id="about" className="bg-background py-14 sm:py-16">
       <PageContainer>
-        <p className="mb-3.5 font-mono text-xs tracking-[0.12em] text-muted uppercase">
-          About
-        </p>
-        <div className="flex max-w-[820px] flex-col gap-4 text-[clamp(1rem,1.4vw,1.125rem)] leading-[1.65] text-secondary">
+        <SectionHeading kicker="About" title="About me" />
+        <div className="flex max-w-[820px] flex-col gap-4 text-base leading-[1.65] sm:text-lg text-secondary">
           <p>
             Based in Dhaka, Bangladesh. I have spent 10+ years in enterprise
             reporting, starting with Excel and SQL Server reports, moving into
@@ -21,7 +20,7 @@ export default function About() {
             way. The project write-ups below show how that works in practice.
           </p>
         </div>
-        <p className="mt-6 inline-flex items-center gap-2.5 rounded-2xl border border-border px-4 py-2 text-sm text-secondary">
+        <p className="mt-6 inline-flex items-center gap-2.5 rounded-2xl bg-elevated px-4 py-2 text-sm text-secondary">
           <span
             aria-hidden="true"
             className="block h-2 w-2 rounded-full bg-accent"
