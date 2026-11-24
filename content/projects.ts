@@ -536,9 +536,10 @@ export const projects: Project[] = [
       "The pipelines behind the three Olist dashboards, rebuilt in dbt on Databricks Free Edition. A learning project, built with AI as a guide.",
     outcome: "25 models · 57 tests",
     cardTags: ["dbt", "Databricks", "Unity Catalog"],
-    title: "Olist Pipeline — dbt on Databricks",
+    title: "Olist Pipeline: dbt on Databricks",
+    eyebrow: "dbt · Databricks · Olist series, rebuilt as code",
     summary:
-      "The pipelines behind my three Olist dashboards, rebuilt in dbt on Databricks Free Edition: 25 models, 57 tests, a Databricks job, a Lakeflow pipeline and a Unity Catalog row filter. A learning project, built with AI as a guide.",
+      "A learning project that rebuilds the pipelines behind my three Olist Power BI dashboards as dbt models on Databricks Free Edition: 25 models, 57 tests, a Databricks job, a Lakeflow pipeline and a Unity Catalog row filter. I used AI as a guide and checked every mart against the original projects.",
     tags: ["dbt", "Databricks", "SQL", "Unity Catalog", "Lakeflow"],
     palette: "amber",
     repoUrl: "https://github.com/siamsadman/olist-dbt-databricks",
@@ -547,38 +548,90 @@ export const projects: Project[] = [
       src: "/projects/olist-dbt-databricks/card.png",
       alt: "Databricks dashboard on the dbt marts — six KPIs, revenue by month, late-delivery rate, review score by delay, delivery time against review score by state, and the payment mix",
     },
-    sections: [
+    numbers: [
+      { big: "25", label: "models: 9 staging views, 1 intermediate view and 15 marts, with 57 tests and 1 seed" },
+      { big: "85 of 85", label: "build steps pass, locally and in the Databricks job, counting two project hooks" },
+      { big: "8", label: "delivered orders with no delivery date, found by a Lakeflow expectation after I first counted 2" },
+    ],
+    archHeading: "From raw CSVs to a dashboard",
+    layers: [
       {
-        type: "gallery",
-        heading: "The dashboard",
-        images: [
-          {
-            src: "/projects/olist-dbt-databricks/dashboard.png",
-            alt: "Databricks dashboard on the dbt marts: six KPI tiles, revenue by month, late deliveries by purchase month, review score by delay bucket, delivery time against review score by state, and payment value by type",
-          },
-        ],
-        paragraphs: [
-          "Built by hand in the Databricks dashboard editor on top of the dbt marts, with six SQL datasets. The late-delivery line groups by purchase month and only counts months with 100 or more orders, because a handful of orders in September 2016 gave a meaningless 100% rate.",
-        ],
+        label: "LOAD",
+        title: "Raw tables in Unity Catalog",
+        text: "Nine Olist CSVs are loaded with hand-run SQL as all-text tables, so every cast and every cleaning decision lives in dbt code where it can be tested.",
+        gateLabel: "Checked",
+        gate: "Row counts were compared with the source files, for example 99,441 orders and 99,224 review rows.",
       },
       {
+        label: "TRANSFORM",
+        title: "dbt: staging, intermediate, marts",
+        text: "Nine staging views cast and rename, one intermediate view holds the shared lateness rule, and 15 marts rebuild the three dashboards' star schemas.",
+        gateLabel: "Rule",
+        gate: "Staging uses `cast`, not `try_cast`, so bad data fails the build instead of turning into a silent NULL.",
+      },
+      {
+        label: "RUN",
+        title: "Job, pipeline and dashboard",
+        text: "A Databricks Asset Bundle deploys a serverless job that runs `dbt build`, plus a Lakeflow pipeline. A dashboard built by hand reads the marts.",
+        gateLabel: "Checked",
+        gate: "`dbt build` passes 83 of 83 locally and in the job, or 85 counting the two project hooks.",
+        highlight: true,
+      },
+    ],
+    archNote:
+      "I built this to learn dbt and Databricks by doing, using the pipelines behind my three Olist dashboards as the exercise. I am a BI developer coming from the Microsoft stack, not a dbt expert, and I used AI (Claude) as a guide throughout. I ran every step myself, and every mart is reconciled against the original projects, with the differences documented rather than forced to match.",
+    diagrams: [
+      {
+        src: "/projects/olist-dbt-databricks/lineage-graph.png",
+        alt: "dbt lineage for fact_deliveries — five raw sources and a seed, through staging views and an intermediate view, into the mart",
+      },
+    ],
+    findingsHeading: "What reconciles, and what does not",
+    findingsNote: "Counts are from my own build, compared with the published Olist projects.",
+    findings: [
+      {
+        big: "7,827 late",
+        title: "Lateness reproduces exactly",
+        text: "`fact_deliveries` gives 88,649 on time, 7,827 late and 2,965 never delivered, with an average delivery time of 12.50 days: the same figures as the Logistics report.",
+      },
+      {
+        big: "4.29 vs 2.57",
+        title: "Review scores reproduce too",
+        text: "`bridge_review_order` gives 88,658 on-time, 7,701 late and 2,865 never-delivered review links, with average scores of 4.29 on time and 2.57 late, as in the Customer Satisfaction report.",
+      },
+      {
+        big: "98,991 vs 103,831",
+        title: "One published count only reproduces without DISTINCT",
+        text: "The published row count for `bridge_review_category_delay` appears only when the join runs without `DISTINCT`, although the original SQL contains it. I kept `DISTINCT` and documented the gap.",
+      },
+    ],
+    screensHeading: "The dashboard on the marts",
+    screens: {
+      images: [
+        {
+          src: "/projects/olist-dbt-databricks/dashboard.png",
+          alt: "Databricks dashboard on the dbt marts: six KPI tiles, revenue by month, late deliveries by purchase month, review score by delay bucket, delivery time against review score by state, and payment value by type",
+        },
+      ],
+      paragraphs: [
+        "Built by hand in the Databricks dashboard editor, with six SQL datasets reading the marts: six KPI tiles, revenue by month, late deliveries by purchase month, review score by delay bucket, delivery time against review score by state, and payment value by type.",
+        "The late-delivery line counts only months with 100 or more orders, because a handful of orders in September 2016 gave a meaningless 100% rate. The bundle does not deploy the dashboard: its exported JSON is in the repository, but I have not tested re-importing it into a fresh workspace.",
+      ],
+    },
+    sections: [
+      {
         type: "list",
-        heading: "Pipeline",
-        intro:
-          "Built end to end on Databricks Free Edition, rebuilding the pipelines behind my three Olist Power BI dashboards. I am new to dbt and Databricks and used AI (Claude) as a guide throughout; I ran every step myself and checked the numbers against my original projects.",
+        kicker: "Pipeline",
+        heading: "What got built",
         items: [
           "**Raw layer.** The nine Olist CSV files are loaded as all-text tables in `workspace.olist_raw`, so dbt does every cast and clean.",
-          "**dbt models.** 25 models — 9 staging views, 1 intermediate view and 15 marts — plus 57 tests and 1 seed. `dbt build` passes 83 of 83 (85 counting two project hooks).",
-          "**Databricks job.** A Databricks Asset Bundle deploys a serverless job that runs `dbt build`. The job runs dbt 1.12.6 while I develop locally with dbt v2 (2.0.11); the same project ran unchanged under both.",
+          "**dbt models.** 25 models (9 staging views, 1 intermediate view and 15 marts) plus 57 tests and 1 seed. `dbt build` passes 83 of 83, or 85 counting two project hooks.",
+          "**Databricks job.** A Databricks Asset Bundle deploys a serverless job that runs `dbt build`. The job runs dbt 1.12.6 while I develop locally with dbt v2 (2.0.11), and the same project ran unchanged under both.",
           "**Lakeflow pipeline.** Auto Loader reads the orders file in two batches into a streaming table with three data-quality expectations, plus a materialized view. The stream is simulated: the Olist data is static, so I split one CSV into two files and uploaded them by hand.",
-          "**Row filter.** A Unity Catalog row filter on `dim_customer` — admins see every customer, everyone else only São Paulo — re-applied after every dbt rebuild by dbt hooks.",
+          "**Row filter.** A Unity Catalog row filter on `dim_customer` lets admins see every customer and everyone else only São Paulo. dbt hooks re-apply it after every rebuild.",
           "**Docs.** A dbt Docs v2 site with lineage, descriptions and tests, hosted on Vercel.",
         ],
         images: [
-          {
-            src: "/projects/olist-dbt-databricks/lineage-graph.png",
-            alt: "dbt lineage for fact_deliveries — five raw sources and a seed, through staging views and an intermediate view, into the mart",
-          },
           {
             src: "/projects/olist-dbt-databricks/dbt-docs-columns.png",
             alt: "Generated dbt docs for fact_deliveries — every column has a description; the sidebar shows 25 models, 57 tests, 9 sources and 1 seed",
@@ -587,45 +640,64 @@ export const projects: Project[] = [
       },
       {
         type: "list",
-        heading: "Reconciliation and what differs",
-        intro:
-          "Every mart was reconciled against the numbers from my published Olist projects. Where they differ, the difference is documented rather than hidden.",
+        kicker: "Data quality",
+        heading: "Six problems in the raw files",
         items: [
-          "**bridge_review_category_delay: 98,991 rows against the published 103,831.** The published count only reproduces when the same join runs without `DISTINCT`, although the original SQL contains `SELECT DISTINCT`. I kept `DISTINCT`: one row per review, category and delay bucket.",
-          "**dim_customer takes each customer's address from their latest order.** 252 customers (0.26%) have more than one address, so a few rows can differ from the published project.",
-          "**dim_date has 800 days, not 774.** The logistics project needed estimated delivery dates beyond the last purchase date.",
-          "**Late means a timestamp comparison, not a date comparison.** The published review figures only reproduce when lateness compares full timestamps; the date-based version in the SQL file gives an average score of 2.27 for late orders against the published 2.57.",
+          "`review_id` is not unique: there are 98,410 distinct values across 99,224 rows. The real grain is the pair of review and order, enforced by a singular test, so `fact_reviews` keeps one row per review and `bridge_review_order` keeps every pair.",
+          "Review comments contain line breaks and quotes, which breaks a default CSV load. The raw load for that file uses the multi-line and quote-escape options, and the correct count is 99,224 rows.",
+          "610 products have no category and 13 more sit in two categories missing from the translation file, 623 untranslated in total. The 610 become `Unknown` and the other two are mapped by hand in a seed.",
+          "2 products have no weight. I set them to 0, following the original rule; it is a made-up value for two products, not a measurement.",
+          "775 orders have no items, so order value and weight stay NULL in `fact_deliveries` instead of being turned into zeros.",
+          "Geolocation has coordinates outside Brazil. No current mart uses that table, so I left it, with a note that any future mart would need to filter or flag the points.",
         ],
       },
       {
         type: "list",
+        kicker: "Reconciliation",
+        heading: "Where my numbers differ",
+        intro:
+          "Every mart was compared with the numbers from my published Olist projects. Where they differ, the difference is documented rather than hidden.",
+        items: [
+          "**`bridge_review_category_delay`: 98,991 rows against the published 103,831.** The published count only reproduces when the same join runs without `DISTINCT`, although the original SQL contains `SELECT DISTINCT`. I kept `DISTINCT`: one row per review, category and delay bucket.",
+          "**Late means a timestamp comparison, not a date comparison.** The published review figures only reproduce when lateness compares full timestamps. The date-based version in the SQL file gives an average score of 2.27 for late orders against the published 2.57.",
+          "**`dim_order` has 99,441 rows, the published Sales model has 98,666.** The Sales model leaves out the 775 orders with no line items. The 99,441 target came from an approximate figure in a SQL comment, and my mart keeps every order.",
+          "**`dim_customer` takes each customer's address from their latest order.** 252 customers (0.26%) have more than one address, so a few rows can differ from the published project.",
+          "**`dim_date` has 800 days, not 774.** The logistics project needed estimated delivery dates beyond the last purchase date.",
+        ],
+      },
+      {
+        type: "list",
+        kicker: "Lessons",
         heading: "What went wrong",
         items: [
           "**A dbt rebuild silently dropped the row filter.** Rebuilding `dim_customer` removed it. The fix is dbt hooks (an `on-run-start` function and a model `post_hook`), verified in both dbt versions.",
-          "**Anaconda broke the Databricks CLI.** A user-level `SSL_CERT_FILE` variable made it fail with a certificate error; clearing it in each terminal session fixes it.",
-          "**I first counted the wrong number of delivered orders without a delivery date.** I recorded 2; the right number is 8 — my comparison had netted out other statuses.",
+          "**Anaconda broke the Databricks CLI.** A user-level `SSL_CERT_FILE` variable made it fail with a certificate error. Clearing it in each terminal session fixes it.",
+          "**Expectations on an existing streaming table checked nothing at first.** A streaming table does not re-read files it has already processed, so a normal run only sees new data and a full refresh was needed.",
+          "**I first counted the wrong number of delivered orders without a delivery date.** I recorded 2 and the right number is 8, because my comparison netted out other statuses.",
           "**Deleting a Lakeflow pipeline did not delete its tables.** I dropped them by hand before the bundle took over the pipeline.",
         ],
       },
       {
         type: "list",
+        kicker: "Lessons",
         heading: "What I learned",
         items: [
-          "**Models with ref() replace scripts run by hand.** dbt works out the build order and the lineage itself.",
+          "**Models with `ref()` replace scripts run by hand.** dbt works out the build order and the lineage itself.",
           "**Tests catch what row counts cannot.** Matching numbers did not prove that a rebuild kept the row filter, so I checked the state directly.",
           "**Docs only stay true if I regenerate them.** I forgot to after adding the hooks and had to redo them.",
-          "**Reconciling is most useful when it fails.** Two of the four differences came from the original SQL and the published numbers not agreeing with each other.",
+          "**Reconciling is most useful when it fails.** Three of the five differences came from the original SQL and the published numbers not agreeing with each other.",
           "**Day differences must be computed on dates, not timestamps.** SQL Server counts date boundaries.",
         ],
       },
       {
         type: "list",
+        kicker: "Limits",
         heading: "Checks and limits",
         items: [
-          "**Checked.** `dbt build` passes 83 of 83 locally and in the Databricks job, the marts reconcile against my published figures, and the row filter was confirmed in `information_schema.row_filters` after a rebuild.",
+          "**Checked.** `dbt build` passes 83 of 83 locally and in the Databricks job, the marts reconcile against my published figures apart from the differences above, and the row filter was confirmed in `information_schema.row_filters` after a rebuild.",
           "**Row filter limit.** I tested it by swapping in a rule that referenced a group I do not belong to, not with a second real user.",
-          "**Expectations.** The drop-row and fail-update expectations fired zero times on the real data; they show the mechanism, not a cleaned dataset. The warning expectation flagged 8 delivered orders with no delivery date.",
-          "**Dashboard.** Built by hand and not deployed by the bundle. Its exported JSON is in the repo, but I have not tested re-importing it into a fresh workspace.",
+          "**Expectations.** The drop-row and fail-update expectations fired zero times on the real data, so they show the mechanism, not a cleaned dataset. The warning expectation flagged 8 delivered orders with no delivery date.",
+          "**Raw layer.** Loaded by running SQL by hand, with no automated ingestion for the nine main tables.",
           "**Docs.** dbt Docs v2 is alpha and loads its viewer libraries from a CDN.",
           "**Free Edition.** Serverless compute only, one SQL warehouse and one active pipeline per type, with a daily compute quota whose size is not published.",
         ],
