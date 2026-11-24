@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import PageContainer from "@/components/PageContainer";
+import Reveal from "@/components/Reveal";
 import SectionHeading from "@/components/SectionHeading";
 import {
   projectOrder,
@@ -64,11 +65,11 @@ export default function Projects() {
         </div>
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-          {visible.map((project) => (
+          {visible.map((project, i) => (
+            <Reveal key={project.slug} delay={(i % 2) * 70} className="h-full">
             <Link
-              key={project.slug}
               href={`/projects/${project.slug}`}
-              className="group flex flex-col overflow-hidden rounded-[18px] border border-line bg-card transition-colors hover:border-accent"
+              className="group flex h-full flex-col overflow-hidden rounded-[18px] border border-line bg-card transition-colors hover:border-accent"
             >
               <div className="relative h-[190px] overflow-hidden sm:h-[220px] bg-elevated">
                 {project.cardImage.darkSrc ? (
@@ -125,6 +126,7 @@ export default function Projects() {
                 </span>
               </div>
             </Link>
+            </Reveal>
           ))}
         </div>
 

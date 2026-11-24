@@ -118,6 +118,25 @@ h3 {
   animation: flowDot 3s linear infinite;
 }
 
+/* Vertical version of the connector dot, used between stacked layer cards on phones */
+@keyframes flowDotV {
+  0% { top: 0; opacity: 0; }
+  12% { opacity: 1; }
+  88% { opacity: 1; }
+  100% { top: calc(100% - 8px); opacity: 0; }
+}
+
+.fl-dot-v {
+  position: absolute;
+  left: -3px;
+  top: 0;
+  width: 8px;
+  height: 8px;
+  border-radius: 9999px;
+  background: var(--accent);
+  animation: flowDotV 3s linear infinite;
+}
+
 .fl-node {
   animation: nodePulse 3s ease-in-out infinite;
 }
@@ -128,6 +147,30 @@ h3 {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .fl-dot, .fl-node, .fl-bar { animation: none; }
-  .fl-dot { display: none; }
+  .fl-dot, .fl-dot-v, .fl-node, .fl-bar { animation: none; }
+  .fl-dot, .fl-dot-v { display: none; }
+}
+
+/* Scroll reveal (see components/Reveal.tsx). Content is visible by default; the
+   component only sets data-reveal after load, for elements below the fold. */
+[data-reveal] {
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+[data-reveal="hidden"] {
+  opacity: 0;
+  transform: translateY(16px);
+}
+
+[data-reveal="shown"] {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal] {
+    transition: none;
+    opacity: 1;
+    transform: none;
+  }
 }

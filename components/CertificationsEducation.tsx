@@ -1,5 +1,6 @@
 import Image from "next/image";
 import PageContainer from "@/components/PageContainer";
+import Reveal from "@/components/Reveal";
 import SectionHeading from "@/components/SectionHeading";
 
 const microsoftCerts = [
@@ -46,7 +47,7 @@ export default function CertificationsEducation() {
       <PageContainer>
         <SectionHeading kicker="Credentials" title="Certifications &amp; Education" />
 
-        <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,320px),1fr))] items-stretch gap-5">
+        <Reveal className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,320px),1fr))] items-stretch gap-5">
           <div className={`${cardClass} flex flex-col justify-center`}>
             <p className={`${labelClass} mb-1`}>Microsoft certifications</p>
             <ul>
@@ -99,7 +100,7 @@ export default function CertificationsEducation() {
               </div>
             </div>
           </div>
-        </div>
+        </Reveal>
       </PageContainer>
     </section>
   );

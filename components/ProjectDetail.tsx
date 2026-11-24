@@ -177,6 +177,7 @@ export default function ProjectDetail({ project }: { project: Project }) {
   const next = index >= 0 && index < built.length - 1 ? built[index + 1] : undefined;
 
   return (
+    <main id="main" className="flex-1">
     <PageContainer className="py-12 sm:py-16">
       <div className="mx-auto max-w-[980px]">
         <Link
@@ -207,12 +208,12 @@ export default function ProjectDetail({ project }: { project: Project }) {
               </li>
             ))}
           </ul>
-          <div className="flex flex-wrap gap-3 text-sm">
+          <div className="flex flex-col gap-3 text-sm sm:flex-row sm:flex-wrap">
             <a
               href={project.repoUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex min-h-11 items-center gap-2 rounded-[10px] bg-accent px-6 py-3 font-semibold text-on-accent transition-opacity hover:opacity-90"
+              className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-[10px] bg-accent px-6 py-3 sm:w-auto font-semibold text-on-accent transition-opacity hover:opacity-90"
             >
               <GithubIcon />
               View on GitHub
@@ -223,7 +224,7 @@ export default function ProjectDetail({ project }: { project: Project }) {
                 href={project.docsUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex min-h-11 items-center gap-2 rounded-[10px] border border-border px-6 py-3 text-secondary transition-colors hover:border-accent hover:text-accent"
+                className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-[10px] border border-border px-6 py-3 sm:w-auto text-secondary transition-colors hover:border-accent hover:text-accent"
               >
                 <BookIcon />
                 Live docs
@@ -235,7 +236,7 @@ export default function ProjectDetail({ project }: { project: Project }) {
                 href={project.downloadUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex min-h-11 items-center gap-2 rounded-[10px] border border-border px-6 py-3 text-secondary transition-colors hover:border-accent hover:text-accent"
+                className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-[10px] border border-border px-6 py-3 sm:w-auto text-secondary transition-colors hover:border-accent hover:text-accent"
               >
                 {project.downloadLabel ?? "Download"}
                 <ArrowUpRightIcon />
@@ -246,7 +247,7 @@ export default function ProjectDetail({ project }: { project: Project }) {
                 href={project.demoUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex min-h-11 items-center gap-2 rounded-[10px] border border-border px-6 py-3 text-secondary transition-colors hover:border-accent hover:text-accent"
+                className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-[10px] border border-border px-6 py-3 sm:w-auto text-secondary transition-colors hover:border-accent hover:text-accent"
               >
                 Watch demo recording
                 <ArrowUpRightIcon />
@@ -255,7 +256,7 @@ export default function ProjectDetail({ project }: { project: Project }) {
             {project.screens && (
               <a
                 href="#screens"
-                className="inline-flex min-h-11 items-center rounded-[10px] border border-border px-6 py-3 text-secondary transition-colors hover:border-accent hover:text-accent"
+                className="inline-flex min-h-11 w-full items-center justify-center rounded-[10px] border border-border px-6 py-3 sm:w-auto text-secondary transition-colors hover:border-accent hover:text-accent"
               >
                 Screenshots ↓
               </a>
@@ -296,15 +297,26 @@ export default function ProjectDetail({ project }: { project: Project }) {
               {project.layers.map((layer, i) => (
                 <div key={layer.label} className="contents">
                   {i > 0 && (
-                    <div
-                      aria-hidden="true"
-                      className="relative hidden h-0.5 self-center bg-line md:block"
-                    >
-                      <span
-                        className="fl-dot"
-                        style={{ animationDelay: `${i - 1}s` }}
-                      />
-                    </div>
+                    <>
+                      <div
+                        aria-hidden="true"
+                        className="relative hidden h-0.5 self-center bg-line md:block"
+                      >
+                        <span
+                          className="fl-dot"
+                          style={{ animationDelay: `${i - 1}s` }}
+                        />
+                      </div>
+                      <div
+                        aria-hidden="true"
+                        className="relative mx-auto h-6 w-0.5 bg-line md:hidden"
+                      >
+                        <span
+                          className="fl-dot-v"
+                          style={{ animationDelay: `${i - 1}s` }}
+                        />
+                      </div>
+                    </>
                   )}
                   <div
                     className={`flex flex-col gap-2.5 rounded-2xl border bg-card p-6 md:min-h-[230px] ${
@@ -414,5 +426,6 @@ export default function ProjectDetail({ project }: { project: Project }) {
         )}
       </div>
     </PageContainer>
+    </main>
   );
 }

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
+import Logo from "@/components/Logo";
 import PageContainer from "@/components/PageContainer";
 import ThemeToggle from "@/components/ThemeToggle";
 
@@ -69,7 +70,11 @@ export default function Header() {
     <header className="sticky top-0 z-50 border-b border-line bg-background/85 backdrop-blur-md">
       <PageContainer>
         <div className="flex h-16 items-center justify-between gap-4">
-          <a href="/#top" className="font-display text-xl font-bold text-heading">
+          <a
+            href="/#top"
+            className="font-display inline-flex items-center gap-2.5 text-xl font-bold text-heading"
+          >
+            <Logo className="h-9 w-9 flex-none" />
             Siam Sadman
           </a>
 

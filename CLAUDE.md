@@ -30,7 +30,7 @@ default. Do not reinterpret it.
 | Styling | Tailwind CSS v4, tokens in `app/globals.css` |
 | Theme | Light/dark, class-based toggle in the header, defaults to system preference |
 | Fonts | Inter (body), Space Grotesk (headings), JetBrains Mono (kickers, chips) |
-| Animation | CSS keyframes (see Animations); Framer Motion is installed |
+| Animation | CSS keyframes and a small `Reveal` wrapper (see Animations); Framer Motion installed but unused |
 | Hosting | Vercel, Hobby plan; every push to a branch builds a preview |
 
 No Three.js, no 3D. Not a requirement and not wanted.
@@ -47,6 +47,12 @@ No Three.js, no 3D. Not a requirement and not wanted.
 - **Primary button** is the accent-filled rounded rectangle used by the Hero
   (`rounded-[10px] bg-accent … text-on-accent`). Read `Hero.tsx` and `ProjectDetail.tsx`
   before adding any button; do not invent a new shape.
+- **Logo**: `components/Logo.tsx` is the SS monogram (open teal ring, first S in the heading
+  colour, second S in the accent colour). It sits before the name in the header and reads
+  the theme tokens, so it follows light and dark. The same shape is `app/icon.svg` (switches
+  with the OS theme), plus `app/favicon.ico` (mid-tone, transparent) and `app/apple-icon.png`
+  (dark background). Keep all of them in step if the mark changes. Do not replace it with
+  plain text or a gradient mark.
 - **Icons** are inline SVG components in `components/Icons.tsx` (no icon package). Add new
   ones there. Check both themes.
 - Keep tokens and spacing centralised so the owner (skilled in UI/UX, works in Figma) can
@@ -61,14 +67,23 @@ What exists today, and nothing else:
   `app/globals.css`, used in `Hero.tsx`. Each runs a 3 s loop.
 - **Reduced motion is respected**: `prefers-reduced-motion` turns off those animations,
   hides the flowing dot and disables smooth scrolling. Any new motion must do the same.
+- **Scroll reveal**: `components/Reveal.tsx` (a small client wrapper using
+  IntersectionObserver, styles under `[data-reveal]` in `app/globals.css`). A block fades
+  in with a 16 px rise over 0.5 s, once. Content is fully visible in the server-rendered
+  HTML; only after load does it hide blocks still below the fold. Blocks already on screen
+  and visitors with reduced motion are left alone. Applied to `SectionHeading`, project
+  cards (second card in a row delayed 70 ms), the Apsis block and timeline entries in
+  Experience, the Skills table and the Credentials grid. Use `as="li"` / `as="dl"` to keep
+  valid markup. To animate another block, wrap it in `<Reveal>`; do not write new motion code.
 - Smooth anchor scrolling (`scroll-behavior: smooth`, `scroll-padding-top: 5rem`) and a
   0.2 s background/colour transition when the theme toggles.
 - Hover transitions on buttons and cards (`transition-colors` / `transition-opacity`).
 
-**Not built:** scroll-triggered reveal animations. `framer-motion` is in `package.json`
-but is only imported by `components/ProofPoints.tsx`, which is no longer used on the page
-(safe to delete). If scroll motion is added, keep it subtle (fade and a short rise), make
-it respect reduced motion, and never hide content when JavaScript is slow to load.
+**Deliberately not built:** parallax, animated number counters, page-load animation, and
+animation on project detail bodies (only their headings reveal; screenshots must not
+shift while being studied). `framer-motion` is still in `package.json` but nothing imports it any more (the unused
+`ProofPoints.tsx` was deleted); remove it with `npm uninstall framer-motion` when convenient.
+Any new motion must respect `prefers-reduced-motion`.
 
 ## Site structure (as built)
 
@@ -234,6 +249,12 @@ sponsorship or EOR arrangements anywhere on the site.
 - Assume the owner is new to git and to JavaScript/React. Spell out commands.
 - **Say when something is wrong or inconsistent.** Flagging is wanted. Design critique
   after each page is part of the routine.
+- Accessibility basics are in place and must stay: skip-to-content link in `app/layout.tsx`,
+  one `<main id="main">` per page (also on project pages and the 404), one `h1` per page,
+  alt text on every image, 44 px minimum tap targets, visible focus rings, branded 404 at
+  `app/not-found.tsx`. Text contrast was checked in both themes with no failures.
+- The availability line "Currently open to new roles — Dhaka or remote." appears twice, in
+  About and in Contact (the redesign mockup has it in both). Keep the wording identical.
 - Verify before publishing: tsc (`npx tsc --noEmit`) passes, every project slug still
   present, pages load in both themes and at phone width.
 - Don't publish content from untracked or internal files (for example

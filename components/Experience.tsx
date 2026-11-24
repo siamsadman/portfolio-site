@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import PageContainer from "@/components/PageContainer";
+import Reveal from "@/components/Reveal";
 import SectionHeading from "@/components/SectionHeading";
 import { experience, timeline, earlierCareer } from "@/content/experience";
 
@@ -28,7 +29,7 @@ export default function Experience() {
           />
 
           {apsis && (
-            <div className="mb-10 rounded-[18px] border border-line bg-card p-7">
+            <Reveal className="mb-10 rounded-[18px] border border-line bg-card p-7">
               <div className="mb-4 flex flex-wrap justify-between gap-2">
                 <div>
                   <h3 className="text-xl font-bold text-heading">{apsis.employer}</h3>
@@ -63,7 +64,7 @@ export default function Experience() {
                   </li>
                 ))}
               </ol>
-            </div>
+            </Reveal>
           )}
 
           <ol className="ml-2 flex flex-col gap-8 border-l-2 border-line pl-9">
@@ -73,7 +74,8 @@ export default function Experience() {
               const hiddenCount = Math.max(0, all.length - VISIBLE_BULLETS);
               const bullets = isOpen ? all : all.slice(0, VISIBLE_BULLETS);
               return (
-                <li
+                <Reveal
+                  as="li"
                   key={item.id}
                   className="relative rounded-2xl border border-line bg-card p-[26px]"
                 >
@@ -112,7 +114,7 @@ export default function Experience() {
                       </svg>
                     </button>
                   )}
-                </li>
+                </Reveal>
               );
             })}
           </ol>

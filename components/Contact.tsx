@@ -1,7 +1,7 @@
 import PageContainer from "@/components/PageContainer";
 
 const base =
-  "inline-flex min-h-11 items-center gap-2 rounded-[10px] px-[18px] py-3";
+  "inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-[10px] px-[18px] py-3 sm:w-auto";
 const outlineLink = `${base} border border-border text-secondary transition-colors hover:border-accent hover:text-accent`;
 
 const svgProps = {
@@ -68,7 +68,7 @@ export default function Contact() {
             Send a note and I will reply with a CV and project links.
           </p>
         </div>
-        <div className="flex flex-wrap gap-2.5 text-sm">
+        <div className="flex w-full flex-col gap-2.5 text-sm sm:w-auto sm:flex-row sm:flex-wrap">
           <a
             href="mailto:siamsadman@gmail.com"
             className={`${base} bg-accent font-semibold text-on-accent transition-opacity hover:opacity-90`}

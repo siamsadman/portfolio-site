@@ -35,17 +35,18 @@ export default function Hero() {
             View projects
           </a>
 
-          <ul className="flex flex-wrap gap-2.5">
+          <ul className="grid grid-cols-3 gap-2 sm:flex sm:flex-wrap sm:gap-2.5">
             {certChips.map((chip) => (
               <li
                 key={chip}
-                className="inline-flex items-center gap-2 rounded-full bg-elevated py-1.5 pr-3.5 pl-2 font-mono text-xs text-secondary"
+                className="inline-flex items-center justify-center gap-1.5 rounded-full bg-elevated py-1.5 pr-2 pl-1.5 font-mono text-xs font-medium text-secondary sm:justify-start sm:gap-2.5 sm:py-2 sm:pr-5 sm:pl-2.5 sm:text-sm"
               >
                 <Image
                   src="/ms-associate-badge.svg"
                   alt="Microsoft Certified Associate badge"
-                  width={28}
-                  height={28}
+                  width={44}
+                  height={44}
+                  className="h-8 w-8 flex-none sm:h-11 sm:w-11"
                 />
                 {chip}
               </li>

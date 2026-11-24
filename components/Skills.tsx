@@ -1,4 +1,5 @@
 import PageContainer from "@/components/PageContainer";
+import Reveal from "@/components/Reveal";
 import SectionHeading from "@/components/SectionHeading";
 
 const skillRows = [
@@ -33,7 +34,7 @@ export default function Skills() {
     <section id="skills" className="bg-background py-14 sm:py-16">
       <PageContainer>
         <SectionHeading kicker="Skills" title="What I work with" />
-        <dl className="rounded-[18px] border border-line bg-card px-6 py-2">
+        <Reveal as="dl" className="rounded-[18px] border border-line bg-card px-6 py-2">
           {skillRows.map((row) => (
             <div
               key={row.label}
@@ -47,7 +48,7 @@ export default function Skills() {
               </dd>
             </div>
           ))}
-        </dl>
+        </Reveal>
       </PageContainer>
     </section>
   );

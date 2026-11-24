@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <style>
+    .a { stroke: #0f766e; }
+    .h { stroke: #0b1220; }
+    @media (prefers-color-scheme: dark) {
+      .a { stroke: #5eead4; }
+      .h { stroke: #e6edf7; }
+    }
+  </style>
+  <circle class="a" cx="24" cy="24" r="21" stroke-width="2.6" stroke-dasharray="118 14" transform="rotate(-60 24 24)"/>
+  <path class="h" stroke-width="3.6" transform="translate(10 13)" d="M13 5C12 2 9.5 1 7 1C3.5 1 1.5 3 1.5 5.5C1.5 8 3.5 9 7 11C10.5 13 12.5 14 12.5 16.5C12.5 19 10.5 21 7 21C4 21 1.8 19.5 1 17"/>
+  <path class="a" stroke-width="3.6" transform="translate(24 13)" d="M13 5C12 2 9.5 1 7 1C3.5 1 1.5 3 1.5 5.5C1.5 8 3.5 9 7 11C10.5 13 12.5 14 12.5 16.5C12.5 19 10.5 21 7 21C4 21 1.8 19.5 1 17"/>
+</svg>

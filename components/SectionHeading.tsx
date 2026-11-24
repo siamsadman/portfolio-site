@@ -1,3 +1,5 @@
+import Reveal from "@/components/Reveal";
+
 type SectionHeadingProps = {
   kicker: string; // small mono label above the heading
   title: string;
@@ -6,7 +8,7 @@ type SectionHeadingProps = {
 
 export default function SectionHeading({ kicker, title, intro }: SectionHeadingProps) {
   return (
-    <div className="mb-7">
+    <Reveal className="mb-7">
       <p className="mb-3 font-mono text-xs tracking-[0.12em] text-muted uppercase">
         {kicker}
       </p>
@@ -16,6 +18,6 @@ export default function SectionHeading({ kicker, title, intro }: SectionHeadingP
       {intro && (
         <p className="mt-3 max-w-[680px] text-base text-muted sm:text-lg">{intro}</p>
       )}
-    </div>
+    </Reveal>
   );
 }
