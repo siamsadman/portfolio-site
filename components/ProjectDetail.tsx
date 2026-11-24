@@ -332,7 +332,7 @@ export default function ProjectDetail({ project }: { project: Project }) {
             </div>
             {project.archNote && (
               <p className="max-w-[760px] text-base text-secondary">
-                {project.archNote}
+                {renderInline(project.archNote)}
               </p>
             )}
             {project.diagrams && project.diagrams.length > 0 && (
