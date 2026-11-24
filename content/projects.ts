@@ -37,6 +37,7 @@ export type ProjectLayer = {
   title: string;
   text: string;
   gate: string;
+  gateLabel?: string; // defaults to "Gate"
   highlight?: boolean; // accent border on the final layer
 };
 export type ProjectFinding = { big: string; title: string; text: string };
@@ -560,21 +561,109 @@ export const projects: Project[] = [
       "OpenSky positions streamed through Eventstream into an Eventhouse, analysed in KQL, with a Real-Time Dashboard and an Activator rule.",
     outcome: "Streaming counterpart to the batch lakehouse",
     cardTags: ["Eventstream", "KQL", "Power BI"],
-    title: "Live Aircraft Data — Fabric Real-Time Intelligence",
-    pages: ["OpenSky snapshot"],
+    title: "Live aircraft data in Fabric Real-Time Intelligence",
+    eyebrow: "Microsoft Fabric · Real-Time Intelligence",
     summary:
       "Live OpenSky aircraft positions streamed through a Fabric Eventstream into an Eventhouse, analysed with KQL, shown on a Real-Time Dashboard and in a Power BI report on an imported snapshot, with an Activator rule on top. A streaming counterpart to the BTS batch lakehouse; the write-up states what failed and what was not verified.",
-    tags: ["Microsoft Fabric", "Real-Time Intelligence", "KQL", "Python", "Power BI"],
+    tags: ["Microsoft Fabric", "Real-Time Intelligence", "Eventstream", "KQL", "Activator", "Python", "Power BI"],
     palette: "sky",
     repoUrl: "https://github.com/siamsadman/opensky-fabric-rti",
     cardImage: {
       src: "/projects/opensky-fabric-rti/22-powerbi-report.png",
       alt: "OpenSky Power BI report page: KPI cards, aircraft per 5 minutes, top origin countries and a table of airborne readings below -20 m/s",
     },
+    numbers: [
+      { big: "54,587", label: "events ingested in 3 h 18 min, 10:16 to 13:34 UTC, with gaps" },
+      { big: "46,004", label: "unique positions after cleaning; 8,583 repeats removed (about 15.7%)" },
+      { big: "~1,086", label: "distinct aircraft (a dcount estimate)" },
+    ],
+    archHeading: "From the OpenSky API to a dashboard and an alert",
+    layers: [
+      {
+        label: "INGEST",
+        title: "Python producer to Eventstream",
+        text: "A producer script gets an OAuth2 token, polls a South Asia bounding box every 60 seconds and sends one JSON event per aircraft to an Eventstream custom endpoint.",
+        gateLabel: "Checked",
+        gate: "The first run authenticated and sent 321 events, and the credit counter fell by 4 per call, as documented for this box.",
+      },
+      {
+        label: "STORE",
+        title: "Eventhouse and KQL",
+        text: "Direct ingestion into the table aircraft_states. A saved function, aircraft_clean(), types the data and keeps one row per aircraft and position time.",
+        gateLabel: "Checked",
+        gate: "Raw rows are split into unique positions and repeats, so the gap between raw and clean is explained, not assumed.",
+      },
+      {
+        label: "SERVE",
+        title: "Dashboard, alert and report",
+        text: "A Real-Time Dashboard with two tiles, an Activator rule created from the second tile, and a Power BI report on an imported snapshot.",
+        gateLabel: "Not verified",
+        gate: "Notification delivery. The rule recorded 1 activation, but the account has no working Teams or mailbox.",
+        highlight: true,
+      },
+    ],
+    archNote:
+      "Built in one session on 25 Oct 2026 on a Fabric trial. A script feeds the Eventstream because OpenSky requires OAuth2 client credentials and the Eventstream HTTP source (preview) is documented without OAuth support; I did not test the HTTP source. Data: OpenSky Network, used under their API terms, for a non-commercial portfolio project. All times are UTC.",
+    findingsHeading: "What the data and the checks showed",
+    findings: [
+      {
+        big: "19 of 23",
+        title: "Reported rapid descents mostly disagreed with altitude",
+        text: "On the final data, 23 of the 26 airborne readings below -20 m/s had an earlier reading from the same aircraft 5 to 120 seconds before. 4 agreed with the rate calculated from the altitude change (within 5 m/s, a tolerance I chose) and 19 did not. I did not investigate why.",
+      },
+      {
+        big: "1 of 3",
+        title: "Live-feed rows are not activations",
+        text: "The alert's live feed listed 3 matching rows, but History recorded 1 activation, a borderline case: reported -21.46 m/s against -16.7 m/s from altitude. The other two likely arrived before I corrected the condition from 'is equal to' to 'is less than' (not verified).",
+      },
+      {
+        big: "8 gaps",
+        title: "Not a continuous 60-second series",
+        text: "Eight gaps longer than 90 seconds, up to 487 seconds. One is a producer restart, two match producer timeouts and five are unexplained, so per-window counts dip where collection stopped.",
+      },
+      {
+        big: "Registration, not location",
+        title: "India leads, but that is where aircraft are registered",
+        text: "origin_country is inferred from the transponder address, so India's lead says where aircraft are registered, not where they were flying.",
+      },
+    ],
+    screensHeading: "The Power BI report",
+    screens: {
+      images: [
+        {
+          src: "/projects/opensky-fabric-rti/22-powerbi-report.png",
+          alt: "Power BI report page: four KPI cards, a line chart of distinct aircraft per 5-minute window, a bar chart of the top 8 origin countries and a table of airborne readings below -20 m/s",
+        },
+      ],
+      paragraphs: [
+        "A one-page Power BI report on an imported snapshot of `aircraft_clean()` (46,004 rows), not a live connection to the Eventhouse. Four KPI cards, distinct aircraft per 5-minute window, the top 8 origin countries, and a table of the 26 airborne readings reported below -20 m/s. It was built with Claude Code and Microsoft's Power BI authoring plugin.",
+        "**Checks.** The five count measures match a KQL cross-check on the final data (46,004 / 1,088 / 1,081 / 26 / 21), the table's 26 readings equal the `Readings Below -20 m/s` measure, and the nine rows at the top of the table match a DAX query on the model. The top-8 countries measure was checked with a DAX query only, not in KQL.",
+        "**Limits.** The time axis shows 12-hour labels, the table scrolls (about eight of its 26 rows are visible at once), and the Power BI project files are not published because they contain the Eventhouse address.",
+      ],
+    },
     sections: [
       {
+        type: "list",
+        kicker: "Queries",
+        heading: "What the queries showed",
+        intro:
+          "Nine queries are in the repo (`kql/03_analysis.kql`). Times are when each one was run, so the figures come from a table that was still filling.",
+        items: [
+          "**Aircraft per 5 minutes.** Roughly 250 to 350 distinct aircraft per window while the producer was running, with dips where it was stopped or failing.",
+          "**Top origin countries (11:06 UTC, before collection ended).** India 408 distinct aircraft, UAE 47, Thailand 44, China 25, Bangladesh 24.",
+          "**Vertical rate of airborne readings (11:12 UTC, 14,104 readings).** Median 0 m/s, 5th to 95th percentile about -8.8 to +9.7 m/s, extremes -44.87 and +26.33 m/s.",
+          "**Emergency squawk codes 7500, 7600, 7700.** No rows when I ran the query at 11:14 UTC. I did not re-run it on the full table.",
+          "**Rapid-descent frequency (11:19 UTC, 15,938 airborne readings).** 71 below -15 m/s, 8 below -20 m/s, 5 below -25 m/s.",
+        ],
+        images: [
+          { src: "/projects/opensky-fabric-rti/05-dedup-breakdown.png", alt: "Raw rows split into unique positions and repeated positions" },
+          { src: "/projects/opensky-fabric-rti/13-descent-consistency.png", alt: "Consistency check of reported rapid descents against altitude change" },
+        ],
+      },
+      {
         type: "gallery",
-        heading: "Dashboard",
+        kicker: "Dashboard",
+        heading: "Two tiles, one tightened",
         images: [
           {
             src: "/projects/opensky-fabric-rti/14-dashboard-strict-tile.png",
@@ -582,35 +671,14 @@ export const projects: Project[] = [
           },
         ],
         paragraphs: [
-          "A Real-Time Dashboard with two tiles, built on an Eventhouse table of live aircraft states from the OpenSky Network. Tile 1 shows distinct aircraft per 5 minutes and honours the dashboard time range. Tile 2 lists airborne readings below -20 m/s whose reported vertical rate is within 5 m/s of the rate calculated from the altitude change.",
+          "Tile 1 shows distinct aircraft per 5 minutes and honours the dashboard time range. Tile 2 lists airborne readings below -20 m/s whose reported vertical rate is within 5 m/s of the rate calculated from the altitude change.",
           "Tile 2 was tightened after a first version that used the reported rate alone: most of that version's hits looked inconsistent with altitude.",
         ],
       },
       {
-        type: "list",
-        heading: "Pipeline",
-        intro:
-          "Built in one session on a Fabric trial on 25 Oct 2026. The repo includes a log of the problems hit along the way.",
-        items: [
-          "**Source.** The OpenSky REST API for a bounding box over South Asia (latitude 5 to 35, longitude 60 to 100), polled by a Python producer set to a 60-second interval. OpenSky requires OAuth2 client credentials, so the producer fetches a token and refreshes it before it expires.",
-          "**Ingestion.** The producer sends one JSON event per aircraft to an Eventstream custom endpoint over the Event Hubs protocol, and the Eventstream feeds an Eventhouse table by direct ingestion. I used a script because the Eventstream HTTP source (preview) is documented with Anonymous, Basic and API key authentication and says OAuth is not supported; I did not test the HTTP source.",
-          "**Store.** The destination setup created the table `aircraft_states`. A saved KQL function, `aircraft_clean()`, converts epoch seconds to datetimes and keeps one row per aircraft and position time.",
-          "**Alert.** An Activator rule created from the second dashboard tile checks `vertical_rate_ms` below -20 every 5 minutes.",
-        ],
-      },
-      {
-        type: "list",
-        heading: "Data and findings",
-        items: [
-          "**Volume.** 54,587 events ingested between 10:16 and 13:34 UTC, a span of 3 h 18 min with gaps, covering about 1,086 distinct aircraft (a `dcount` estimate).",
-          "**Repeated positions.** Each poll resends aircraft that have not reported a new position, so `aircraft_clean()` removed 8,583 of the 54,587 rows (about 15.7%), mostly repeats.",
-          "**Registration, not location.** In a query at 11:06 UTC India led with 408 distinct aircraft, then the UAE with 47. `origin_country` is inferred from the transponder address, so this is registration country, not where the aircraft were flying.",
-          "**Reported rapid descents often disagreed with altitude.** On the final data, 23 of the 26 airborne readings reported below -20 m/s had an earlier reading from the same aircraft 5 to 120 seconds before, so a rate could be calculated from the altitude change. 4 agreed (within 5 m/s, a tolerance I chose) and 19 did not. An earlier run on partial data found 12 readings, 2 agreed and 10 did not. I did not investigate why they disagree.",
-        ],
-      },
-      {
         type: "gallery",
-        heading: "Alert rule",
+        kicker: "Alert",
+        heading: "One recorded activation",
         images: [
           {
             src: "/projects/opensky-fabric-rti/18-activator-history.png",
@@ -618,35 +686,22 @@ export const projects: Project[] = [
           },
         ],
         paragraphs: [
-          "`rapid_descent_consistent` was created from tile 2 and showed Running. At about 13:03 UTC its History tab showed 1 recorded activation, a borderline case: reported -21.46 m/s against -16.7 m/s calculated from altitude.",
-          "**Notification delivery is not verified.** The account has no working mailbox or Teams subscription: the email test failed and a Teams subscription error was shown.",
-        ],
-      },
-      {
-        type: "gallery",
-        heading: "Power BI report",
-        images: [
-          {
-            src: "/projects/opensky-fabric-rti/22-powerbi-report.png",
-            alt: "Power BI report page: four KPI cards, a line chart of distinct aircraft per 5-minute window, a bar chart of the top 8 origin countries and a table of airborne readings below -20 m/s",
-          },
-        ],
-        paragraphs: [
-          "A one-page Power BI report on an imported snapshot of `aircraft_clean()` (46,004 rows), not a live connection to the Eventhouse. Four KPI cards, distinct aircraft per 5-minute window, the top 8 origin countries, and a table of the 26 airborne readings reported below -20 m/s.",
-          "The report was built with Claude Code and Microsoft's Power BI authoring plugin.",
-          "**Checks.** The five count measures match a KQL cross-check on the final data (46,004 / 1,088 / 1,081 / 26 / 21), the table's 26 readings equal the `Readings Below -20 m/s` measure, and the nine rows at the top of the table match a DAX query on the model. The top-8 countries measure was checked with a DAX query only, not in KQL.",
-          "**Limits.** The time axis shows 12-hour labels, the table scrolls (about eight of its 26 rows are visible at once), and the Power BI project files are not published because they contain the Eventhouse address.",
+          "`rapid_descent_consistent` was created from tile 2: the query runs every 5 minutes, the condition is `vertical_rate_ms` less than -20, and the action is a Teams message to my own account. It showed Running. At about 13:03 UTC its History tab showed 1 recorded activation (12:44:52 UTC). I did not re-check History after that.",
+          "**Notification delivery is not verified.** The account has no working mailbox or Teams subscription: the email test failed with 'email address is not defined in your profile' and a Teams subscription error was shown. I did not determine whether Activator records an activation when delivery fails.",
         ],
       },
       {
         type: "list",
-        heading: "Limits and what I did not verify",
+        kicker: "Limits",
+        heading: "What I did not verify",
         items: [
-          "**Not a continuous series.** Eight gaps longer than 90 seconds, up to 487 seconds: one is the producer restart, two match producer timeouts, and five are unexplained.",
-          "**Producer timeouts.** One ReadTimeout and several ConnectTimeouts calling OpenSky. The script logged each and recovered at the next interval; I did not determine the cause.",
+          "**Not a continuous series.** Eight gaps longer than 90 seconds, up to 487 seconds, listed in the problems log: one is the producer restart (10:35:09 to 10:43:16 UTC), two match producer timeouts, and five (12:13 to 12:43 UTC) are unexplained.",
           "**The flag is a data check, not a safety signal.** Many reported rapid descents looked inconsistent with altitude, which could be bad values, and I did not establish what actually happened.",
-          "**Mistakes I made and fixed.** The first dashboard tile ignored the time-range filter, the alert condition first saved as equal to instead of less than, I first counted live-feed rows as activations, my first redaction of the dashboard export missed one identifier, and the Power BI report's 5-minute window column first loaded as text because its query had no type step. All are in the problems log.",
+          "**Mistakes I made and fixed.** The first dashboard tile ignored the time-range filter, so its label did not match its data. The alert condition first saved as equal to instead of less than. I first counted live-feed rows as activations. My first redaction of the dashboard export missed one identifier. The Power BI report's 5-minute window column first loaded as text because its query had no type step. All are in the problems log.",
           "**Not tested.** The Eventstream HTTP source, ingestion latency, rebuilding the project from scratch on another machine, and a live (DirectQuery) Power BI connection to the Eventhouse.",
+          "**Producer timeouts.** One ReadTimeout and several ConnectTimeouts calling OpenSky. The script logs each and tries again at the next interval, and recovered every time. It has no retry logic of its own, and I did not determine the cause.",
+          "**Events sent before the destination existed.** A test run of 321 events went out before the Eventhouse destination was added. The table's first event is 10:16 UTC, so those events appear not to have been stored (inferred from timestamps).",
+          "**Hard-coded local paths.** The producer script keeps its credential and connection-string paths on my machine, outside the repo.",
           "**After the trial.** The Fabric items disappear when the trial ends. The repo keeps the producer script, the KQL scripts, a sanitized dashboard export, the problems log and 22 screenshots.",
         ],
       },

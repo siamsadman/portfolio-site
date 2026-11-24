@@ -267,7 +267,9 @@ export default function ProjectDetail({ project }: { project: Project }) {
                     </h3>
                     <p className="flex-1 text-sm text-secondary">{layer.text}</p>
                     <p className="border-t border-line pt-3 text-sm text-muted">
-                      <span className="font-semibold text-accent">Gate: </span>
+                      <span className="font-semibold text-accent">
+                        {layer.gateLabel ?? "Gate"}:{" "}
+                      </span>
                       {layer.gate}
                     </p>
                   </div>
