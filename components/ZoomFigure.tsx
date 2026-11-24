@@ -7,7 +7,13 @@ import type { ProjectImage } from "@/content/projects";
 // Click-to-enlarge figure built on the native <dialog> element: no library.
 // The browser provides the backdrop, Escape to close, focus trapping while
 // open, and returns focus to the thumbnail on close.
-export default function ZoomFigure({ image }: { image: ProjectImage }) {
+export default function ZoomFigure({
+  image,
+  compact = false,
+}: {
+  image: ProjectImage;
+  compact?: boolean; // short caption for narrow thumbnails
+}) {
   const dialogRef = useRef<HTMLDialogElement>(null);
 
   const open = () => {
@@ -46,7 +52,7 @@ export default function ZoomFigure({ image }: { image: ProjectImage }) {
         ))}
       </button>
       <figcaption className="mt-2 text-xs text-muted">
-        {image.alt} · Tap to enlarge
+        {compact ? image.alt : `${image.alt} · Tap to enlarge`}
       </figcaption>
 
       <dialog

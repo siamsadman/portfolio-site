@@ -9,6 +9,7 @@ import {
   projectOrder,
   projects,
   type Project,
+  type ProjectImage,
   type ProjectSection,
 } from "@/content/projects";
 
@@ -112,6 +113,32 @@ function SectionBlock({ section }: { section: ProjectSection }) {
   );
 }
 
+function ScreenGrid({ images }: { images: ProjectImage[] }) {
+  const wide = images.filter((image) => !image.portrait);
+  const tall = images.filter((image) => image.portrait);
+  const [first, ...rest] = wide;
+
+  return (
+    <div className="flex flex-col gap-8">
+      {first && <ZoomFigure image={first} />}
+      {rest.length > 0 && (
+        <div className="grid grid-cols-1 items-start gap-6 sm:grid-cols-2">
+          {rest.map((image) => (
+            <ZoomFigure key={image.src} image={image} />
+          ))}
+        </div>
+      )}
+      {tall.length > 0 && (
+        <div className="grid max-w-[640px] grid-cols-3 items-start gap-3 sm:gap-4">
+          {tall.map((image) => (
+            <ZoomFigure key={image.src} image={image} compact />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function Neighbour({
   project,
   direction,
@@ -200,12 +227,23 @@ export default function ProjectDetail({ project }: { project: Project }) {
                 <ArrowUpRightIcon />
               </a>
             )}
+            {project.demoUrl && (
+              <a
+                href={project.demoUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex min-h-11 items-center gap-2 rounded-[10px] border border-border px-6 py-3 text-secondary transition-colors hover:border-accent hover:text-accent"
+              >
+                Watch demo recording
+                <ArrowUpRightIcon />
+              </a>
+            )}
             {project.screens && (
               <a
                 href="#screens"
                 className="inline-flex min-h-11 items-center rounded-[10px] border border-border px-6 py-3 text-secondary transition-colors hover:border-accent hover:text-accent"
               >
-                Report screenshots ↓
+                Screenshots ↓
               </a>
             )}
           </div>
@@ -265,12 +303,14 @@ export default function ProjectDetail({ project }: { project: Project }) {
                     <h3 className="text-xl leading-tight font-bold text-heading">
                       {layer.title}
                     </h3>
-                    <p className="flex-1 text-sm text-secondary">{layer.text}</p>
+                    <p className="flex-1 text-sm text-secondary">
+                      {renderInline(layer.text)}
+                    </p>
                     <p className="border-t border-line pt-3 text-sm text-muted">
                       <span className="font-semibold text-accent">
                         {layer.gateLabel ?? "Gate"}:{" "}
                       </span>
-                      {layer.gate}
+                      {renderInline(layer.gate)}
                     </p>
                   </div>
                 </div>
@@ -282,7 +322,11 @@ export default function ProjectDetail({ project }: { project: Project }) {
               </p>
             )}
             {project.diagrams && project.diagrams.length > 0 && (
-              <div className="mt-8 grid grid-cols-1 items-start gap-6 sm:grid-cols-2">
+              <div
+                className={`mt-8 grid grid-cols-1 items-start gap-6 ${
+                  project.diagrams.length > 1 ? "sm:grid-cols-2" : ""
+                }`}
+              >
                 {project.diagrams.map((image) => (
                   <ZoomFigure key={image.src} image={image} />
                 ))}
@@ -311,11 +355,16 @@ export default function ProjectDetail({ project }: { project: Project }) {
                     <h3 className="mb-1.5 text-base font-semibold text-heading">
                       {f.title}
                     </h3>
-                    <p className="text-base text-secondary">{f.text}</p>
+                    <p className="text-base text-secondary">
+                      {renderInline(f.text)}
+                    </p>
                   </div>
                 </div>
               ))}
             </div>
+            {project.findingsNote && (
+              <p className="mt-4 text-sm text-muted">{project.findingsNote}</p>
+            )}
           </div>
         )}
 
@@ -330,11 +379,7 @@ export default function ProjectDetail({ project }: { project: Project }) {
               kicker="Screens"
               title={project.screensHeading ?? "The report"}
             />
-            <div className="flex flex-col gap-8">
-              {project.screens.images.map((image) => (
-                <ZoomFigure key={image.src} image={image} />
-              ))}
-            </div>
+            <ScreenGrid images={project.screens.images} />
             {project.screens.paragraphs && (
               <div className="mt-6">
                 <Paragraphs items={project.screens.paragraphs} />
