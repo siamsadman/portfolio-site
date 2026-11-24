@@ -79,14 +79,14 @@ export type Project = {
 };
 
 // Order used on the homepage grid and for previous/next links on write-ups
-export const projectOrder = [
-  "olist-sales",
+export const projectOrder: string[] = [
   "bts-fabric-pipeline",
   "opensky-fabric-rti",
   "grid-shift",
+  "olist-dbt-databricks",
+  "olist-sales",
   "olist-logistics",
   "olist-customer-satisfaction",
-  "olist-dbt-databricks",
 ];
 
 export const projects: Project[] = [
@@ -97,7 +97,7 @@ export const projects: Project[] = [
     cardTitle: "Sales & Revenue Performance",
     cardText:
       "Executive overview down to category and product detail, plus the customer and payment patterns behind revenue.",
-    outcome: "3 report pages",
+    outcome: "98K orders · 7 data problems fixed",
     cardTags: ["Power BI", "DAX", "T-SQL"],
     title: "Olist Sales & Revenue Performance: a Power BI dashboard",
     eyebrow: "Power BI · Olist series, part 1 of 3",
@@ -239,7 +239,7 @@ export const projects: Project[] = [
     cardTitle: "Logistics & Delivery Performance",
     cardText:
       "Executive delivery overview with dedicated delay analysis and seller-and-freight breakdowns.",
-    outcome: "Delay analysis built in",
+    outcome: "99,441 orders · 91.9% on time",
     cardTags: ["Power BI", "DAX", "T-SQL"],
     title: "Olist Logistics & Delivery Performance: a Power BI dashboard",
     eyebrow: "Power BI · Olist series, part 2 of 3",
@@ -382,7 +382,7 @@ export const projects: Project[] = [
     cardTitle: "Customer Experience & Satisfaction",
     cardText:
       "Satisfaction overview, the drivers behind it, and seller-level performance across qualifying sellers.",
-    outcome: "3 report pages",
+    outcome: "98,410 reviews · late orders score 1.73 lower",
     cardTags: ["Power BI", "DAX", "T-SQL"],
     title: "Olist Customer Experience & Satisfaction: a Power BI dashboard",
     eyebrow: "Power BI · Olist series, part 3 of 3",
@@ -745,7 +745,7 @@ export const projects: Project[] = [
     cardTitle: "Live Aircraft Data",
     cardText:
       "OpenSky positions streamed through Eventstream into an Eventhouse, analysed in KQL, with a Real-Time Dashboard and an Activator rule.",
-    outcome: "Streaming counterpart to the batch lakehouse",
+    outcome: "54,587 events · 46,004 unique after cleaning",
     cardTags: ["Eventstream", "KQL", "Power BI"],
     title: "Live aircraft data in Fabric Real-Time Intelligence",
     eyebrow: "Microsoft Fabric · Real-Time Intelligence",
@@ -900,7 +900,7 @@ export const projects: Project[] = [
     cardTitle: "Grid Shift",
     cardText:
       "How Bangladesh generates electricity, compared with South Asia and the world, as a Fabric App over a Direct Lake semantic model.",
-    outcome: "Dataflow Gen2 → Direct Lake",
+    outcome: "285,700 rows · 22 DAX measures",
     cardTags: ["Dataflow Gen2", "DAX", "Direct Lake"],
     title: "Grid Shift: how Bangladesh's electricity is generated",
     eyebrow: "Microsoft Fabric · Fabric App (preview)",
@@ -1051,7 +1051,7 @@ export const projects: Project[] = [
     cardTitle: "Olist Pipeline",
     cardText:
       "The pipelines behind the three Olist dashboards, rebuilt in dbt on Databricks Free Edition. A learning project, built with AI as a guide.",
-    outcome: "25 models · 57 tests",
+    outcome: "25 models · 57 tests passing",
     cardTags: ["dbt", "Databricks", "Unity Catalog"],
     title: "Olist Pipeline: dbt on Databricks",
     eyebrow: "dbt · Databricks · Olist series, rebuilt as code",
