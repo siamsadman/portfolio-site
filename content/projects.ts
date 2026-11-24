@@ -13,13 +13,15 @@ export type ProjectImage = {
 export type ProjectSection =
   | {
       type: "gallery";
+      kicker?: string;
       heading: string;
       images: ProjectImage[];
       paragraphs?: string[]; // optional explanatory text beneath the images
     }
-  | { type: "prose"; heading: string; paragraphs: string[] }
+  | { type: "prose"; kicker?: string; heading: string; paragraphs: string[] }
   | {
       type: "list";
+      kicker?: string;
       heading: string;
       intro?: string;
       items: string[];
@@ -27,6 +29,17 @@ export type ProjectSection =
     };
 
 export type ProjectCategory = "bi" | "fabric" | "de";
+
+// Write-up template blocks (all optional so a project can adopt them one at a time)
+export type ProjectNumber = { big: string; label: string };
+export type ProjectLayer = {
+  label: string; // BRONZE / SILVER / GOLD
+  title: string;
+  text: string;
+  gate: string;
+  highlight?: boolean; // accent border on the final layer
+};
+export type ProjectFinding = { big: string; title: string; text: string };
 
 export type Project = {
   slug: string;
@@ -46,8 +59,29 @@ export type Project = {
   repoUrl: string;
   docsUrl?: string; // optional link to a live docs site, shown beside the GitHub link
   cardImage: ProjectImage;
+  eyebrow?: string; // mono label above the title on the write-up page
+  numbers?: ProjectNumber[]; // key-number cards
+  archHeading?: string;
+  layers?: ProjectLayer[]; // Bronze / Silver / Gold cards
+  archNote?: string; // paragraph under the layer cards
+  diagrams?: ProjectImage[]; // full architecture and orchestration diagrams
+  findingsHeading?: string;
+  findings?: ProjectFinding[];
+  screensHeading?: string;
+  screens?: { images: ProjectImage[]; paragraphs?: string[] };
   sections?: ProjectSection[];
 };
+
+// Order used on the homepage grid and for previous/next links on write-ups
+export const projectOrder = [
+  "olist-sales",
+  "bts-fabric-pipeline",
+  "opensky-fabric-rti",
+  "grid-shift",
+  "olist-logistics",
+  "olist-customer-satisfaction",
+  "olist-dbt-databricks",
+];
 
 export const projects: Project[] = [
   {
@@ -315,45 +349,98 @@ export const projects: Project[] = [
       "Medallion lakehouse over US flight records: PySpark, watermark-driven incremental loading, Direct Lake model, validation gates at every layer.",
     outcome: "41.8M records · 71-period backfill, no failures",
     cardTags: ["Microsoft Fabric", "PySpark", "Delta Lake"],
-    title: "BTS Airline On-Time Performance — Fabric Lakehouse",
+    title: "BTS Airline On-Time Performance: a Fabric medallion lakehouse",
+    eyebrow: "Microsoft Fabric · Data engineering",
     summary:
       "A medallion-architecture lakehouse over 41.8 million US flight records — PySpark transformation, watermark-driven incremental loading, and a Direct Lake semantic model, with validation gates at every layer boundary.",
-    tags: ["Microsoft Fabric", "PySpark", "Data Engineering", "Delta Lake"],
+    tags: ["Microsoft Fabric", "PySpark", "Delta Lake", "Direct Lake", "Data Factory"],
     palette: "indigo",
     repoUrl: "https://github.com/siamsadman/bts-fabric-pipeline",
     cardImage: {
       src: "/projects/bts-fabric-pipeline/14-report-page.png",
       alt: "BTS on-time performance report",
     },
-    sections: [
+    numbers: [
+      { big: "41.8M", label: "flight records" },
+      { big: "78", label: "monthly periods, Jan 2020 to Jun 2026" },
+      { big: "7h 06m", label: "unattended backfill of 71 periods, zero failures" },
+    ],
+    archHeading: "Three layers, a gate between each",
+    layers: [
       {
-        type: "gallery",
-        heading: "Report",
-        images: [
-          { src: "/projects/bts-fabric-pipeline/14-report-page.png", alt: "BTS on-time performance report" },
-        ],
-        paragraphs: [
-          "One page: KPI cards, on-time and cancellation rate by month across the full range, carrier comparison, and delay minutes by cause.",
-          "The page carries a note explaining that on-time performance *improved* through mid-2020 while cancellations spiked to 41.5%. Both are real — domestic volume fell below 30% of normal, so the flights that did operate met empty airports and uncongested airspace. April 2020 records **95.1% on-time and 41.5% cancelled in the same month**: the best punctuality and the worst reliability in the dataset. Retaining cancelled flights is what makes that visible.",
-        ],
+        label: "BRONZE",
+        title: "Source contract, preserved",
+        text: "A landing notebook fetches each monthly file server-side. Bronze loads it with an explicit schema and audit columns and no other change. Re-runs delete and append by source file, so a month never loads twice.",
+        gate: "Schema held across all 78 periods; 77 of 77 source archives CRC-verified before ingestion.",
       },
       {
-        type: "gallery",
-        heading: "Architecture",
-        images: [
-          {
-            src: "/projects/bts-fabric-pipeline/architecture_light.png",
-            darkSrc: "/projects/bts-fabric-pipeline/architecture_dark.png",
-            alt: "Medallion lakehouse architecture — landing, bronze, silver, gold and the Direct Lake semantic model",
-          },
-          {
-            src: "/projects/bts-fabric-pipeline/orchestration_light.png",
-            darkSrc: "/projects/bts-fabric-pipeline/orchestration_dark.png",
-            alt: "Pipeline orchestration — single-period and backfill Data Factory pipelines",
-          },
-        ],
+        label: "SILVER",
+        title: "PySpark transformation",
+        text: "A keep-list reduces 109 source fields to 56, timestamps are derived, and rows merge on a business key with null-safe equality.",
+        gate: "Derived clock matched BTS at 100% in every period; zero duplicate keys; merge idempotent at 41.2M rows.",
+      },
+      {
+        label: "GOLD",
+        title: "Star schema and Direct Lake",
+        text: "Two fact tables and five dimensions on natural keys, one row per scheduled flight leg including cancelled and diverted, served to Power BI through a Direct Lake model.",
+        gate: "Referential integrity checked on every load: zero orphans across 41.2M rows.",
+        highlight: true,
+      },
+    ],
+    archNote:
+      "Two Data Factory pipelines orchestrate the notebooks: one processes a single period, chained on success, and a backfill pipeline calls it once per period. All layers live in one lakehouse, separated by table-name prefix, and the workspace was connected to GitHub before any item existed, so the commit history tracks the build.",
+    diagrams: [
+      {
+        src: "/projects/bts-fabric-pipeline/architecture_light.png",
+        darkSrc: "/projects/bts-fabric-pipeline/architecture_dark.png",
+        alt: "Medallion lakehouse architecture — landing, bronze, silver, gold and the Direct Lake semantic model",
+      },
+      {
+        src: "/projects/bts-fabric-pipeline/orchestration_light.png",
+        darkSrc: "/projects/bts-fabric-pipeline/orchestration_dark.png",
+        alt: "Pipeline orchestration — single-period and backfill Data Factory pipelines",
+      },
+    ],
+    findingsHeading: "What validation found",
+    findings: [
+      {
+        big: "48% mismatch",
+        title: "Arrival timestamp derivation",
+        text: "Adding elapsed minutes to the departure time disagreed with the reported arrival on nearly half of all flights. The cause was gate-to-gate local clock time, resolved without a timezone reference dataset.",
+      },
+      {
+        big: "607,577 new rows",
+        title: "Incremental load, to the row",
+        text: "June 2026 was held back from the backfill and loaded afterwards through the same unchanged pipeline. Periods went from 77 to 78, and the fact table grew by exactly June's count in the watermark: no double-counting, no manual step.",
+      },
+      {
+        big: "95.1% on time, 41.5% cancelled",
+        title: "April 2020, in the same month",
+        text: "The best punctuality and the worst reliability in the dataset. Keeping cancelled flights in the data is what makes it visible; filtering them out would have removed two fifths of the month.",
+      },
+      {
+        big: "100% pass, still wrong",
+        title: "One passing check is not validation",
+        text: "The 2400 midnight bug passed the clock check at 100% and was caught only by the independent date check. Applying the departure rule to arrivals had put 532 rows two days out.",
+      },
+    ],
+    screensHeading: "The report",
+    screens: {
+      images: [
+        { src: "/projects/bts-fabric-pipeline/14-report-page.png", alt: "BTS on-time performance report" },
+      ],
+      paragraphs: [
+        "One page: KPI cards, on-time and cancellation rate by month across the full range, carrier comparison, and delay minutes by cause.",
+        "The page carries a note explaining that on-time performance *improved* through mid-2020 while cancellations spiked to 41.5%. Both are real: domestic volume fell below 30% of normal, so the flights that did operate met empty airports and uncongested airspace.",
+      ],
+    },
+    sections: [
+      {
+        type: "prose",
+        kicker: "Design",
+        heading: "How it fits together",
         paragraphs: [
-          "A medallion lakehouse in Microsoft Fabric over US Bureau of Transportation Statistics flight data: January 2020 to June 2026, 78 monthly files, **41.8 million flight records**, roughly 20 GB of source CSV.",
+"A medallion lakehouse in Microsoft Fabric over US Bureau of Transportation Statistics flight data: January 2020 to June 2026, 78 monthly files, **41.8 million flight records**, roughly 20 GB of source CSV.",
           "Landing holds raw CSV. Bronze preserves the source contract with an explicit schema and audit columns. Silver types and cleans, reducing 109 source fields to 56 and merging on a business key. Gold is a star schema — two facts, five dimensions. A Direct Lake semantic model sits on the gold tables only.",
           "Layer separation is by table-name prefix within a single lakehouse. Three separate lakehouses would mean cross-lakehouse references in every notebook for no architectural gain at this scale.",
           "Orchestration is two Data Factory pipelines: one that processes a single period through four notebook activities, and a backfill that invokes it sequentially per period. Activities are chained **on success**, not on completion — on-completion would let a failed landing step run bronze anyway, which is how partial data gets written and reported as a success. All four activities share a Spark session tag so the pipeline runs as one Spark application rather than four, which is necessary on F4 capacity and removes three session startups from every run.",
@@ -362,6 +449,7 @@ export const projects: Project[] = [
       },
       {
         type: "list",
+        kicker: "Decisions",
         heading: "Pipeline decisions",
         items: [
           "**Explicit schema, not inference.** Inference reads the file twice and produces inconsistent types between months — a column entirely null in one month infers as `string` and as `int` in another, and the append then fails partway through a backfill. The schema is generated once from a reference month, hardened, and cached to a 20 KB JSON file rather than making two passes over 260 MB of CSV.",
@@ -382,7 +470,21 @@ export const projects: Project[] = [
       },
       {
         type: "list",
-        heading: "Validation",
+        kicker: "Semantic model",
+        heading: "Direct Lake over the gold layer",
+        intro:
+          "The model reads the seven gold tables only. Bronze, silver and the watermark are deliberately excluded: a semantic model is the presentation layer, and staging tables in it are working notes shipped to the customer.",
+        items: [
+          "**Eleven measures on a dedicated `_measures` table.** Its single dummy column is hidden, so the measures sort to the top of the field list instead of hiding inside a fact table.",
+          "**`dim_airport` role-plays.** Two relationships to `fact_flight`: active on `origin_airport_id`, inactive on `dest_airport_id`. `Arriving Flights` exposes the destination side with `USERELATIONSHIP`, so one dimension answers both \"flights from LAX\" and \"flights to LAX\".",
+          "**`Completed Flights` is the measure that matters.** It excludes cancelled and diverted flights and is the correct denominator for punctuality, because a cancelled flight has no arrival time and must not dilute a delay average. `Flights` is the denominator for reliability. Conflating the two is the subtle version of the grain mistake.",
+          "**Delay averages use the `_minutes` variants, which floor at zero.** Using `arr_delay` would let early arrivals offset late ones and give a much lower, misleading figure.",
+        ],
+      },
+      {
+        type: "list",
+        kicker: "Validation",
+        heading: "Every layer boundary fails the run",
         intro:
           "Every layer boundary has a check that fails the run rather than warning. When the pipeline runs unattended, a bad month must fail the run rather than quietly write wrong data.\n\n`validate_timestamps()` runs two **independent** checks: that the derived clock matches the BTS reported time of day, and that the arrival date is the flight date or the day after. The `2400` bug passed the first at 100% and was caught only by the second. One passing check is not validation.",
         items: [
@@ -403,7 +505,8 @@ export const projects: Project[] = [
       },
       {
         type: "list",
-        heading: "Results",
+        kicker: "Results",
+        heading: "What the run showed",
         items: [
           "**41,829,828 rows**, identical across bronze, silver and `fact_flight` — no drift through the chain.",
           "**Full backfill of 71 periods ran unattended in 7 hours 6 minutes with zero failures.** Retries were configured on each activity but never fired.",
@@ -416,11 +519,28 @@ export const projects: Project[] = [
         images: [
           { src: "/projects/bts-fabric-pipeline/08-backfill-71-periods-7h06m.png", alt: "Backfill — 71 periods, 7h 06m, zero failures" },
           { src: "/projects/bts-fabric-pipeline/15-pipeline-failure-unpublished-period.png", alt: "Failure path — unpublished period, no partial data" },
+          { src: "/projects/bts-fabric-pipeline/11-watermark-before-incremental-77.png", alt: "Watermark before the incremental load: 77 periods, 41,222,251 rows" },
+          { src: "/projects/bts-fabric-pipeline/12-watermark-after-incremental-78.png", alt: "Watermark after the incremental load: 78 periods, 41,829,828 rows" },
         ],
       },
       {
         type: "list",
-        heading: "Notes on the Fabric platform",
+        kicker: "Limitations",
+        heading: "What it does not do",
+        intro: "Stated in the repository as well, so nobody has to find them by accident.",
+        items: [
+          "**Arrival timestamps are destination-local wall clock, with a date derived from origin-local arithmetic.** A small residual remains where the arithmetic date lands on the other side of midnight. Timezone-correct conversion would need a third data source keyed on IATA codes, plus DST-aware conversion, for accuracy no measure in the model consumes. Every metric is a duration or a delay, both differences within the same frame.",
+          "**IATA code reuse is defended against but not observed in this range.** All 78 periods report 387 distinct `airport_id` and 387 distinct `airport_code`, so no collisions. BTS reuses codes across decades, so six and a half years does not exercise it. The check stays as a gate.",
+          "**Delay-cause totals do not reconcile to all delay minutes, by design.** Flights delayed 1 to 14 minutes have no BTS-reported cause.",
+          "**Both `dep_delay` and `dep_delay_minutes` are kept.** The first goes negative for early departures and the second floors at zero, so averaging the wrong one gives a different answer.",
+          "**The pipeline takes an explicit period instead of deriving it.** A Lookup activity against `load_watermark` returning the next unprocessed period would make a schedule self-driving. The watermark table already supports it; the backfill did not need it.",
+          "**Deferred:** timezone-correct arrival times, Type 2 SCD on airports, a time-block dimension, and watermark-driven scheduling.",
+        ],
+      },
+      {
+        type: "list",
+        kicker: "Platform notes",
+        heading: "Fabric defaults that cost time",
         intro: "Three defaults that cost time and are not obvious from the error messages.",
         items: [
           "**GitHub sync is disabled tenant-wide by default.** The setting lives in the Admin portal, not workspace settings. With it off, GitHub simply does not appear in the workspace Git provider list — it looks like a missing feature rather than a permission.",

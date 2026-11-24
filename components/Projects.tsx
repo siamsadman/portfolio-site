@@ -5,20 +5,14 @@ import Image from "next/image";
 import Link from "next/link";
 import PageContainer from "@/components/PageContainer";
 import SectionHeading from "@/components/SectionHeading";
-import { projects, type Project, type ProjectCategory } from "@/content/projects";
+import {
+  projectOrder,
+  projects,
+  type Project,
+  type ProjectCategory,
+} from "@/content/projects";
 
-// Order shown on the homepage (the first four are visible before "See all")
-const homeOrder = [
-  "olist-sales",
-  "bts-fabric-pipeline",
-  "opensky-fabric-rti",
-  "grid-shift",
-  "olist-logistics",
-  "olist-customer-satisfaction",
-  "olist-dbt-databricks",
-];
-
-const ordered: Project[] = homeOrder
+const ordered: Project[] = projectOrder
   .map((slug) => projects.find((p) => p.slug === slug))
   .filter((p): p is Project => Boolean(p));
 
