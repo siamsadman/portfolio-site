@@ -1,243 +1,139 @@
 "use client";
 
-import { motion, type Variants } from "framer-motion";
+import { useState } from "react";
 import PageContainer from "@/components/PageContainer";
-import SectionHeading from "@/components/SectionHeading";
-import {
-  experience,
-  type ExperienceEntry,
-  type EngagementItem,
-} from "@/content/experience";
+import { experience, timeline, earlierCareer } from "@/content/experience";
 
-const cardsContainer: Variants = {
-  hidden: {},
-  visible: { transition: { staggerChildren: 0.06 } },
-};
-
-const cardItem: Variants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.2, ease: "easeOut" } },
-};
-
-const engagementsContainer: Variants = {
-  hidden: {},
-  visible: { transition: { staggerChildren: 0.04 } },
-};
-
-const engagementItem: Variants = {
-  hidden: { opacity: 0, y: 10 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.15, ease: "easeOut" } },
-};
-
-function EngagementBlock({ item }: { item: EngagementItem }) {
-  const kicker = item.kind === "client" ? "Client engagement" : item.label;
-
-  return (
-    <motion.div
-      variants={engagementItem}
-      className="border-l-2 border-border pl-4"
-    >
-      <p className="text-xs font-semibold uppercase tracking-wide text-accent">
-        {kicker}
-      </p>
-
-      {item.kind === "internal" && (
-        <>
-          <div className="mt-1 flex items-baseline gap-2">
-            <h4 className="text-lg font-semibold text-foreground">
-              {item.label}
-            </h4>
-            <span className="text-xs text-muted">{item.dateRange}</span>
-          </div>
-          <ul className="mt-2 max-w-[80ch] list-disc space-y-1 pl-4 text-base leading-relaxed text-foreground sm:text-lg">
-            {item.bullets.map((bullet) => (
-              <li key={bullet}>{bullet}</li>
-            ))}
-          </ul>
-        </>
-      )}
-
-      {item.kind === "client" && item.workstreams.length === 1 && (
-        <>
-          <div className="mt-1 flex flex-wrap items-baseline gap-2">
-            <h4 className="text-lg font-semibold text-foreground">
-              {item.client} — {item.workstreams[0].descriptor}
-            </h4>
-            <span className="text-xs text-muted">
-              {item.workstreams[0].dateRange}
-            </span>
-          </div>
-          {item.workstreams[0].note && (
-            <p className="mt-1 text-sm italic text-muted">
-              {item.workstreams[0].note}
-            </p>
-          )}
-          <ul className="mt-2 max-w-[80ch] list-disc space-y-1 pl-4 text-base leading-relaxed text-foreground sm:text-lg">
-            {item.workstreams[0].bullets.map((bullet) => (
-              <li key={bullet}>{bullet}</li>
-            ))}
-          </ul>
-        </>
-      )}
-
-      {item.kind === "client" && item.workstreams.length > 1 && (
-        <>
-          <h4 className="mt-1 text-lg font-semibold text-foreground">
-            {item.client}
-          </h4>
-          <div className="mt-3 space-y-4 rounded-lg bg-elevated p-4">
-            {item.workstreams.map((workstream) => (
-              <div key={workstream.descriptor}>
-                <p className="text-[11px] font-semibold uppercase tracking-wide text-muted">
-                  Workstream
-                </p>
-                <div className="mt-0.5 flex flex-wrap items-baseline gap-2">
-                  <p className="text-sm font-semibold text-foreground">
-                    {workstream.descriptor}
-                  </p>
-                  <span className="text-xs text-muted">
-                    {workstream.dateRange}
-                  </span>
-                </div>
-                {workstream.note && (
-                  <p className="mt-1 text-sm italic text-muted">
-                    {workstream.note}
-                  </p>
-                )}
-                <ul className="mt-2 max-w-[80ch] list-disc space-y-1 pl-4 text-base leading-relaxed text-foreground sm:text-lg">
-                  {workstream.bullets.map((bullet) => (
-                    <li key={bullet}>{bullet}</li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-        </>
-      )}
-    </motion.div>
-  );
-}
-
-function ApsisCard({
-  entry,
-}: {
-  entry: Extract<ExperienceEntry, { type: "engagements" }>;
-}) {
-  return (
-    <motion.div
-      variants={cardItem}
-      className="rounded-2xl border border-border bg-card p-6 sm:p-8"
-    >
-      <h3 className="text-2xl font-bold text-heading sm:text-3xl">
-        {entry.employer}
-      </h3>
-      <p className="mt-1 text-sm text-muted">
-        {entry.location} · {entry.dateRange}
-      </p>
-
-      <div className="mt-4 flex flex-col gap-1">
-        {entry.titles.map((title) => (
-          <p
-            key={title.title}
-            className="text-sm font-medium text-secondary"
-          >
-            {title.title}
-            {title.dateRange && (
-              <span className="text-muted"> · {title.dateRange}</span>
-            )}
-          </p>
-        ))}
-        {entry.roleNote && (
-          <p className="text-xs italic text-muted">{entry.roleNote}</p>
-        )}
-      </div>
-
-      <motion.div
-        variants={engagementsContainer}
-        className="mt-6 flex flex-col gap-6"
-      >
-        {entry.engagements.map((item, index) => (
-          <EngagementBlock
-            key={item.kind === "client" ? item.client : item.label + index}
-            item={item}
-          />
-        ))}
-      </motion.div>
-    </motion.div>
-  );
-}
-
-function EarlierRoles({
-  entries,
-}: {
-  entries: Extract<ExperienceEntry, { type: "bullets" }>[];
-}) {
-  return (
-    <motion.div
-      variants={cardItem}
-      className="rounded-2xl border border-border bg-card p-6 sm:p-8"
-    >
-      <p className="text-xs font-semibold uppercase tracking-wide text-muted">
-        Earlier roles
-      </p>
-      <div className="mt-6 flex flex-col gap-6">
-        {entries.map((entry) => (
-          <div key={entry.id}>
-            <h4 className="text-lg font-semibold text-heading">
-              {entry.employer}
-            </h4>
-            <p className="text-sm text-muted">
-              {entry.location} · {entry.dateRange}
-              {entry.partTime && " · Part-time"}
-            </p>
-            <p className="mt-1 text-sm font-medium text-secondary">
-              {entry.titles[0].title}
-            </p>
-            {entry.bullets.map((bullet) => (
-              <p key={bullet} className="mt-2 text-base leading-relaxed text-foreground sm:text-lg">
-                {bullet}
-              </p>
-            ))}
-          </div>
-        ))}
-      </div>
-    </motion.div>
-  );
+function shortRange(range?: string) {
+  // "Jan 2022 – Aug 2026" -> "2022 – 2026"
+  return (range ?? "").replace(/[A-Za-z]+\s(\d{4})/g, "$1");
 }
 
 export default function Experience() {
-  const apsisEntry = experience.find(
-    (entry): entry is Extract<ExperienceEntry, { type: "engagements" }> =>
-      entry.type === "engagements"
-  );
-  const earlierRoles = experience.filter(
-    (entry): entry is Extract<ExperienceEntry, { type: "bullets" }> =>
-      entry.type === "bullets"
-  );
+  const [open, setOpen] = useState<Record<string, boolean>>({});
+  const apsis = experience.find((e) => e.id === "apsis");
+  // Ladder reads oldest to newest
+  const ladder = apsis ? [...apsis.titles].reverse() : [];
 
   return (
-    <section id="experience" className="bg-panel pt-6 pb-24 sm:pt-8">
+    <section id="experience" className="bg-background pt-[72px] pb-14">
       <PageContainer>
-        <div className="mx-auto max-w-3xl">
-          <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.2, ease: "easeOut" }}
-          >
-            <SectionHeading kicker="02 / Experience" title="Experience" />
-          </motion.div>
+        <div className="max-w-[1100px]">
+          <p className="mb-3 font-mono text-xs tracking-[0.12em] text-muted uppercase">
+            Experience
+          </p>
+          <h2 className="mb-7 text-[clamp(1.5rem,2.8vw,2rem)] font-bold tracking-tight text-heading">
+            From requirements to production, for global clients
+          </h2>
 
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.2 }}
-            variants={cardsContainer}
-            className="flex flex-col gap-12"
-          >
-            {apsisEntry && <ApsisCard entry={apsisEntry} />}
-            <EarlierRoles entries={earlierRoles} />
-          </motion.div>
+          {apsis && (
+            <div className="mb-10 rounded-[18px] border border-line bg-card p-7">
+              <div className="mb-4 flex flex-wrap justify-between gap-2">
+                <div>
+                  <h3 className="text-xl font-bold text-heading">{apsis.employer}</h3>
+                  {apsis.about && (
+                    <p className="mt-0.5 text-sm text-muted">{apsis.about}</p>
+                  )}
+                </div>
+                <p className="text-sm text-muted">
+                  {apsis.location} · {apsis.dateRange}
+                  {apsis.roleNote ? ` · ${apsis.roleNote}` : ""}
+                </p>
+              </div>
+              <ol className="flex flex-wrap items-center gap-3 text-sm">
+                {ladder.map((t, i) => (
+                  <li key={t.title} className="contents">
+                    {i > 0 && (
+                      <span aria-hidden="true" className="text-dot">
+                        →
+                      </span>
+                    )}
+                    <span
+                      className={`rounded-lg border px-3.5 py-2 ${
+                        i === ladder.length - 1
+                          ? "border-accent text-heading"
+                          : "border-border text-secondary"
+                      }`}
+                    >
+                      {t.title}
+                      <br />
+                      <span className="text-muted">{shortRange(t.dateRange)}</span>
+                    </span>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          )}
+
+          <ol className="ml-2 flex flex-col gap-8 border-l-2 border-line pl-9">
+            {timeline.map((item) => {
+              const isOpen = !!open[item.id];
+              const bullets = isOpen ? [...item.bullets, ...item.more] : item.bullets;
+              return (
+                <li
+                  key={item.id}
+                  className="relative rounded-2xl border border-line bg-card p-[26px]"
+                >
+                  <span
+                    aria-hidden="true"
+                    className="absolute top-[30px] -left-[47px] h-3.5 w-3.5 rounded-full border-[3px] border-background bg-dot"
+                  />
+                  <p className="mb-2 font-mono text-xs text-muted">{item.when}</p>
+                  <h3 className="mb-0.5 text-xl font-bold text-heading">{item.title}</h3>
+                  <p className="mb-4 text-sm text-muted">{item.org}</p>
+                  <ul className="flex list-disc flex-col gap-2 pl-5 text-[0.9375rem] text-secondary">
+                    {bullets.map((b) => (
+                      <li key={b}>{b}</li>
+                    ))}
+                  </ul>
+                  {item.more.length > 0 && (
+                    <button
+                      type="button"
+                      aria-expanded={isOpen}
+                      onClick={() => setOpen((o) => ({ ...o, [item.id]: !o[item.id] }))}
+                      className="mt-4 rounded-lg border border-border px-4 py-2 text-sm text-secondary transition-colors hover:border-accent hover:text-accent"
+                    >
+                      {isOpen ? "Show less" : `Show ${item.more.length} more`}
+                    </button>
+                  )}
+                </li>
+              );
+            })}
+          </ol>
+
+          <div className="mt-14">
+            <p className="mb-4 font-mono text-xs tracking-[0.12em] text-muted uppercase">
+              Earlier career
+            </p>
+            <ul className="flex flex-col gap-4">
+              {earlierCareer.map((role) => (
+                <li
+                  key={role.id}
+                  className="rounded-[18px] border border-line bg-card p-7"
+                >
+                  <div className="mb-4 flex flex-wrap justify-between gap-2">
+                    <div>
+                      <h3 className="text-xl font-bold text-heading">{role.employer}</h3>
+                      {role.about && (
+                        <p className="mt-0.5 text-sm text-muted">{role.about}</p>
+                      )}
+                    </div>
+                    <p className="text-sm text-muted">
+                      {role.location} · {role.when}
+                    </p>
+                  </div>
+                  <p className="inline-block rounded-lg border border-border px-3.5 py-2 text-sm text-secondary">
+                    {role.title}
+                  </p>
+                  {role.note && (
+                    <p className="mt-4 max-w-[760px] text-[0.9375rem] text-secondary">
+                      {role.note}
+                    </p>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       </PageContainer>
     </section>
