@@ -1,147 +1,155 @@
 # CLAUDE.md — Portfolio site build notes
 
 Personal portfolio for a BI Developer / Reporting Analyst based in Dhaka, Bangladesh.
-It serves two purposes at once: a **CV** (as a web page *and* a downloadable PDF) and a
-**project showcase** that must scale as new projects are added, without a redesign.
+**It is a project-first portfolio site, no longer a CV page.** The CV exists as a
+downloadable PDF (`public/Siam_Sadman_BI_Developer.pdf`, linked from the header and
+Contact), but the site itself leads with the work.
 
 - GitHub: https://github.com/siamsadman
 - LinkedIn: https://www.linkedin.com/in/siam-sadman
 - Live at: https://siamsadman.vercel.app
 
-CV content lives in `CV_CONTENT.md` in this repo. Read it before writing any section
-that contains career information.
+Career facts live in `CV_CONTENT.md` and `content/experience.ts`. Read them before
+writing anything that states employers, titles, dates or metrics. (`CV_CONTENT.md` and the
+CV PDF still carry the old Market Express wording and have not been refreshed yet.)
 
-Timeline: this is a **two-week build**, not an open-ended project. Job applications run
-daily in parallel; the site is an amplifier, not a blocker.
+## Redesign status (branch `redesign`)
+
+The redesign is built on the `redesign` branch and **not yet pushed or merged**; `main` is
+still the old site. The owner commits and pushes himself (`git push -u origin redesign`
+gives a Vercel preview). Never commit or push on his behalf.
+
+**The approved redesign mockup wins any design conflict** with this file or with a
+default. Do not reinterpret it.
 
 ## Stack
 
 | | |
 |---|---|
 | Framework | Next.js 16.3.1, App Router, TypeScript |
-| Styling | Tailwind CSS v4 |
+| Styling | Tailwind CSS v4, tokens in `app/globals.css` |
 | Theme | Light/dark, class-based toggle in the header, defaults to system preference |
-| Animation | Framer Motion |
-| Hosting | Vercel, Hobby plan |
-| Domain | `siamsadman.vercel.app` (custom domain possible later) |
+| Fonts | Inter (body), Space Grotesk (headings), JetBrains Mono (kickers, chips) |
+| Animation | CSS keyframes (see Animations); Framer Motion is installed |
+| Hosting | Vercel, Hobby plan; every push to a branch builds a preview |
 
 No Three.js, no 3D. Not a requirement and not wanted.
 
-CV brand colours, worth carrying into the site: navy `#1F3A5F`, teal `#0E7C86`.
+## Design system
 
-## Visual direction
+- **Tokens** live in `app/globals.css` (`:root` for light, `.dark` for dark) and are
+  exposed to Tailwind through `@theme inline`: `background`, `panel`, `card`, `code`,
+  `elevated`, `line`, `border`, `foreground`, `heading`, `secondary`, `muted`, `dot`,
+  `accent`, `on-accent`. Use these names, never hard-coded hex, so both themes work.
+  Accent is teal (`#0f766e` light, `#5eead4` dark).
+- **Section kicker** — every section starts with `SectionHeading` (`kicker`, `title`,
+  optional `intro`): a small mono uppercase label above the heading. Not numbered any more.
+- **Primary button** is the accent-filled rounded rectangle used by the Hero
+  (`rounded-[10px] bg-accent … text-on-accent`). Read `Hero.tsx` and `ProjectDetail.tsx`
+  before adding any button; do not invent a new shape.
+- **Icons** are inline SVG components in `components/Icons.tsx` (no icon package). Add new
+  ones there. Check both themes.
+- Keep tokens and spacing centralised so the owner (skilled in UI/UX, works in Figma) can
+  refine the visual layer himself.
 
-**Closest structural reference: `nbarkiya.xyz`.** Homepage sections each show a few
-items with a link through to detail pages. Follow that *structure*. Do not mirror its
-visual design — the site should look like its own thing.
+## Animations
 
-Elements deliberately borrowed from other references:
+What exists today, and nothing else:
 
-- **Numbered section markers** — a small, quiet `0X / Section name` above each
-  titled section. Adapted from a terminal-styled reference; keep it understated,
-  not a full monospace brutalist theme. Hero silently occupies slot 1 (it shows
-  no kicker of its own), so the as-built sequence is: Experience "02", the
-  technical proof-points strip "03" (kicker-only, no visible title — see that
-  section), Projects "04", Skills "05", Certifications & Education "06", Contact
-  "07".
-- **Tech tags on project cards** — small pills (`Power BI`, `DAX`, `T-SQL`). These come
-  from each project's `tags` field.
+- **Hero pipeline animation** (Bronze → Silver → Gold → dashboard): pure CSS keyframes
+  `flowDot`, `nodePulse`, `barGrow` with classes `.fl-dot`, `.fl-node`, `.fl-bar` in
+  `app/globals.css`, used in `Hero.tsx`. Each runs a 3 s loop.
+- **Reduced motion is respected**: `prefers-reduced-motion` turns off those animations,
+  hides the flowing dot and disables smooth scrolling. Any new motion must do the same.
+- Smooth anchor scrolling (`scroll-behavior: smooth`, `scroll-padding-top: 5rem`) and a
+  0.2 s background/colour transition when the theme toggles.
+- Hover transitions on buttons and cards (`transition-colors` / `transition-opacity`).
 
-Modern, animated, polished. Scroll-triggered motion via Framer Motion. Should look like
-someone who cares about presentation built it, not a static document.
+**Not built:** scroll-triggered reveal animations. `framer-motion` is in `package.json`
+but is only imported by `components/ProofPoints.tsx`, which is no longer used on the page
+(safe to delete). If scroll motion is added, keep it subtle (fade and a short rise), make
+it respect reduced motion, and never hide content when JavaScript is slow to load.
 
-The owner is genuinely skilled at UI/UX and works in Figma. Structure the visual layer
-so he can refine it himself — keep design tokens and spacing consistent and centralised.
+## Site structure (as built)
 
-### Buttons and icons (decided 2026-11-17)
+One scrolling homepage in this order (see `app/page.tsx`): **Hero → About → Projects →
+Experience → Skills → Certifications & Education → Contact.** Projects comes before
+Experience on purpose in the redesign. Do not reorder without being asked.
 
-Every call-to-action button is a **pill**: filled primary
-`rounded-full bg-heading px-6 py-3 text-sm font-medium text-background transition-colors hover:bg-accent`,
-outlined secondary
-`rounded-full border border-heading px-6 py-3 text-sm font-medium text-heading transition-colors hover:bg-heading hover:text-background`,
-with `inline-flex items-center gap-2` when an icon is present. This is used by the Hero, the
-Contact row and the bottom of each project detail page. Do not invent a second button shape;
-read `Contact.tsx` and `Hero.tsx` first. The "View project →" links on cards and "← All
-projects" stay quiet text links on purpose (a grid of filled buttons would compete with the
-screenshots). Icons are inline SVG components in `components/Icons.tsx` (no icon package):
-add a new icon there instead of pasting SVG into a page. Check both light and dark themes.
+- **Hero**: kicker, headline "Enterprise reporting that people trust.", client line,
+  one "View projects" button, certification chips, portrait, pipeline animation. The
+  availability line is NOT in the hero (see below).
+- **Projects**: filter chips (All / BI / Fabric / DE via `category`), four cards visible,
+  then a "See all 7 projects" button. Cards are data-driven.
+- **Experience**: data-driven from `content/experience.ts`.
+- Navigation is a scroll-to-section menu on one page; each project opens its own detail
+  page at `/projects/<slug>`.
+- Deferred, not built: experience detail pages, a separate `/projects` index.
 
-### Explicitly NOT in this build
+## Projects are data-driven
 
-Deferred, do not build, do not suggest until the owner raises them:
+All project content lives in `content/projects.ts`. The homepage maps `projectOrder` to
+cards; one dynamic route, `app/projects/[slug]/page.tsx`, renders every detail page with
+`components/ProjectDetail.tsx`. **Adding a project must never require a new component:**
+drop images in `public/projects/<slug>/`, add one entry to `content/projects.ts`, add its
+slug to `projectOrder`, commit, push.
 
-- A "currently building" / recent-activity block — the Microsoft Fabric project does not
-  exist yet, and an empty promise is worse than silence
-- Experience detail pages at `/experience/<slug>` — good idea, phase two, would roughly
-  double the build
-- A `/projects` index page with tag filtering — worthwhile at around six projects
+`projectOrder` controls BOTH the homepage card order and the prev/next links on detail
+pages. Current order (by strength, Fabric and engineering first, the Olist trio kept
+together as parts 1 to 3):
 
-Navigation is a **scroll-to-section menu on one page**, not separate route pages. It can
-become real pages later without a rebuild.
+1. `bts-fabric-pipeline` — BTS Airline On-Time Performance (Fabric lakehouse)
+2. `opensky-fabric-rti` — Live Aircraft Data (Fabric Real-Time Intelligence)
+3. `grid-shift` — Grid Shift (Fabric App). Slug differs from the repo `ember-fabric-app`.
+4. `olist-dbt-databricks` — Olist Pipeline (dbt on Databricks)
+5. `olist-sales` — Sales & Revenue Performance (Power BI, Olist part 1 of 3)
+6. `olist-logistics` — Logistics & Delivery Performance (part 2 of 3)
+7. `olist-customer-satisfaction` — Customer Experience & Satisfaction (part 3 of 3)
 
-## Site structure (decided)
+All seven pages use the **shared project template**. Project fields: card fields (`kind`,
+`cardTitle`, `cardText`, `outcome`, `cardTags`, `category`, card image 1280×720 which is
+also the social-share image) and page fields (`eyebrow`, `numbers`, `archHeading`,
+`layers`, `archNote`, `diagrams`, `findingsHeading` / `findingsNote` / `findings`,
+`screensHeading` / `screens`, `sections`, `downloadUrl` / `downloadLabel`, `docsUrl`,
+`demoUrl`). Page order: header (buttons: GitHub, Live docs, Download .pbix, Watch demo,
+Screenshots) → key numbers → architecture layers → diagrams → findings → sections →
+screens → prev/next.
 
-One scrolling homepage. Each project card opens its **own detail page** at
-`/projects/<slug>`. Detail pages carry the depth — full-size dashboard screenshots, the
-data model, modelling decisions, validation approach — with a GitHub link at the bottom
-for anyone who wants the files.
+Rendering notes: `renderInline` formats `**bold**`, `` `code` `` and `*italic*` in body
+text, `archNote` and finding text, but **not** in `finding.title`. `CollapsibleList`
+collapses at 4 items (only when there is more than one extra). Screenshots open in a
+native `<dialog>` lightbox (`ZoomFigure`).
 
-Rationale: the deciding reader is a BI lead, and depth is what they screen for. Many
-hiring managers will not open a GitHub repo. Per-project URLs also mean a specific
-project can be linked directly in a job application.
+**Card `outcome` line** — one verified fact in accent colour under the card text, same
+shape on every card (scale figure · result):
 
-### Homepage section order (decided — do not reorder)
+| Project | Outcome |
+|---|---|
+| BTS | 41.8M records · 71-period backfill, no failures |
+| OpenSky | 54,587 events · 46,004 unique after cleaning |
+| Grid Shift | 285,700 rows · 22 DAX measures |
+| dbt | 25 models · 57 tests passing |
+| Sales | 98K orders · 7 data problems fixed |
+| Logistics | 99,441 orders · 91.9% on time |
+| Customer Satisfaction | 98,410 reviews · late orders score 1.73 lower |
 
-1. **Hero** — name, role line, the verbatim bio line, two buttons (view projects,
-   download CV), and a portrait photo. **Not a dashboard screenshot**: Power BI
-   dashboards are information-dense and become unreadable at hero size. They belong
-   large, in the project cards. If no suitable portrait is supplied, the hero is
-   text-only with generous whitespace.
-2. **Experience**
-3. **Technical proof points** — a compact four-item strip between Experience and
-   Projects (the 91.9% validation catch, the 48% timestamp-derivation mismatch, the
-   41.8M-row zero-failure backfill, and the 41-second import). This is what stops a
-   BI lead scrolling.
-4. **Projects**
-5. **Skills**
-6. **Certifications & Education**
-7. **Contact**
+Every number on every page was checked against the repo, the live page and, for the three
+Olist dashboards, the open `.pbix` model through the Power BI Modeling MCP. Re-check
+before changing one; never round up or inflate.
 
-Experience comes before Projects deliberately. Twelve years and three multinational
-clients is the credibility anchor; portfolio projects lead a page only when there is no
-experience to lead with. Lead each Experience block with the **client and the work**,
-not the job title.
+**Project 7 (dbt on Databricks) — framing, settled.** A learning project on Databricks
+Free Edition rebuilding the pipelines behind the three Olist dashboards. The page says
+openly that the owner is new to dbt and Databricks and used AI (Claude) as a guide, and
+states its limits (row filter tested with a simulated non-member only, Lakeflow stream
+simulated, dashboard export untested on re-import). Do not add or reword dbt or Databricks
+skills, or touch the CV, without the owner's explicit say-so.
 
-### Projects must be data-driven
+**Positioning — settled, do not drift.** The hero, site title, bio and OG description
+describe Power BI and reporting on purpose. The owner targets analyst and BI roles first,
+MIS as fallback. Do not reposition around DP-700 or "Fabric Data Engineer" even though the
+Fabric projects would support it.
 
-All project content lives in a single `content/projects.ts` array. The homepage maps over
-it to render cards. One dynamic route at `app/projects/[slug]/page.tsx` renders every
-detail page.
-
-Detail bodies are a **per-project list of sections, not fixed slots**. Olist Sales might
-declare *Screenshots → Data Model → Validation → Findings*; a Microsoft Fabric project
-would declare *Architecture → Medallion Layers → Pipelines → Lineage*. Same template,
-different section list.
-
-**Adding a project must never require writing new components.** The steps must be: drop
-images into `public/projects/<slug>/`, add one entry to `content/projects.ts`, commit,
-push.
-
-The homepage renders cards in a three-across grid at desktop width (two-across on
-tablet, one-across on mobile) — not a stacked single column.
-
-Include a `tags` field on every project (`Power BI`, `Fabric`, `SQL`, `Python`).
-
-Experience should be data-driven the same way, in `content/experience.ts`.
-
-### Build order — do not deviate
-
-A half-built site is worse than a finished simple one:
-
-1. Homepage, complete
-2. One detail page (Olist Sales) as the reusable template
-3. Deploy — the site is now live and linkable
-4. Remaining two detail pages, same template
+Next planned projects: a SQL-focused project, then a Python-focused one.
 
 ## Do NOT build these
 
@@ -207,103 +215,29 @@ One quiet line in the **Contact** section, phrased exactly as:
 was not asking, and is the fastest thing on the site to go stale. Do not mention visa
 sponsorship or EOR arrangements anywhere on the site.
 
-## Projects
-
-Seven projects: three Power BI dashboards on the Olist Brazilian E-Commerce dataset
-(Kaggle), then three Microsoft Fabric projects covering batch, streaming and app
-workloads, then a dbt-on-Databricks project that rebuilds the Olist pipelines. Nine
-dashboard pages total across the three Olist Power BI projects, on one shared dimensional
-model. Each Olist Power BI repo has three dashboard screenshots plus a data model diagram
-in `images/`.
-
-| # | Project | Palette | Repo |
-|---|---|---|---|
-| 1 | Sales & Revenue Performance | blue | `olist-sales-dashboard` |
-| 2 | Logistics & Delivery Performance | teal/navy | `olist-logistics-dashboard` |
-| 3 | Customer Experience & Satisfaction | coral/gold | `olist-customer-satisfaction-dashboard` |
-| 4 | BTS Airline On-Time Performance — Fabric Lakehouse | indigo | `bts-fabric-pipeline` |
-| 5 | Live Aircraft Data — Fabric Real-Time Intelligence | sky | `opensky-fabric-rti` |
-| 6 | Grid Shift — Fabric App | emerald | `ember-fabric-app` |
-| 7 | Olist Pipeline — dbt on Databricks | amber | `olist-dbt-databricks` |
-
-Cards render in array order, so the newest project goes last. Every `cardImage` must be
-16:9 — the three-across grid assumes it, and the detail page also uses it as the 1280×720
-social-share image — so make card images exactly 1280×720. Project 6's slug is
-`grid-shift`, not the repo name — the only slug that differs.
-
-The screenshots are the strongest asset on the site. Unlike a developer portfolio where
-projects are screenshots of websites, these artifacts are *dashboards* — visually rich and
-immediately legible as skilled work. Show them large.
-
-**Technical proof points — these drive the strip in section 03. Attributions are
-settled, don't re-derive them:**
-
-- Caught an on-time rate reading 95% instead of the correct 91.9% through independent SQL
-  validation of every DAX measure — **Olist Logistics**
-- Adding elapsed minutes to departure time disagreed with the reported arrival on nearly
-  half of all flights; diagnosed to gate-to-gate local clock time and resolved without a
-  timezone reference dataset — **BTS Fabric Pipeline**
-- Seventy-one monthly periods (41.8M rows) loaded end to end in seven hours through a
-  Fabric pipeline, with retries configured on every activity and none fired —
-  **BTS Fabric Pipeline**
-- Cut a 98,000-row SQL Server import from 10+ minutes to 41 seconds by correcting column
-  type declarations — **Olist Customer Experience**
-- Deliberately disconnected a pre-flattened bridge table when DAX across two independent
-  many-to-many paths returned plausible but wrong results — and documented why rather than
-  hiding it — **Olist Customer Experience**
-
-Next project to be built (after project 7): a **SQL-focused project**, with a Python-focused project after
-it. The three Fabric projects (BTS lakehouse, OpenSky Real-Time Intelligence, Grid Shift
-Fabric App) are done; DP-700 was passed on 24 Oct 2026 and is listed in Certifications.
-
-**Positioning — settled, do not drift.** The hero role line, site title, bio and OG
-description all describe Power BI and reporting on purpose. Siam is targeting analyst and
-BI roles first, with MIS as the fallback, not data engineering roles — so do not
-reposition the site around DP-700 or "Fabric Data Engineer" even though the Fabric
-projects would support it.
-
-**Project 7 (`olist-dbt-databricks`) — framing, settled.** A learning project: dbt on
-Databricks Free Edition, rebuilding the pipelines behind the three Olist dashboards. The
-card says openly that the owner is new to dbt and Databricks and used AI (Claude) as a
-guide, and states its limits (row filter tested with a simulated non-member only, the
-Lakeflow stream is simulated, the dashboard export is untested on re-import). It is a
-card only: it does not change the hero or the site title. Skills now
-has a "Databricks and dbt" group with four lines the owner approved (2026-11-17); do not add
-or reword dbt or Databricks skills, or touch the CV, without the owner's explicit say-so.
-
-**Optional `Project` fields, used sparingly:**
-
-- `pages` / `pagesLabel` — the line under the tags on a detail page. Omit `pages` to hide
-  the line (BTS does, it had only one page). `pagesLabel` defaults to "Report pages";
-  Grid Shift sets it to "Views" because it is an app, not a report.
-- `docsUrl` — a link to a live docs site, shown as a filled "Live docs" pill (book icon and
-  arrow) beside the outlined GitHub pill at the bottom of the detail page and opening in a
-  new tab. Used by project 7 (the dbt Docs
-  site on Vercel). Omit it and nothing renders.
-- `ProjectImage.darkSrc` — a dark-theme variant, swapped with CSS, used by the BTS
-  architecture diagrams.
-- `images` on a `list` section — evidence screenshots rendered after the list items, used
-  by BTS and by Grid Shift's architecture diagram.
-
 ## Environment
 
-- **Windows 11, PowerShell, natively.** Node, git, Python and Power BI Desktop all run in
-  Windows. WSL exists only as Docker infrastructure for databases — never route work
+- **Windows 11, PowerShell, natively.** Node, git, Python and Power BI Desktop run in
+  Windows. WSL exists only as Docker infrastructure for databases; never route work
   through it.
 - Project root: `L:\Python_Env\Portfolio_Website\portfolio-site`
 - Node v24.19.0 at `L:\nodejs`, npm cache at `L:\npm-cache` (C: is space-constrained)
-- Git identity configured globally; branch is `main`; every push auto-deploys to Vercel
+- Branch for this work is `redesign`; `main` auto-deploys to Vercel.
+- Every PowerShell block starts with `Set-Location` to the project folder.
+- Commit messages: use several `-m` flags (one per trailer line); pasting a multi-line
+  commit breaks PSReadLine.
 
 ## Working style
 
-- **One step at a time.** Give one step, then wait for confirmation before the next. Do
-  not write ten files in a single pass, and do not move on to the next section
-  unprompted.
-- Assume the owner is **new to git and to JavaScript/React.** Spell out commands and say
-  what they actually do.
-- **Say when something is wrong or inconsistent.** Consistency passes on the dashboards
-  caught real problems — mismatched KPI cards, misleading axis scales, a stale number in a
-  callout. Flagging these is wanted, not unwelcome.
+- **One step at a time**, and say which choice you recommend whenever presenting a
+  decision between options.
+- Assume the owner is new to git and to JavaScript/React. Spell out commands.
+- **Say when something is wrong or inconsistent.** Flagging is wanted. Design critique
+  after each page is part of the routine.
+- Verify before publishing: tsc (`npx tsc --noEmit`) passes, every project slug still
+  present, pages load in both themes and at phone width.
+- Don't publish content from untracked or internal files (for example
+  `pipeline-settings-log.md`, `opensky-extras`) without asking.
 - Written English is strong.
 
 ## Git rules learned the hard way
