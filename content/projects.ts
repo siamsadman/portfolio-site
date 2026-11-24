@@ -5,12 +5,9 @@ export type ProjectImage = {
   portrait?: boolean; // phone screenshots: shown in a compact row instead of full width
 };
 
-// Detail-page content block — not rendered yet (detail pages are a later
-// pass), but defined now so future projects (and detail pages) don't force a
-// schema change. A discriminated union so wildly different project types (a
-// Power BI dashboard's "Screenshots"/"Data Model" vs. a Fabric project's
-// "Architecture"/"Medallion Layers") can each pick whichever block kinds fit,
-// in any order.
+// Free-form write-up block, rendered after the template blocks on a project page.
+// A discriminated union so very different project types can each pick whichever
+// block kinds fit, in any order.
 export type ProjectSection =
   | {
       type: "gallery";

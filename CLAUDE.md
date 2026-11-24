@@ -13,11 +13,12 @@ Career facts live in `CV_CONTENT.md` and `content/experience.ts`. Read them befo
 writing anything that states employers, titles, dates or metrics. (`CV_CONTENT.md` and the
 CV PDF still carry the old Market Express wording and have not been refreshed yet.)
 
-## Redesign status (branch `redesign`)
+## Status
 
-The redesign is built on the `redesign` branch and **not yet pushed or merged**; `main` is
-still the old site. The owner commits and pushes himself (`git push -u origin redesign`
-gives a Vercel preview). Never commit or push on his behalf.
+The redesign is **finished and live** at siamsadman.vercel.app (merged to `main` on
+2026-11-24; the `redesign` branch is kept as history). The site is now maintained, not
+under construction. The owner commits and pushes himself, so never commit or push on his
+behalf. A push to any other branch gives a Vercel preview; a push to `main` is production.
 
 **The approved redesign mockup wins any design conflict** with this file or with a
 default. Do not reinterpret it.
@@ -169,6 +170,68 @@ Fabric projects would support it.
 
 Next planned projects: a SQL-focused project, then a Python-focused one.
 
+## Adding a new project — step by step
+
+Nothing else in the code changes. Work in this order.
+
+1. **Gather the facts first, from the project itself** (repo README, the live work, the
+   open model). Every number, count and date on the page must be verified against its
+   source. Never round up, never invent, never claim something untested. State limits
+   openly, the way the existing pages do ("I did not test…", "not verified").
+2. **Images** go in `public/projects/<slug>/`. Use lower-case file names without spaces.
+   The card image must be exactly 16:9 (1280×720); it is also the social-share image.
+   Dark and light variants of a diagram use `darkSrc`. Phone screenshots use
+   `portrait: true`. Every image needs a meaningful `alt`.
+3. **Add one entry** to the `projects` array in `content/projects.ts`, using the skeleton
+   below. Fields marked *required* must exist; everything else is optional and a block is
+   simply not shown when omitted.
+4. **Add the slug to `projectOrder`** in the same file. That list controls the homepage
+   card order and the previous/next links. A project missing from it will not appear.
+5. **Check it**: `npx tsc --noEmit`, open `/projects/<slug>` on desktop and phone width in
+   both themes, click every button, open every image, and read the page against the
+   source one more time. Confirm the homepage card (and "See all N projects") look right.
+6. **Update this file**: the project list under "Projects are data-driven", the outcome
+   table, and the "7 projects" wording here, in `README.md` and in `Projects.tsx` copy if
+   any of it counts the projects.
+
+Skeleton (copy an existing entry of the same kind as a model: a Power BI dashboard like
+`olist-sales`, a Fabric or pipeline project like `bts-fabric-pipeline`):
+
+```ts
+{
+  slug: "my-project",                       // required, matches the images folder
+  category: "bi",                           // required: "bi" | "fabric" | "de" (filter chips)
+  kind: "Power BI",                         // required: small chip on the card image
+  cardTitle: "Short card title",            // required
+  cardText: "One or two sentences.",        // required
+  outcome: "98K orders · 7 problems fixed", // required: scale figure · verified result
+  cardTags: ["Power BI", "DAX"],            // required: 2 to 4 pills on the card
+  title: "Full title for the page and browser tab", // required
+  eyebrow: "Power BI · short label",        // mono label above the title
+  summary: "Two or three sentences.",       // required
+  tags: ["Power BI", "DAX", "T-SQL"],       // required: pills under the summary
+  palette: "blue",                          // required by the type, not used visually
+  repoUrl: "https://github.com/siamsadman/<repo>", // required
+  docsUrl: "", demoUrl: "", downloadUrl: "", downloadLabel: "", // optional buttons
+  cardImage: { src: "/projects/my-project/card.png", alt: "…" }, // required, 1280×720
+  numbers: [{ big: "98K", label: "what it counts" }],  // key-number cards (3 is ideal)
+  archHeading: "How it is built",
+  layers: [{ label: "BRONZE", title: "…", text: "…", gate: "what was checked" }],
+  archNote: "Optional paragraph under the layer cards.",
+  diagrams: [{ src: "…", alt: "…" }],
+  findingsHeading: "What validation found",
+  findings: [{ big: "19 of 23", title: "…", text: "…" }],
+  screensHeading: "The report",
+  screens: { images: [{ src: "…", alt: "…" }], paragraphs: ["**Page name.** What it shows."] },
+  sections: [{ type: "prose", heading: "…", paragraphs: ["…"] }], // also "list" and "gallery"
+}
+```
+
+Writing rules for the copy: first person, plain, specific. Bold the lead phrase with
+`**…**`, code with backticks. Findings are things the checks showed, including what
+failed or was not investigated. Keep TOLL internal system names out. If the project
+touches the CV, the hero or skills, ask the owner first.
+
 ## Do NOT build these
 
 Considered and deliberately rejected. Do not add them, do not suggest them again:
@@ -250,7 +313,7 @@ sponsorship or EOR arrangements anywhere on the site.
   through it.
 - Project root: `L:\Python_Env\Portfolio_Website\portfolio-site`
 - Node v24.19.0 at `L:\nodejs`, npm cache at `L:\npm-cache` (C: is space-constrained)
-- Branch for this work is `redesign`; `main` auto-deploys to Vercel.
+- `main` auto-deploys to production on Vercel; other branches get preview URLs.
 - Every PowerShell block starts with `Set-Location` to the project folder.
 - Commit messages: use several `-m` flags (one per trailer line); pasting a multi-line
   commit breaks PSReadLine.

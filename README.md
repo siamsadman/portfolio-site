@@ -40,6 +40,9 @@ No new component is needed.
 3. Add its slug to `projectOrder` in the same file. That list sets the homepage card order
    and the previous and next links on project pages.
 
+`CLAUDE.md` has the full step-by-step guide, a copy-and-fill entry skeleton and the
+checklist to run before publishing. Start there.
+
 ## Working on it
 
 Design rules, content rules and what is deliberately not built are in
