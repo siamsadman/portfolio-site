@@ -116,9 +116,9 @@ he does not claim VBScript as a skill, so do not list it under skills.
 
 ### 2. Market Express Limited — Dhaka — Reporting Officer — 2016 – Feb 2017
 
-- Established the reporting service for British American Tobacco Bangladesh. BATB
-  subsequently consolidated the engagement under Apsis Solutions, the vendor operating
-  its CRM platform, and the team transferred with the account.
+- Owned the reporting methods and pipeline for BATB's CRM reporting service from its
+  start in 2016. BATB subsequently consolidated the engagement under Apsis Solutions, the
+  vendor operating its CRM platform, and the team transferred with the account.
 
 ### 3. K.S. International — Dhaka — Digital Media Developer — 2014 – 2016
 
