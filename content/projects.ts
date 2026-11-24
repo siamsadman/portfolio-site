@@ -26,8 +26,17 @@ export type ProjectSection =
       images?: ProjectImage[]; // rendered after the list items
     };
 
+export type ProjectCategory = "bi" | "fabric" | "de";
+
 export type Project = {
   slug: string;
+  // Homepage card fields (short copy shown on the project grid)
+  category: ProjectCategory; // drives the homepage filter chips
+  kind: string; // small chip on the card image
+  cardTitle: string;
+  cardText: string;
+  outcome: string; // one verified fact shown in accent colour
+  cardTags: string[];
   title: string;
   pages?: string[]; // omit to hide the line entirely
   pagesLabel?: string; // defaults to "Report pages"
@@ -43,6 +52,13 @@ export type Project = {
 export const projects: Project[] = [
   {
     slug: "olist-sales",
+    category: "bi",
+    kind: "Power BI",
+    cardTitle: "Sales & Revenue Performance",
+    cardText:
+      "Executive overview down to category and product detail, plus the customer and payment patterns behind revenue.",
+    outcome: "3 report pages",
+    cardTags: ["Power BI", "DAX", "T-SQL"],
     title: "Sales & Revenue Performance",
     pages: [
       "Executive Overview",
@@ -121,6 +137,13 @@ export const projects: Project[] = [
   },
   {
     slug: "olist-logistics",
+    category: "bi",
+    kind: "Power BI",
+    cardTitle: "Logistics & Delivery Performance",
+    cardText:
+      "Executive delivery overview with dedicated delay analysis and seller-and-freight breakdowns.",
+    outcome: "Delay analysis built in",
+    cardTags: ["Power BI", "DAX", "T-SQL"],
     title: "Logistics & Delivery Performance",
     pages: ["Executive Overview", "Delay Analysis", "Seller & Freight"],
     summary:
@@ -194,6 +217,13 @@ export const projects: Project[] = [
   },
   {
     slug: "olist-customer-satisfaction",
+    category: "bi",
+    kind: "Power BI",
+    cardTitle: "Customer Experience & Satisfaction",
+    cardText:
+      "Satisfaction overview, the drivers behind it, and seller-level performance across qualifying sellers.",
+    outcome: "3 report pages",
+    cardTags: ["Power BI", "DAX", "T-SQL"],
     title: "Customer Experience & Satisfaction",
     pages: ["Overview", "Drivers", "Sellers"],
     summary:
@@ -278,6 +308,13 @@ export const projects: Project[] = [
   },
   {
     slug: "bts-fabric-pipeline",
+    category: "fabric",
+    kind: "Fabric lakehouse",
+    cardTitle: "BTS Airline On-Time Performance",
+    cardText:
+      "Medallion lakehouse over US flight records: PySpark, watermark-driven incremental loading, Direct Lake model, validation gates at every layer.",
+    outcome: "41.8M records · 71-period backfill, no failures",
+    cardTags: ["Microsoft Fabric", "PySpark", "Delta Lake"],
     title: "BTS Airline On-Time Performance — Fabric Lakehouse",
     summary:
       "A medallion-architecture lakehouse over 41.8 million US flight records — PySpark transformation, watermark-driven incremental loading, and a Direct Lake semantic model, with validation gates at every layer boundary.",
@@ -396,6 +433,13 @@ export const projects: Project[] = [
   },
   {
     slug: "opensky-fabric-rti",
+    category: "fabric",
+    kind: "Real-Time Intelligence",
+    cardTitle: "Live Aircraft Data",
+    cardText:
+      "OpenSky positions streamed through Eventstream into an Eventhouse, analysed in KQL, with a Real-Time Dashboard and an Activator rule.",
+    outcome: "Streaming counterpart to the batch lakehouse",
+    cardTags: ["Eventstream", "KQL", "Power BI"],
     title: "Live Aircraft Data — Fabric Real-Time Intelligence",
     pages: ["OpenSky snapshot"],
     summary:
@@ -490,6 +534,13 @@ export const projects: Project[] = [
   },
   {
     slug: "grid-shift",
+    category: "fabric",
+    kind: "Fabric App (preview)",
+    cardTitle: "Grid Shift",
+    cardText:
+      "How Bangladesh generates electricity, compared with South Asia and the world, as a Fabric App over a Direct Lake semantic model.",
+    outcome: "Dataflow Gen2 → Direct Lake",
+    cardTags: ["Dataflow Gen2", "DAX", "Direct Lake"],
     title: "Grid Shift — Fabric App",
     pages: ["Overview", "Monthly"],
     pagesLabel: "Views",
@@ -579,6 +630,13 @@ export const projects: Project[] = [
   },
   {
     slug: "olist-dbt-databricks",
+    category: "de",
+    kind: "dbt on Databricks",
+    cardTitle: "Olist Pipeline",
+    cardText:
+      "The pipelines behind the three Olist dashboards, rebuilt in dbt on Databricks Free Edition. A learning project, built with AI as a guide.",
+    outcome: "25 models · 57 tests",
+    cardTags: ["dbt", "Databricks", "Unity Catalog"],
     title: "Olist Pipeline — dbt on Databricks",
     summary:
       "The pipelines behind my three Olist dashboards, rebuilt in dbt on Databricks Free Edition: 25 models, 57 tests, a Databricks job, a Lakeflow pipeline and a Unity Catalog row filter. A learning project, built with AI as a guide.",
